@@ -12,6 +12,11 @@
   display: flex;
 }
 
+.col {
+  display: flex;
+  flex-direction: column;
+}
+
 .column-full {
   flex-basis: 100%;
 }
