@@ -6,9 +6,7 @@
   <title>AJAX Project</title>
   <link rel="icon" href="images/favicon.ico">
   <link rel="icon" href="images/favicon.ico">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
-    integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
-    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap" rel="stylesheet">
@@ -43,7 +41,9 @@
   <main>
     <div class="container" id="home">
       <div class="col justify-center align-center height-400">
+        <!-- fa-person-circle-question or fa-chess-->
         <i class="fa-solid fa-chess text-white icon-xxl"></i>
+        <p class="text-white hidden" id="failed-msg">Unable to find username.</p>
         <div class="input-group mt-3">
           <input type="text" class="search-box-main font-jetbrains" id="main-search" placeholder="Search Players"
             maxlength="32" />
