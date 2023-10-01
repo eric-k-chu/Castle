@@ -42,10 +42,6 @@
   justify-content: space-between;
 }
 
-.height-140 {
-  height: 140px;
-}
-
 .height-200 {
   height: 200px;
 }
@@ -161,7 +157,8 @@
   height: 150px;
 }
 
-.text-sm {
+#account-info-text {
+  height: 140px;
   font-size: 0.75rem;
 }
 
@@ -175,4 +172,103 @@
 
 .mr-1 {
   margin-right: 1rem;
+}
+
+.content-box {
+  border-radius: 5px;
+  box-shadow: 2px 2px 2px black;
+  background-color: #363944;
+  padding: 0.5rem;
+  margin-top: 1rem;
+}
+
+#stats > div > p {
+  border-bottom: 1px solid #f5f5f5;
+  font-size: 0.75rem;
+  margin-top: 0;
+  padding-bottom: 5px;
+}
+
+#league-rank {
+  font-size: 0.75rem;
+}
+
+.stats-box {
+  font-size: 0.5rem;
+  display: flex;
+  align-items: center;
+  margin: 0.25rem 0;
+}
+
+.stats-box .mode-icon {
+  font-size: 1rem;
+  margin-right: 5px;
+}
+
+.stats-box .mode-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-right: 10px;
+}
+
+.stats-box .mode-wpct {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-right: 0;
+  margin-left: 40px;
+}
+
+.mode-name,
+.mode-pct {
+  font-weight: 700;
+}
+
+.mode-rating,
+.mode-desc {
+  color: gray;
+}
+
+.mode-name,
+.mode-rating,
+.mode-pct,
+.mode-desc {
+  margin: 3px 0;
+}
+
+@media only screen and (min-width: 768px) {
+  .img-wrapper img {
+    width: 200px;
+  }
+
+  #account-info {
+    height: 240px;
+  }
+
+  #account-info-text {
+    height: 220px;
+    font-size: 1.2rem;
+  }
+
+  #league-rank {
+    font-size: 1rem;
+  }
+
+  #stats > div > p {
+    font-size: 1rem;
+  }
+
+  .stats-box {
+    font-size: 0.75rem;
+  }
+
+  .stats-box .mode-icon {
+    font-size: 1.5rem;
+    margin-right: 10px;
+  }
+
+  .stats-box .mode-wpct {
+    margin-left: 80px;
+  }
 }
