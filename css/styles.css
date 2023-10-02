@@ -1,3 +1,7 @@
+span {
+  white-space: pre;
+}
+
 .bg-white {
   background-color: #f5f5f5;
 }
@@ -58,6 +62,10 @@
   align-items: center;
 }
 
+.icon-base {
+  font-size: 1rem;
+}
+
 .icon-med {
   font-size: 1.5rem;
 }
@@ -68,10 +76,6 @@
 
 .icon-sm {
   font-size: 0.75rem;
-}
-
-.icon-base {
-  font-size: 1rem;
 }
 
 .gap-half {
@@ -154,20 +158,42 @@
   padding: 0.5rem 0;
 }
 
-.img-wrapper img {
+.avatar-wrapper img {
   max-width: 125px;
   border-radius: 5px;
   border: 1px solid black;
   box-shadow: 2px 2px 2px black;
 }
 
-#account-info {
+.league-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.league-wrapper img {
+  width: 75%;
+}
+
+#player-info-header {
+  font-size: 0.6rem;
   height: 150px;
 }
 
-#account-info-text {
-  height: 140px;
-  font-size: 0.75rem;
+#account-info-name,
+#account-info-followers,
+#account-info-location,
+#account-info-joined {
+  color: #aaa;
+}
+
+#account-info-country {
+  border: 1px solid black;
+  border-radius: 2px;
+  font-size: 1rem;
+}
+
+.font-italic {
+  font-style: italic;
 }
 
 .font-bold {
@@ -190,6 +216,24 @@
   margin-top: 1rem;
 }
 
+td {
+  padding-bottom: 5px;
+}
+
+#stats-table {
+  font-size: 0.5rem;
+}
+
+tr > td:nth-of-type(2) > p:nth-of-type(2),
+tr > td:nth-of-type(3) > p:nth-of-type(2) {
+  color: #aaa;
+  font-size: 0.4rem;
+}
+
+#stats-table tbody tr td > p {
+  margin: 0;
+}
+
 #account-stats > p:nth-of-type(1),
 #clubs > div > p:nth-of-type(1) {
   border-bottom: 1px solid #f5f5f5;
@@ -202,62 +246,47 @@
   font-size: 0.75rem;
 }
 
-.stats-box {
-  font-size: 0.5rem;
-  display: flex;
-  align-items: center;
-  margin: 0.25rem 0;
+tr > td:nth-of-type(1) {
+  width: 15px;
 }
 
-.stats-box .mode-icon {
-  font-size: 1rem;
-  margin-right: 5px;
+tr > td:nth-of-type(1) > i {
+  font-size: 0.75rem;
 }
 
-.stats-box .mode-info {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  margin-right: 10px;
-}
-
-.stats-box .mode-wpct {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  margin-right: 0;
-  margin-left: 40px;
-}
-
-.mode-name,
-.mode-pct {
-  font-weight: 700;
-}
-
-.mode-rating,
-.mode-desc {
-  color: gray;
-}
-
-.mode-name,
-.mode-rating,
-.mode-pct,
-.mode-desc {
-  margin: 3px 0;
+tr > td:nth-of-type(3) {
+  text-align: right;
 }
 
 @media only screen and (min-width: 768px) {
-  .img-wrapper img {
+  #player-info-header {
+    font-size: 0.8rem;
+    height: 170px;
+  }
+
+  #account-info-country {
+    font-size: 1.1rem;
+  }
+
+  #stats-table {
+    font-size: 0.75rem;
+  }
+
+  tr > td:nth-of-type(2) > p:nth-of-type(2),
+  tr > td:nth-of-type(3) > p:nth-of-type(2) {
+    font-size: 0.65rem;
+  }
+
+  tr > td:nth-of-type(1) {
+    width: 20px;
+  }
+
+  tr > td:nth-of-type(1) > i {
+    font-size: 1rem;
+  }
+
+  .avatar-wrapper img {
     max-width: 150px;
-  }
-
-  #account-info {
-    height: 240px;
-  }
-
-  #account-info-text {
-    height: 220px;
-    font-size: 1.2rem;
   }
 
   #league-rank {
@@ -267,18 +296,5 @@
   #account-stats > p:nth-of-type(1),
   #clubs > div > p:nth-of-type(1) {
     font-size: 1rem;
-  }
-
-  .stats-box {
-    font-size: 0.75rem;
-  }
-
-  .stats-box .mode-icon {
-    font-size: 1.5rem;
-    margin-right: 10px;
-  }
-
-  .stats-box .mode-wpct {
-    margin-left: 80px;
   }
 }

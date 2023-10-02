@@ -17,9 +17,12 @@ const $accountInfoFollowers = document.querySelector('#account-info-followers');
 const $accountInfoLocation = document.querySelector('#account-info-location');
 const $accountInfoJoined = document.querySelector('#account-info-joined');
 const $accountInfoLeague = document.querySelector('#account-info-league');
+const $leagueIcon = document.querySelector('#league-icon');
 
 // Account Stats
-const $accountStats = document.querySelector('#account-stats');
+const $statsTable = document.querySelector('#stats-table > tbody');
+
+// const $tables = document.querySelectorAll('table');
 
 const months = [
   'January',
@@ -36,6 +39,17 @@ const months = [
   'December'
 ];
 
+const leagueIcons = {
+  Wood: 'https://www.chess.com/bundles/web/images/leagues/badges/wood.b8940cb5.svg',
+  Stone: 'https://www.chess.com/bundles/web/images/leagues/badges/stone.3434a62c.svg',
+  Bronze: 'https://www.chess.com/bundles/web/images/leagues/badges/bronze.b529d5c1.svg',
+  Silver: 'https://www.chess.com/bundles/web/images/leagues/badges/silver.6e7fa8dc.svg',
+  Crystal: 'https://www.chess.com/bundles/web/images/leagues/badges/crystal.232d0aa5.svg',
+  Elite: 'https://www.chess.com/bundles/web/images/leagues/badges/elite.970af95e.svg',
+  Champion: 'https://www.chess.com/bundles/web/images/leagues/badges/champion.0c764ca5.svg',
+  Legend: 'https://www.chess.com/bundles/web/images/leagues/badges/legend.1ea014f3.svg'
+};
+
 $headerSearch.addEventListener('keydown', getPlayerInfo);
 $mainSearch.addEventListener('keydown', getPlayerInfo);
 
@@ -45,7 +59,6 @@ function getPlayerInfo(event) {
     xhr.open('GET', `https://api.chess.com/pub/player/${$headerSearch.value}`);
     xhr.responseType = 'json';
     xhr.addEventListener('load', function () {
-
       if (xhr.status === 200) {
         data.viewSwap($playerInfo);
         insertAccountInfo(xhr.response);
@@ -61,9 +74,11 @@ function getPlayerInfo(event) {
 
 function insertAccountInfo(response) {
   $accountInfoImg.src = response.avatar;
+  $accountInfoImg.alt = `${response.username} avatar`;
   $accountInfoUser.textContent = response.username;
-  $accountInfoCountry.textContent = response.country.slice(-2);
-  $accountInfoFollowers.textContent = response.followers;
+  const countryCode = response.country.slice(-2).toLowerCase();
+  $accountInfoCountry.className = `fi fi-${countryCode}`;
+  $accountInfoFollowers.textContent = ` ${response.followers}`;
 
   if (response.name === undefined) {
     $accountInfoName.textContent = 'N/A';
@@ -74,7 +89,7 @@ function insertAccountInfo(response) {
   if (response.location === undefined) {
     $accountInfoLocation.textContent = ' N/A';
   } else {
-    $accountInfoLocation.textContent = ' ' + response.location;
+    $accountInfoLocation.textContent = ` ${response.location}`;
   }
 
   const date = new Date(response.joined * 1000);
@@ -84,73 +99,49 @@ function insertAccountInfo(response) {
   $accountInfoJoined.textContent = joinedDate;
 
   $accountInfoLeague.textContent = response.league;
+  $leagueIcon.src = leagueIcons[response.league];
+  $leagueIcon.alt = response.league;
 }
-
-/* <div class="stats-box">
-    <div class="mode-icon">
-      <i class="fa-solid fa-sun"></i>
-    </div>
-    <div class="mode-info">
-      <p class="mode-name">Daily</p>
-      <p class="mode-rating">1526</p>
-    </div>
-    <div class="mode-wpct">
-      <p class="mode-pct">70.46%</p>
-      <p class="mode-desc">Win %</p>
-    </div>
-  </div> */
 
 function renderStat(type, stats) {
   const game = getGame(type);
 
-  const $parentDiv = document.createElement('div');
-  $parentDiv.className = 'stats-box';
+  const $tr = document.createElement('tr');
+  const $tdIcon = document.createElement('td');
+  const $tdMode = document.createElement('td');
+  const $tdStat = document.createElement('td');
 
-  const $iconDiv = document.createElement('div');
-  $iconDiv.className = 'mode-icon';
   const $icon = document.createElement('i');
+  const $p1 = document.createElement('p');
+  const $p2 = document.createElement('p');
+  const $p3 = document.createElement('p');
+  const $p4 = document.createElement('p');
+
   $icon.className = game.icon;
-
-  const $infoDiv = document.createElement('div');
-  $infoDiv.className = 'mode-info';
-  const $pName = document.createElement('p');
-  $pName.className = 'mode-name';
-  $pName.textContent = game.name;
-  const $pRating = document.createElement('p');
-  $pRating.className = 'mode-rating';
-
-  const $wpctDiv = document.createElement('div');
-  $wpctDiv.className = 'mode-wpct';
-  const $pPCT = document.createElement('p');
-  $pPCT.className = 'mode-pct';
-  const $pDesc = document.createElement('p');
-  $pDesc.className = 'mode-desc';
-  $pDesc.textContent = 'Win %';
+  $p1.textContent = game.name;
 
   if (game.name === 'Puzzles') {
-    $pRating.textContent = stats.lowest.rating;
-    $pPCT.textContent = stats.highest.rating;
-    $pDesc.textContent = 'Highest';
+    $p2.textContent = `Lowest (${stats.lowest.rating})`;
+    $p3.textContent = stats.highest.rating;
+    $p4.textContent = 'Highest';
   } else if (game.name === 'Puzzle Rush') {
-    $pPCT.textContent = stats.best.total_attempts;
-    $pPCT.textContent = stats.best.score;
-    $pDesc.textContent = 'Score';
+    $p2.textContent = `Attempts (${stats.best.total_attempts})`;
+    $p3.textContent = stats.best.score;
+    $p4.textContent = 'Score';
   } else {
-    $pRating.textContent = stats.last.rating;
-    $pPCT.textContent = getWPCT(stats.record.win, stats.record.loss, stats.record.draw);
+    $p2.textContent = stats.last.rating;
+    $p3.textContent = getWPCT(stats.record.win, stats.record.loss, stats.record.draw);
+    $p4.textContent = 'Win %';
   }
 
-  $parentDiv.appendChild($iconDiv);
-  $parentDiv.appendChild($infoDiv);
-  $parentDiv.appendChild($wpctDiv);
+  $tr.appendChild($tdIcon);
+  $tr.appendChild($tdMode);
+  $tr.appendChild($tdStat);
+  $tdIcon.appendChild($icon);
+  $tdMode.append($p1, $p2);
+  $tdStat.append($p3, $p4);
 
-  $iconDiv.appendChild($icon);
-  $infoDiv.appendChild($pName);
-  $infoDiv.appendChild($pRating);
-  $wpctDiv.appendChild($pPCT);
-  $wpctDiv.appendChild($pDesc);
-
-  return $parentDiv;
+  return $tr;
 }
 
 function insertStats(username) {
@@ -162,7 +153,7 @@ function insertStats(username) {
     gameModes.forEach((key, index) => {
       if (key !== 'fide') {
         const $statBox = renderStat(key, xhr.response[key]);
-        $accountStats.appendChild($statBox);
+        $statsTable.appendChild($statBox);
       }
     });
   });
@@ -209,3 +200,11 @@ function getWPCT(win, loss, draw) {
   const pct = Math.trunc(dec * 100);
   return `${pct}%`;
 }
+
+// function clearPrevious() {
+//   for (const table of $tables) {
+//     while (table.childNodes.length > 0) {
+//       table.removeChild(table.firstChild);
+//     }
+//   }
+// }

@@ -10,6 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@6.11.0/css/flag-icons.min.css" />
   <link rel="stylesheet" href="css/reset.css">
   <link rel="stylesheet" href="css/layout.css">
   <link rel="stylesheet" href="css/styles.css">
@@ -61,20 +62,20 @@
 
     <div class="hidden" id="player-info">
       <div class="bg-blue-1">
-        <div class="container text-white">
+        <div class="container text-white col justify-center" id="player-info-header">
           <div class="row align-center">
             <div class="mr-1">
-              <div class="img-wrapper">
-                <img id="account-info-img" src="" alt="user icon">
+              <div class="avatar-wrapper">
+                <img id="account-info-img" src="" alt="user avatar">
               </div>
             </div>
             <div class="col">
               <div class="row gap-1 align-center leading-1">
                 <h3 id="account-info-username"></h3>
-                <h3 id="account-info-country"></h3>
+                <span id="account-info-country"></span>
               </div>
               <div class="row">
-                <p id="account-info-name"></p>
+                <p id="account-info-name" class="font-italic"></p>
               </div>
               <div class="row gap-1 mtb-three-fourths">
                 <i class="fa-solid fa-user">
@@ -99,12 +100,20 @@
           <div class="row">
             <div class="col mr-1">
               <div class="row content-box justify-center">
+                <div class="league-wrapper">
+                  <img src="" alt="" id="league-icon">
+                </div>
                 <p id="account-info-league"></p>
               </div>
 
               <div class="row content-box">
                 <div class="col column-full" id="account-stats">
                   <p>Stats</p>
+                  <table id="stats-table">
+                    <tbody>
+
+                    </tbody>
+                  </table>
                 </div>
               </div>
 
