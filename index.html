@@ -60,33 +60,33 @@
     </div>
 
     <div class="hidden" id="player-info">
-      <div class="bg-blue-1" id="player-info-header">
+      <div class="bg-blue-1">
         <div class="container text-white">
-          <div class="row align-center" id="account-info">
-            <div class="mr-1" id="account-info-img">
+          <div class="row align-center">
+            <div class="mr-1">
               <div class="img-wrapper">
-                <img src="/images/example-avatar.png" alt="user icon">
+                <img id="account-info-img" src="" alt="user icon">
               </div>
             </div>
-            <div class="col" id="account-info-text">
+            <div class="col">
               <div class="row gap-1 align-center leading-1">
-                <h3 id="username">hikaru</h3>
-                <h3 id="country">US</h3>
+                <h3 id="account-info-username"></h3>
+                <h3 id="account-info-country"></h3>
               </div>
               <div class="row">
-                <p id="name">Hikaru Nakamura</p>
+                <p id="account-info-name"></p>
               </div>
               <div class="row gap-1 mtb-three-fourths">
                 <i class="fa-solid fa-user">
-                  <span class="font-jetbrains font-thin" id="followers"> 500</span>
+                  <span class="font-jetbrains font-thin" id="account-info-followers"></span>
                 </i>
                 <i class="fa-solid fa-location-dot">
-                  <span class="font-jetbrains font-thin" id="location"> Bay Area, CA</span>
+                  <span class="font-jetbrains font-thin" id="account-info-location"></span>
                 </i>
               </div>
               <div class="row mtb-three-fourths">
-                <i class="fa-regular fa-calendar-days" id="joined">
-                  <span class="font-jetbrains font-thin"> Joined September 2020</span>
+                <i class="fa-regular fa-calendar-days">
+                  <span class="font-jetbrains font-thin" id="account-info-joined"></span>
                 </i>
               </div>
             </div>
@@ -94,7 +94,7 @@
         </div>
       </div>
 
-      <div class="bg-white" id="player-info-body">
+      <div class="bg-dark-gray" id="player-info-body">
         <div class="container text-white">
           <div class="row">
             <div class="col mr-1">
