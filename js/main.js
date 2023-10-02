@@ -54,16 +54,16 @@ $mainSearch.addEventListener('keydown', getPlayerInfo);
 function getPlayerInfo(event) {
   if (event.key === 'Enter') {
     const xhr = new XMLHttpRequest();
-    xhr.open('GET', `https://api.chess.com/pub/player/${$headerSearch.value}`);
+    xhr.open('GET', `https://api.chess.com/pub/player/${event.target.value}`);
     xhr.responseType = 'json';
     xhr.addEventListener('load', function () {
       if (xhr.status === 200) {
         data.viewSwap($playerInfo);
         insertAccountInfo(xhr.response);
-        insertStats($headerSearch.value);
-        $headerSearch.value = '';
+        insertStats(event.target.value);
+        event.target.value = '';
       } else {
-        $errorMsg.textContent = 'Unable to find ' + $headerSearch.value + '.';
+        $errorMsg.textContent = 'Unable to find ' + event.target.value + '.';
         data.viewSwap($failedSearch);
       }
     });
@@ -72,9 +72,8 @@ function getPlayerInfo(event) {
 }
 
 function insertAccountInfo(response) {
-  $accountInfoImg.src = response.avatar;
-  $accountInfoImg.alt = `${response.username} avatar`;
   $accountInfoUser.textContent = response.username;
+  $accountInfoImg.alt = `${response.username} avatar`;
   const countryCode = response.country.slice(-2).toLowerCase();
   $accountInfoCountry.className = `fi fi-${countryCode}`;
   $accountInfoFollowers.textContent = ` ${response.followers}`;
@@ -91,15 +90,25 @@ function insertAccountInfo(response) {
     $accountInfoLocation.textContent = ` ${response.location}`;
   }
 
+  if (response.avatar === undefined) {
+    $accountInfoImg.src = '/images/placeholder-image-square.jpg';
+  } else {
+    $accountInfoImg.src = response.avatar;
+  }
+
+  if (response.league === undefined) {
+    $accountInfoLeague.textContent = 'No league found.';
+  } else {
+    $accountInfoLeague.textContent = response.league;
+    $leagueIcon.src = leagueIcons[response.league];
+    $leagueIcon.alt = response.league;
+  }
+
   const date = new Date(response.joined * 1000);
   const month = months[date.getMonth()];
   const year = date.getFullYear();
   const joinedDate = ` Joined ${month} ${year}`;
   $accountInfoJoined.textContent = joinedDate;
-
-  $accountInfoLeague.textContent = response.league;
-  $leagueIcon.src = leagueIcons[response.league];
-  $leagueIcon.alt = response.league;
 }
 
 function renderStat(type, stats) {
