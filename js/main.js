@@ -98,6 +98,8 @@ function insertAccountInfo(response) {
 
   if (response.league === undefined) {
     $accountInfoLeague.textContent = 'No league found.';
+    $leagueIcon.src = '';
+    $leagueIcon.alt = '';
   } else {
     $accountInfoLeague.textContent = response.league;
     $leagueIcon.src = leagueIcons[response.league];
