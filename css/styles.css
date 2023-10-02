@@ -2,10 +2,6 @@ span {
   white-space: pre;
 }
 
-.bg-white {
-  background-color: #f5f5f5;
-}
-
 .bg-blue-1 {
   background-color: #363944;
 }
@@ -16,18 +12,6 @@ span {
 
 .bg-dark-gray {
   background-color: #333;
-}
-
-.bg-green {
-  background-color: #81b64c;
-}
-
-.bg-gold {
-  background-color: #ca9372;
-}
-
-.bg-red {
-  background-color: #ba0c2f;
 }
 
 .text-white {
@@ -52,10 +36,6 @@ span {
 
 .justify-around {
   justify-content: space-around;
-}
-
-.height-200 {
-  height: 200px;
 }
 
 .align-center {
@@ -90,7 +70,8 @@ span {
   font-family: "JetBrains Mono", monospace;
 }
 
-.search-box {
+.search-box,
+.search-box-main {
   border-radius: 5px;
   background-color: #f5f5f5;
   border: 1px solid #f5f5f5;
@@ -100,11 +81,6 @@ span {
 }
 
 .search-box-main {
-  border-radius: 5px;
-  background-color: #f5f5f5;
-  border: 1px solid #f5f5f5;
-  padding: 0.2rem 0.5rem;
-  padding-right: 2.5rem;
   font-size: 1rem;
 }
 
@@ -138,10 +114,6 @@ span {
   height: 500px;
 }
 
-.maxheight-150 {
-  max-height: 150px;
-}
-
 .mt-3 {
   margin-top: 3rem;
 }
@@ -152,10 +124,6 @@ span {
 
 .mtb-three-fourths {
   margin: 0.75rem 0;
-}
-
-.ptb-half {
-  padding: 0.5rem 0;
 }
 
 .avatar-wrapper img {
@@ -194,10 +162,6 @@ span {
 
 .font-italic {
   font-style: italic;
-}
-
-.font-bold {
-  font-weight: 600;
 }
 
 .leading-1 {

@@ -61,6 +61,7 @@ function getPlayerInfo(event) {
         data.viewSwap($playerInfo);
         insertAccountInfo(xhr.response);
         insertStats($headerSearch.value);
+        $headerSearch.value = '';
       } else {
         $errorMsg.textContent = 'Unable to find ' + $headerSearch.value + '.';
         data.viewSwap($failedSearch);

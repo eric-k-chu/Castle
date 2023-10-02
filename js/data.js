@@ -1,5 +1,7 @@
 /* exported data */
 const $home = document.querySelector('#home');
+const $headSearch = document.querySelector('#header-search');
+const $bodySearch = document.querySelector('#main-search');
 
 const data = {
   currentView: $home,
@@ -10,3 +12,8 @@ const data = {
     this.currentView = newView;
   }
 };
+
+window.addEventListener('beforeunload', function (event) {
+  $headSearch.value = '';
+  $bodySearch.value = '';
+});
