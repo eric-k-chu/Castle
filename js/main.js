@@ -22,8 +22,6 @@ const $leagueIcon = document.querySelector('#league-icon');
 // Account Stats
 const $statsTable = document.querySelector('#stats-table > tbody');
 
-// const $tables = document.querySelectorAll('table');
-
 const months = [
   'January',
   'February',
@@ -149,6 +147,9 @@ function insertStats(username) {
   xhr.open('GET', `https://api.chess.com/pub/player/${username}/stats`);
   xhr.responseType = 'json';
   xhr.addEventListener('load', function (event) {
+    while ($statsTable.firstChild) {
+      $statsTable.removeChild($statsTable.firstChild);
+    }
     const gameModes = Object.keys(xhr.response);
     gameModes.forEach((key, index) => {
       if (key !== 'fide') {
@@ -200,11 +201,3 @@ function getWPCT(win, loss, draw) {
   const pct = Math.trunc(dec * 100);
   return `${pct}%`;
 }
-
-// function clearPrevious() {
-//   for (const table of $tables) {
-//     while (table.childNodes.length > 0) {
-//       table.removeChild(table.firstChild);
-//     }
-//   }
-// }
