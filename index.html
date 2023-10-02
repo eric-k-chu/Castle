@@ -39,11 +39,9 @@
     </div>
   </div>
   <main>
-    <div class="container hidden" id="home">
+    <div class="container" id="home">
       <div class="col justify-center align-center height-500">
-        <!-- fa-person-circle-question or fa-chess-->
-        <i class="fa-solid fa-chess text-white icon-xxl"></i>
-        <p class="text-white hidden" id="failed-msg">Unable to find username.</p>
+        <i class="fa-solid text-white icon-xxl fa-chess" id="main-logo"></i>
         <div class="input-group mt-3">
           <input type="text" class="search-box-main font-jetbrains" id="main-search" placeholder="Search Players"
             maxlength="32" />
@@ -54,78 +52,89 @@
       </div>
     </div>
 
-    <div class="bg-blue-1" id="player-info-header">
-      <div class="container text-white">
-        <div class="row align-center" id="account-info">
-          <div class="mr-1" id="account-info-img">
-            <div class="img-wrapper">
-              <img src="/images/example-avatar.png" alt="user icon">
+    <div class="container hidden" id="failed-search">
+      <div class="col align-center justify-center text-white height-500">
+        <i class="fa-solid text-white icon-xxl fa-person-circle-question"></i>
+        <h3 id="error-msg"></h3>
+      </div>
+    </div>
+
+    <div class="hidden" id="player-info">
+      <div class="bg-blue-1" id="player-info-header">
+        <div class="container text-white">
+          <div class="row align-center" id="account-info">
+            <div class="mr-1" id="account-info-img">
+              <div class="img-wrapper">
+                <img src="/images/example-avatar.png" alt="user icon">
+              </div>
             </div>
-          </div>
-          <div class="col" id="account-info-text">
-            <div class="row gap-1 align-center leading-1">
-              <h3 id="username">hikaru</h3>
-              <h3 id="country">US</h3>
-            </div>
-            <div class="row">
-              <p id="name">Hikaru Nakamura</p>
-            </div>
-            <div class="row gap-1 mtb-three-fourths">
-              <i class="fa-solid fa-user">
-                <span class="font-jetbrains font-thin" id="followers"> 500</span>
-              </i>
-              <i class="fa-solid fa-location-dot">
-                <span class="font-jetbrains font-thin" id="location"> Bay Area, CA</span>
-              </i>
-            </div>
-            <div class="row mtb-three-fourths">
-              <i class="fa-regular fa-calendar-days" id="joined">
-                <span class="font-jetbrains font-thin"> Joined September 2020</span>
-              </i>
+            <div class="col" id="account-info-text">
+              <div class="row gap-1 align-center leading-1">
+                <h3 id="username">hikaru</h3>
+                <h3 id="country">US</h3>
+              </div>
+              <div class="row">
+                <p id="name">Hikaru Nakamura</p>
+              </div>
+              <div class="row gap-1 mtb-three-fourths">
+                <i class="fa-solid fa-user">
+                  <span class="font-jetbrains font-thin" id="followers"> 500</span>
+                </i>
+                <i class="fa-solid fa-location-dot">
+                  <span class="font-jetbrains font-thin" id="location"> Bay Area, CA</span>
+                </i>
+              </div>
+              <div class="row mtb-three-fourths">
+                <i class="fa-regular fa-calendar-days" id="joined">
+                  <span class="font-jetbrains font-thin"> Joined September 2020</span>
+                </i>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="container text-white" id="player-info-body">
-      <div class="row">
-        <div class="col mr-1">
-          <div class="row content-box justify-center" id="league-rank">
-            <p>No league found.</p>
-          </div>
+      <div class="bg-white" id="player-info-body">
+        <div class="container text-white">
+          <div class="row">
+            <div class="col mr-1">
+              <div class="row content-box justify-center" id="league-rank">
+                <p>No league found.</p>
+              </div>
 
-          <div class="row content-box" id="stats">
-            <div class="col column-full">
-              <p>Stats</p>
-              <div class="stats-box">
-                <div class="mode-icon">
-                  <i class="fa-solid fa-sun"></i>
-                </div>
-                <div class="mode-info">
-                  <p class="mode-name">Daily</p>
-                  <p class="mode-rating">1526</p>
-                </div>
-                <div class="mode-wpct">
-                  <p class="mode-pct">70.46%</p>
-                  <p class="mode-desc">Win %</p>
+              <div class="row content-box" id="stats">
+                <div class="col column-full">
+                  <p>Stats</p>
+                  <div class="stats-box">
+                    <div class="mode-icon">
+                      <i class="fa-solid fa-sun"></i>
+                    </div>
+                    <div class="mode-info">
+                      <p class="mode-name">Daily</p>
+                      <p class="mode-rating">1526</p>
+                    </div>
+                    <div class="mode-wpct">
+                      <p class="mode-pct">70.46%</p>
+                      <p class="mode-desc">Win %</p>
+                    </div>
+                  </div>
                 </div>
               </div>
+
+              <div class="row content-box" id="clubs">
+                <div class="col column-full">
+                  <p>Clubs</p>
+                  <p class="text-center">No clubs found.</p>
+                </div>
+              </div>
+
             </div>
-          </div>
 
-          <div class="row content-box" id="clubs">
-            <div class="col column-full">
-              <p>Clubs</p>
-              <p class="text-center">No clubs found.</p>
+            <div class="col">
+              <div class="row content-box justify-around" id="game-archives">
+                <p>No games found.</p>
+              </div>
             </div>
-          </div>
-
-        </div>
-
-        <div class="col">
-          <div class="row content-box justify-around" id="game-archives">
-            <p>No games found.</p>
           </div>
         </div>
       </div>
