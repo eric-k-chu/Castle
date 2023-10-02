@@ -65,6 +65,7 @@ function getPlayerInfo(event) {
       } else {
         $errorMsg.textContent = 'Unable to find ' + event.target.value + '.';
         data.viewSwap($failedSearch);
+        event.target.value = '';
       }
     });
     xhr.send();
