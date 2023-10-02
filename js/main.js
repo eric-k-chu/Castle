@@ -63,7 +63,7 @@ function getPlayerInfo(event) {
         insertStats(event.target.value);
         event.target.value = '';
       } else {
-        $errorMsg.textContent = 'Unable to find ' + event.target.value + '.';
+        $errorMsg.textContent = `Unable to find ${event.target.value}`;
         data.viewSwap($failedSearch);
         event.target.value = '';
       }
