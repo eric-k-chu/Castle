@@ -1,0 +1,264 @@
+span {
+  white-space: pre;
+}
+
+.bg-blue-1 {
+  background-color: #363944;
+}
+
+.bg-blue-2 {
+  background-color: #292b33;
+}
+
+.bg-dark-gray {
+  background-color: #333;
+}
+
+.text-white {
+  color: #f5f5f5;
+}
+
+.text-green {
+  color: #81b64c;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.justify-around {
+  justify-content: space-around;
+}
+
+.align-center {
+  align-items: center;
+}
+
+.icon-base {
+  font-size: 1rem;
+}
+
+.icon-med {
+  font-size: 1.5rem;
+}
+
+.icon-xxl {
+  font-size: 6rem;
+}
+
+.icon-sm {
+  font-size: 0.75rem;
+}
+
+.gap-half {
+  gap: 0.5rem;
+}
+
+.gap-1 {
+  gap: 1rem;
+}
+
+.font-jetbrains {
+  font-family: "JetBrains Mono", monospace;
+}
+
+.search-box,
+.search-box-main {
+  border-radius: 5px;
+  background-color: #f5f5f5;
+  border: 1px solid #f5f5f5;
+  padding: 0.2rem 0.5rem;
+  padding-right: 2.5rem;
+  font-size: 0.7rem;
+}
+
+.search-box-main {
+  font-size: 1rem;
+}
+
+.input-icon {
+  position: absolute;
+  right: 10px;
+  top: 1px;
+}
+
+.input-icon-main {
+  position: absolute;
+  right: 12px;
+  top: 4px;
+}
+
+.input-group {
+  position: relative;
+  display: inline-block;
+}
+
+.nav-bar {
+  text-decoration-line: none;
+  line-height: 3rem;
+}
+
+.nav-bar:hover {
+  cursor: pointer;
+}
+
+.height-500 {
+  height: 500px;
+}
+
+.mt-3 {
+  margin-top: 3rem;
+}
+
+.font-thin {
+  font-weight: 100;
+}
+
+.mtb-three-fourths {
+  margin: 0.75rem 0;
+}
+
+.avatar-wrapper img {
+  max-width: 125px;
+  border-radius: 5px;
+  border: 1px solid black;
+  box-shadow: 2px 2px 2px black;
+}
+
+.league-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.league-wrapper img {
+  width: 75%;
+}
+
+#player-info-header {
+  font-size: 0.6rem;
+  height: 150px;
+}
+
+#account-info-name,
+#account-info-followers,
+#account-info-location,
+#account-info-joined {
+  color: #aaa;
+}
+
+#account-info-country {
+  border: 1px solid black;
+  border-radius: 2px;
+  font-size: 1rem;
+}
+
+.font-italic {
+  font-style: italic;
+}
+
+.leading-1 {
+  line-height: 0.1rem;
+}
+
+.mr-1 {
+  margin-right: 1rem;
+}
+
+.content-box {
+  border-radius: 5px;
+  box-shadow: 2px 2px 2px black;
+  background-color: #363944;
+  padding: 0.5rem;
+  margin-top: 1rem;
+}
+
+td {
+  padding-bottom: 5px;
+}
+
+#stats-table {
+  font-size: 0.5rem;
+}
+
+tr > td:nth-of-type(2) > p:nth-of-type(2),
+tr > td:nth-of-type(3) > p:nth-of-type(2) {
+  color: #aaa;
+  font-size: 0.4rem;
+}
+
+#stats-table tbody tr td > p {
+  margin: 0;
+}
+
+#account-stats > p:nth-of-type(1),
+#clubs > div > p:nth-of-type(1) {
+  border-bottom: 1px solid #f5f5f5;
+  font-size: 0.75rem;
+  margin-top: 0;
+  padding-bottom: 5px;
+}
+
+#league-rank {
+  font-size: 0.75rem;
+}
+
+tr > td:nth-of-type(1) {
+  width: 15px;
+}
+
+tr > td:nth-of-type(1) > i {
+  font-size: 0.75rem;
+}
+
+tr > td:nth-of-type(3) {
+  text-align: right;
+}
+
+@media only screen and (min-width: 768px) {
+  #player-info-header {
+    font-size: 0.8rem;
+    height: 170px;
+  }
+
+  #account-info-country {
+    font-size: 1.1rem;
+  }
+
+  #stats-table {
+    font-size: 0.75rem;
+  }
+
+  tr > td:nth-of-type(2) > p:nth-of-type(2),
+  tr > td:nth-of-type(3) > p:nth-of-type(2) {
+    font-size: 0.65rem;
+  }
+
+  tr > td:nth-of-type(1) {
+    width: 20px;
+  }
+
+  tr > td:nth-of-type(1) > i {
+    font-size: 1rem;
+  }
+
+  .avatar-wrapper img {
+    max-width: 150px;
+  }
+
+  #league-rank {
+    font-size: 1rem;
+  }
+
+  #account-stats > p:nth-of-type(1),
+  #clubs > div > p:nth-of-type(1) {
+    font-size: 1rem;
+  }
+}
