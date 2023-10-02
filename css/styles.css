@@ -190,7 +190,7 @@
   margin-top: 1rem;
 }
 
-#stats > div > p:nth-of-type(1),
+#account-stats > p:nth-of-type(1),
 #clubs > div > p:nth-of-type(1) {
   border-bottom: 1px solid #f5f5f5;
   font-size: 0.75rem;
@@ -264,7 +264,7 @@
     font-size: 1rem;
   }
 
-  #stats > div > p:nth-of-type(1),
+  #account-stats > p:nth-of-type(1),
   #clubs > div > p:nth-of-type(1) {
     font-size: 1rem;
   }
