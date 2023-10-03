@@ -167,9 +167,11 @@ function renderStat(type, stats) {
     $p3.textContent = stats.highest.rating;
     $p4.textContent = 'Highest';
   } else if (game.name === 'Puzzle Rush') {
-    $p2.textContent = `Attempts (${stats.best.total_attempts})`;
-    $p3.textContent = stats.best.score;
-    $p4.textContent = 'Score';
+    if (Object.keys(stats).length > 0) {
+      $p2.textContent = `Attempts (${stats.best.total_attempts})`;
+      $p3.textContent = stats.best.score;
+      $p4.textContent = 'Score';
+    }
   } else {
     $p2.textContent = stats.last.rating;
     $p3.textContent = getWPCT(stats.record.win, stats.record.loss, stats.record.draw);
@@ -242,7 +244,7 @@ function insertClubs(username) {
 
     if (clubs.length < 1) {
       const $msg = document.createElement('div');
-      $msg.className = 'justify-center';
+      $msg.className = 'row justify-center';
       const $p = document.createElement('p');
       $p.textContent = 'No clubs found.';
       $msg.appendChild($p);
