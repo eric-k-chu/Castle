@@ -19,8 +19,9 @@ const $accountInfoJoined = document.querySelector('#account-info-joined');
 const $accountInfoLeague = document.querySelector('#account-info-league');
 const $leagueIcon = document.querySelector('#league-icon');
 
-// Account Stats
+// Tables
 const $statsTable = document.querySelector('#stats-table > tbody');
+const $clubsTable = document.querySelector('#clubs-table');
 
 const months = [
   'January',
@@ -61,6 +62,7 @@ function getPlayerInfo(event) {
         data.viewSwap($playerInfo);
         insertAccountInfo(xhr.response);
         insertStats(event.target.value);
+        insertClubs(event.target.value);
         event.target.value = '';
       } else {
         $errorMsg.textContent = `Unable to find ${event.target.value}`;
@@ -78,6 +80,7 @@ function insertAccountInfo(response) {
   const countryCode = response.country.slice(-2).toLowerCase();
   $accountInfoCountry.className = `fi fi-${countryCode}`;
   $accountInfoFollowers.textContent = ` ${response.followers}`;
+  $accountInfoJoined.textContent = getJoinedDate(response.joined);
 
   if (response.name === undefined) {
     $accountInfoName.textContent = 'N/A';
@@ -106,12 +109,40 @@ function insertAccountInfo(response) {
     $leagueIcon.src = leagueIcons[response.league];
     $leagueIcon.alt = response.league;
   }
+}
 
-  const date = new Date(response.joined * 1000);
-  const month = months[date.getMonth()];
-  const year = date.getFullYear();
-  const joinedDate = ` Joined ${month} ${year}`;
-  $accountInfoJoined.textContent = joinedDate;
+function getGame(string) {
+  const obj = {};
+  switch (string) {
+    case 'chess_daily':
+      obj.name = 'Daily';
+      obj.icon = 'fa-solid fa-sun';
+      return obj;
+    case 'chess960_daily':
+      obj.name = 'Daily 960';
+      obj.icon = 'fa-regular fa-sun';
+      return obj;
+    case 'chess_rapid':
+      obj.name = 'Rapid';
+      obj.icon = 'fa-solid fa-stopwatch';
+      return obj;
+    case 'chess_bullet':
+      obj.name = 'Bullet';
+      obj.icon = 'fa-solid fa-rocket';
+      return obj;
+    case 'chess_blitz':
+      obj.name = 'Blitz';
+      obj.icon = 'fa-solid fa-bolt';
+      return obj;
+    case 'tactics':
+      obj.name = 'Puzzles';
+      obj.icon = 'fa-solid fa-puzzle-piece';
+      return obj;
+    case 'puzzle_rush':
+      obj.name = 'Puzzle Rush';
+      obj.icon = 'fa-solid fa-bolt-lightning';
+      return obj;
+  }
 }
 
 function renderStat(type, stats) {
@@ -174,38 +205,65 @@ function insertStats(username) {
   xhr.send();
 }
 
-function getGame(string) {
-  const obj = {};
-  switch (string) {
-    case 'chess_daily':
-      obj.name = 'Daily';
-      obj.icon = 'fa-solid fa-sun';
-      return obj;
-    case 'chess960_daily':
-      obj.name = 'Daily 960';
-      obj.icon = 'fa-regular fa-sun';
-      return obj;
-    case 'chess_rapid':
-      obj.name = 'Rapid';
-      obj.icon = 'fa-solid fa-stopwatch';
-      return obj;
-    case 'chess_bullet':
-      obj.name = 'Bullet';
-      obj.icon = 'fa-solid fa-rocket';
-      return obj;
-    case 'chess_blitz':
-      obj.name = 'Blitz';
-      obj.icon = 'fa-solid fa-bolt';
-      return obj;
-    case 'tactics':
-      obj.name = 'Puzzles';
-      obj.icon = 'fa-solid fa-puzzle-piece';
-      return obj;
-    case 'puzzle_rush':
-      obj.name = 'Puzzle Rush';
-      obj.icon = 'fa-solid fa-bolt-lightning';
-      return obj;
-  }
+function renderClub(club) {
+  const $row = document.createElement('div');
+  $row.className = 'row align-center';
+
+  const $iconWrapper = document.createElement('div');
+  $iconWrapper.className = 'club-icon-wrapper';
+  const $icon = document.createElement('img');
+  $icon.src = club.icon;
+  $icon.alt = 'club icon';
+
+  const $clubDesc = document.createElement('div');
+  $clubDesc.className = 'col';
+  const $p1 = document.createElement('p');
+  const $p2 = document.createElement('p');
+  $p1.textContent = club.name;
+  $p2.textContent = getJoinedDate(club.joined);
+
+  $row.append($iconWrapper, $clubDesc);
+  $iconWrapper.appendChild($icon);
+  $clubDesc.append($p1, $p2);
+
+  return $row;
+}
+
+function insertClubs(username) {
+  const xhr = new XMLHttpRequest();
+  xhr.open('GET', `https://api.chess.com/pub/player/${username}/clubs`);
+  xhr.responseType = 'json';
+  xhr.addEventListener('load', function (event) {
+    while ($clubsTable.firstChild) {
+      $clubsTable.removeChild($clubsTable.firstChild);
+    }
+    const clubs = xhr.response.clubs;
+    let maxDisplay = 0;
+
+    if (clubs.length < 1) {
+      const $msg = document.createElement('div');
+      $msg.className = 'justify-center';
+      const $p = document.createElement('p');
+      $p.textContent = 'No clubs found.';
+      $msg.appendChild($p);
+      $clubsTable.append($msg);
+    } else {
+      if (clubs.length < 5) {
+        maxDisplay = clubs.length;
+      } else {
+        maxDisplay = 5;
+      }
+
+      let count = 0;
+      let i = clubs.length - 1;
+      while (count < maxDisplay) {
+        $clubsTable.appendChild(renderClub(clubs[i]));
+        count++;
+        i--;
+      }
+    }
+  });
+  xhr.send();
 }
 
 function getWPCT(win, loss, draw) {
@@ -213,4 +271,11 @@ function getWPCT(win, loss, draw) {
   const dec = (2 * win + draw) / (2 * total);
   const pct = Math.trunc(dec * 100);
   return `${pct}%`;
+}
+
+function getJoinedDate(timestamp) {
+  const date = new Date(timestamp * 1000);
+  const month = months[date.getMonth()];
+  const year = date.getFullYear();
+  return ` Joined ${month} ${year}`;
 }

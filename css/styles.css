@@ -142,6 +142,19 @@ span {
   width: 75%;
 }
 
+.club-icon-wrapper img {
+  width: 100%;
+  border-radius: 5px;
+  border: 1px solid black;
+}
+
+.club-icon-wrapper {
+  display: flex;
+  align-items: center;
+  flex-basis: 25%;
+  margin-right: 0.5rem;
+}
+
 #player-info-header {
   font-size: 0.6rem;
   height: 150px;
@@ -180,7 +193,8 @@ span {
   margin-top: 1rem;
 }
 
-td {
+#stats-table > tbody tr td,
+#clubs-table div {
   padding-bottom: 5px;
 }
 
@@ -188,14 +202,12 @@ td {
   font-size: 0.5rem;
 }
 
-tr > td:nth-of-type(2) > p:nth-of-type(2),
-tr > td:nth-of-type(3) > p:nth-of-type(2) {
-  color: #aaa;
-  font-size: 0.4rem;
-}
-
 #stats-table tbody tr td > p {
   margin: 0;
+}
+
+#clubs-table {
+  font-size: 0.5rem;
 }
 
 #account-stats > p:nth-of-type(1),
@@ -206,19 +218,31 @@ tr > td:nth-of-type(3) > p:nth-of-type(2) {
   padding-bottom: 5px;
 }
 
+#clubs-table div > div:nth-of-type(2) > p:nth-of-type(1),
+#clubs-table div > div:nth-of-type(2) > p:nth-of-type(2) {
+  margin: 0;
+}
+
+#clubs-table div > div:nth-of-type(2) > p:nth-of-type(2),
+#stats-table > tbody tr > td:nth-of-type(2) > p:nth-of-type(2),
+#stats-table > tbody tr > td:nth-of-type(3) > p:nth-of-type(2) {
+  color: #aaa;
+  font-size: 0.4rem;
+}
+
 #league-rank {
   font-size: 0.75rem;
 }
 
-tr > td:nth-of-type(1) {
+#stats-table > tbody tr > td:nth-of-type(1) {
   width: 15px;
 }
 
-tr > td:nth-of-type(1) > i {
+#stats-table > tbody tr > td:nth-of-type(1) > i {
   font-size: 0.75rem;
 }
 
-tr > td:nth-of-type(3) {
+#stats-table > tbody tr > td:nth-of-type(3) {
   text-align: right;
 }
 
@@ -236,16 +260,26 @@ tr > td:nth-of-type(3) {
     font-size: 0.75rem;
   }
 
-  tr > td:nth-of-type(2) > p:nth-of-type(2),
-  tr > td:nth-of-type(3) > p:nth-of-type(2) {
+  #clubs-table {
+    font-size: 0.75rem;
+  }
+
+  #account-stats > p:nth-of-type(1),
+  #clubs > div > p:nth-of-type(1) {
+    font-size: 1rem;
+  }
+
+  #clubs-table div > div:nth-of-type(2) > p:nth-of-type(2),
+  #stats-table > tbody tr > td:nth-of-type(2) > p:nth-of-type(2),
+  #stats-table > tbody tr > td:nth-of-type(3) > p:nth-of-type(2) {
     font-size: 0.65rem;
   }
 
-  tr > td:nth-of-type(1) {
+  #stats-table > tbody tr > td:nth-of-type(1) {
     width: 20px;
   }
 
-  tr > td:nth-of-type(1) > i {
+  #stats-table > tbody tr > td:nth-of-type(1) > i {
     font-size: 1rem;
   }
 
@@ -253,12 +287,18 @@ tr > td:nth-of-type(3) {
     max-width: 150px;
   }
 
-  #league-rank {
-    font-size: 1rem;
+  .club-icon-wrapper {
+    display: flex;
+    align-items: center;
+    flex-basis: 25%;
+    margin-right: 0.5rem;
   }
 
-  #account-stats > p:nth-of-type(1),
-  #clubs > div > p:nth-of-type(1) {
+  #clubs-table div > div:nth-of-type(2) {
+    flex-basis: 75%;
+  }
+
+  #league-rank {
     font-size: 1rem;
   }
 }
