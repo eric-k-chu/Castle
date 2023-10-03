@@ -159,20 +159,23 @@ function renderStat(type, stats) {
   const $p3 = document.createElement('p');
   const $p4 = document.createElement('p');
 
-  $icon.className = game.icon;
-  $p1.textContent = game.name;
-
   if (game.name === 'Puzzles') {
+    $icon.className = game.icon;
+    $p1.textContent = game.name;
     $p2.textContent = `Lowest (${stats.lowest.rating})`;
     $p3.textContent = stats.highest.rating;
     $p4.textContent = 'Highest';
   } else if (game.name === 'Puzzle Rush') {
     if (Object.keys(stats).length > 0) {
+      $icon.className = game.icon;
+      $p1.textContent = game.name;
       $p2.textContent = `Attempts (${stats.best.total_attempts})`;
       $p3.textContent = stats.best.score;
       $p4.textContent = 'Score';
     }
   } else {
+    $icon.className = game.icon;
+    $p1.textContent = game.name;
     $p2.textContent = stats.last.rating;
     $p3.textContent = getWPCT(stats.record.win, stats.record.loss, stats.record.draw);
     $p4.textContent = 'Win %';
