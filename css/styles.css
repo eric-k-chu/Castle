@@ -139,11 +139,11 @@ span {
 }
 
 .league-wrapper img {
-  width: 75%;
+  width: 50px;
 }
 
 .club-icon-wrapper img {
-  width: 100%;
+  width: 30px;
   border-radius: 5px;
   border: 1px solid black;
 }
@@ -198,16 +198,13 @@ span {
   padding-bottom: 5px;
 }
 
-#stats-table {
+#stats-table,
+#clubs-table {
   font-size: 0.5rem;
 }
 
 #stats-table tbody tr td > p {
   margin: 0;
-}
-
-#clubs-table {
-  font-size: 0.5rem;
 }
 
 #account-stats > p:nth-of-type(1),
@@ -216,6 +213,13 @@ span {
   font-size: 0.75rem;
   margin-top: 0;
   padding-bottom: 5px;
+}
+
+#clubs-table div > div:nth-of-type(2) > p:nth-of-type(1) {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  width: 5rem;
 }
 
 #clubs-table div > div:nth-of-type(2) > p:nth-of-type(1),
@@ -256,10 +260,7 @@ span {
     font-size: 1.1rem;
   }
 
-  #stats-table {
-    font-size: 0.75rem;
-  }
-
+  #stats-table,
   #clubs-table {
     font-size: 0.75rem;
   }
@@ -267,6 +268,10 @@ span {
   #account-stats > p:nth-of-type(1),
   #clubs > div > p:nth-of-type(1) {
     font-size: 1rem;
+  }
+
+  #clubs-table div > div:nth-of-type(2) > p:nth-of-type(1) {
+    width: 8rem;
   }
 
   #clubs-table div > div:nth-of-type(2) > p:nth-of-type(2),
@@ -287,11 +292,19 @@ span {
     max-width: 150px;
   }
 
+  .league-wrapper img {
+    width: 70px;
+  }
+
   .club-icon-wrapper {
     display: flex;
     align-items: center;
     flex-basis: 25%;
     margin-right: 0.5rem;
+  }
+
+  .club-icon-wrapper img {
+    width: 40px;
   }
 
   #clubs-table div > div:nth-of-type(2) {
