@@ -38,6 +38,21 @@ const months = [
   'December'
 ];
 
+// const monthsAbbr = [
+//   'Jan',
+//   'Feb',
+//   'Mar',
+//   'Apr',
+//   'May',
+//   'Jun',
+//   'Jul',
+//   'Aug',
+//   'Sep',
+//   'Oct',
+//   'Nov',
+//   'Dec'
+// ];
+
 const leagueIcons = {
   Wood: 'https://www.chess.com/bundles/web/images/leagues/badges/wood.b8940cb5.svg',
   Stone: 'https://www.chess.com/bundles/web/images/leagues/badges/stone.3434a62c.svg',
@@ -271,6 +286,66 @@ function insertClubs(username) {
   xhr.send();
 }
 
+// function renderMatch(game, username) {
+//   const mode = getMode(game.time_class, game.rules);
+//   const date = getMatchDate(game.end_time);
+//   const white = game.white.username;
+//   const black = game.black.username;
+//   const whiteRating = game.white.rating;
+//   const blackRating = game.black.rating;
+
+//   const result = parsePGN(game.pgn, white, black, username);
+
+//   const $entry = `<div class="match-entry bg-win">
+//                     <table id="match-info">
+//                       <tbody>
+//                         <tr>
+//                           <td class="info-cell">
+//                             <div class="cell-wrapper">
+//                               <div>
+//                                 <div>
+//                                   <span>${mode}</span>
+//                                 </div>
+//                                 <div>
+//                                   <span class="text-gray">${date}</span>
+//                                 </div>
+//                               </div>
+//                             </div>
+//                           </td>
+//                           <td class="user-cell">
+//                             <div class="cell-wrapper">
+//                               <div>
+//                                 <div>
+//                                   <span>${white} ${whiteRating}</span>
+//                                 </div>
+//                                 <div>
+//                                   <span class="text-black">${black} ${blackRating}</span>
+//                                 </div>
+//                               </div>
+//                             </div>
+//                           </td>
+//                           <td class="result-cell">
+//                             <div class="cell-wrapper">
+//                               <div>
+//                                 <div>
+//                                   <span class="${result.color}">${result.resultStr}</span>
+//                                 </div>
+//                                 <div>
+//                                   <span class="text-gray">${result.moves} moves</span>
+//                                 </div>
+//                               </div>
+//                             </div>
+//                           </td>
+//                           <td class="link-cell">
+//                             <i class="fa-solid fa-link"></i>
+//                           </td>
+//                         </tr>
+//                       </tbody>
+//                     </table>
+//                   </div>`;
+//   return $entry;
+// }
+
 function getWPCT(win, loss, draw) {
   const total = win + loss + draw;
   const dec = (2 * win + draw) / (2 * total);
@@ -284,3 +359,82 @@ function getJoinedDate(timestamp) {
   const year = date.getFullYear();
   return ` Joined ${month} ${year}`;
 }
+
+// function getMatchDate(timestamp) {
+//   const date = new Date(timestamp * 1000);
+//   const month = monthsAbbr[date.getMonth()];
+//   const day = date.getDate();
+//   const year = date.getFullYear();
+//   return `${month} ${day}, ${year}`;
+// }
+
+// function getMode(timeClass, rules) {
+//   if (rules === 'chess') {
+//     return timeClass.charAt(0).toUpperCase() + timeClass.slice(1);
+//   } else if (rules === 'chess960') {
+//     return 'Daily 960';
+//   } else if (rules === 'bughouse') {
+//     return 'Bughouse';
+//   } else if (rules === 'kingofthechill') {
+//     return 'King of the Hill';
+//   } else if (rules === 'threecheck') {
+//     return '3-Check';
+//   } else if (rules === 'crazyhouse') {
+//     return 'Crazyhouse';
+//   }
+// }
+
+// function parsePGN(pgn, white, black, username) {
+//   let flag1 = false;
+//   let flag2 = false;
+//   const flag3 = pgn.includes('{');
+//   const moveCount = [];
+//   let result = '';
+//   let colorStr = '';
+
+//   for (let i = pgn.length - 1; i >= 0; i--) {
+//     if (flag2 === true && /[0-9]/.test(pgn[i])) {
+//       moveCount.unshift(pgn[i]);
+//     }
+
+//     if (pgn[i] === '{') {
+//       flag1 = true;
+//     }
+
+//     if (flag3 === true) {
+//       if (flag1 === true && pgn[i] === '.') {
+//         flag2 = true;
+//       }
+//     } else {
+//       if (pgn[i] === '.') {
+//         flag2 = true;
+//       }
+//     }
+
+//     // penultimate character is always a number 0, 1, or 2
+//     if (i === pgn.length - 2) {
+//       if (pgn[i] === '0') {
+//         if (username === white) {
+//           result = 'Win';
+//           colorStr = 'text-green';
+//         } else {
+//           result = 'Loss';
+//           colorStr = 'text-red';
+//         }
+//       } else if (pgn[i] === '1') {
+//         if (username === black) {
+//           result = 'Win';
+//           colorStr = 'text-green';
+//         } else {
+//           result = 'Loss';
+//           colorStr = 'text-red';
+//         }
+//       } else if (pgn[i] === '2') {
+//         result = 'Draw';
+//         colorStr = 'text-gray';
+//       }
+//     }
+//   }
+
+//   return { resultStr: result, moves: moveCount.join(''), color: colorStr };
+// }

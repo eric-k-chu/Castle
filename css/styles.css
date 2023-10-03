@@ -22,6 +22,14 @@ span {
   color: #81b64c;
 }
 
+.text-black {
+  color: black;
+}
+
+.text-gray {
+  color: #b3aca8;
+}
+
 .text-center {
   text-align: center;
 }
@@ -193,6 +201,73 @@ span {
   margin-top: 1rem;
 }
 
+.match-entry {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  border-radius: 5px;
+  box-shadow: 2px 2px 2px black;
+  margin-top: 0.5rem;
+}
+
+.bg-win {
+  background:
+    linear-gradient(
+      90deg,
+      #81b64c 0%,
+      #81b64c 1.5%,
+      #363944 1.5%,
+      #363944 98.5%,
+      #81b64c 98.5%,
+      #81b64c 100%
+    );
+}
+
+.bg-draw {
+  background:
+    linear-gradient(
+      90deg,
+      #b3aca8 0%,
+      #b3aca8 1.5%,
+      #363944 1.5%,
+      #363944 98.5%,
+      #b3aca8 98.5%,
+      #b3aca8 100%
+    );
+}
+
+.bg-loss {
+  background:
+    linear-gradient(
+      90deg,
+      #ba0c2f 0%,
+      #ba0c2f 1.5%,
+      #363944 1.5%,
+      #363944 98.5%,
+      #ba0c2f 98.5%,
+      #ba0c2f 100%
+    );
+}
+
+.cell-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.info-cell,
+.user-cell,
+.result-cell,
+.link-cell {
+  padding: 0.5rem;
+}
+
+.result-cell {
+  display: none;
+}
+
 #stats-table > tbody tr td,
 #clubs-table div {
   padding-bottom: 5px;
@@ -250,7 +325,27 @@ span {
   text-align: right;
 }
 
+#match-info {
+  font-size: 0.5rem;
+}
+
 @media only screen and (min-width: 768px) {
+  #match-info {
+    width: 100%;
+    font-size: 1rem;
+  }
+
+  .info-cell,
+  .user-cell,
+  .result-cell,
+  .link-cell {
+    padding: 0.5rem 1rem;
+  }
+
+  .result-cell {
+    display: inline-block;
+  }
+
   #player-info-header {
     font-size: 0.8rem;
     height: 170px;
