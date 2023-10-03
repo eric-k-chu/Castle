@@ -30,6 +30,14 @@ span {
   color: #b3aca8;
 }
 
+.text-red {
+  color: #ba0c2f;
+}
+
+.text-gold {
+  color: #ca9372;
+}
+
 .text-center {
   text-align: center;
 }
@@ -205,8 +213,8 @@ span {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-left: 1rem;
-  padding-right: 1rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
   border-radius: 5px;
   box-shadow: 2px 2px 2px black;
   margin-top: 0.5rem;
@@ -260,10 +268,12 @@ span {
 .info-cell,
 .user-cell,
 .result-cell,
+.rating-cell,
 .link-cell {
-  padding: 0.5rem;
+  padding: 0.5rem 0.85rem;
 }
 
+.rating-cell,
 .result-cell {
   display: none;
 }
@@ -329,6 +339,14 @@ span {
   font-size: 0.5rem;
 }
 
+.cell-names {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 2rem;
+  width: 2rem;
+}
+
 @media only screen and (min-width: 768px) {
   #match-info {
     width: 100%;
@@ -338,10 +356,12 @@ span {
   .info-cell,
   .user-cell,
   .result-cell,
+  .rating-cell,
   .link-cell {
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 2rem;
   }
 
+  .rating-cell,
   .result-cell {
     display: inline-block;
   }
@@ -408,5 +428,10 @@ span {
 
   #league-rank {
     font-size: 1rem;
+  }
+
+  .cell-names {
+    max-width: 5rem;
+    width: 5rem;
   }
 }
