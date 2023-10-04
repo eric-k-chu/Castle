@@ -41,8 +41,9 @@ const $refreshClubs = document.querySelector('#refresh-clubs');
 const $refreshMatches = document.querySelector('#refresh-matches');
 
 // Leaderboard
-// const $leaderboardHeader = document.querySelector('#leaderboard-table thead');
-// const $leaderboardBody = document.querySelector('#leaderboard-table tbody');
+// const $leaderboardSelect = document.querySelector('#leaderboard-select');
+const $leaderboardHeader = document.querySelector('#leaderboard-table thead');
+const $leaderboardBody = document.querySelector('#leaderboard-table tbody');
 
 const months = [
   'January',
@@ -102,8 +103,78 @@ $refreshMatches.addEventListener('click', function (event) {
 $navbar.addEventListener('click', function (event) {
   if (event.target.id === 'nav-leaderboard') {
     data.viewSwap($leaderboard);
+    if (!data.leaderboard) {
+      getLeaderboard();
+    }
   }
 });
+
+function getLeaderboard() {
+  const xhr = new XMLHttpRequest();
+  xhr.open('GET', 'https://api.chess.com/pub/leaderboards');
+  xhr.responseType = 'json';
+  xhr.addEventListener('load', function () {
+    const gameList = new Map();
+    let i = 0;
+    for (const key in xhr.response) {
+      gameList.set(i, xhr.response[key]);
+      i++;
+    }
+    data.leaderboard = gameList;
+    renderLeaderboard(0);
+  });
+  xhr.send();
+}
+
+function renderLeaderboard(index) {
+  const rankingList = data.leaderboard.get(index);
+
+  if (index > 9) {
+    const $header = `<tr>
+                <th class="rank">Rank</th>
+                <th class="username">Name</th>
+                <th class="country">Country</th>
+                <th class="rating">Rating</th>
+              </tr>`;
+    $leaderboardHeader.innerHTML += $header;
+    for (let i = 0; i < rankingList.length; i++) {
+      const user = rankingList[i];
+      const countryCode = user.country.slice(-2).toLowerCase();
+
+      const $entry = `<tr class="bg-white">
+                  <td class="rank">${user.rank}</td>
+                  <td class="username">${user.username}</td>
+                  <td class="country"><span class="fi fi-${countryCode}"></span></td>
+                  <td class="rating">${user.score}</td>
+                </tr>`;
+      $leaderboardBody.innerHTML += $entry;
+    }
+  } else {
+    const $header = `<tr>
+                <th class="rank">Rank</th>
+                <th class="username">Name</th>
+                <th class="country">Country</th>
+                <th class="rating">Rating</th>
+                <th class="win-pct">Win %</th>
+              </tr>`;
+    $leaderboardHeader.innerHTML += $header;
+    for (let i = 0; i < rankingList.length; i++) {
+      const user = rankingList[i];
+      const countryCode = user.country.slice(-2).toLowerCase();
+      const wpct = getWPCT(user.win_count, user.draw_count, user.loss_count);
+
+      const $entry = `<tr class="bg-white">
+                  <td class="rank">${user.rank}</td>
+                  <td class="username">${user.username}</td>
+                  <td class="country"><span class="fi fi-${countryCode}"></span></td>
+                  <td class="rating">${user.score}</td>
+                  <td class="win-pct">${wpct}</td>
+                </tr>`;
+      $leaderboardBody.innerHTML += $entry;
+    }
+  }
+
+}
 
 function getPlayerInfo(event) {
   if (event.key === 'Enter') {
