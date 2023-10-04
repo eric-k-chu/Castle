@@ -41,7 +41,7 @@ const $refreshClubs = document.querySelector('#refresh-clubs');
 const $refreshMatches = document.querySelector('#refresh-matches');
 
 // Leaderboard
-// const $leaderboardSelect = document.querySelector('#leaderboard-select');
+const $leaderboardSelect = document.querySelector('#leaderboard-select');
 const $leaderboardHeader = document.querySelector('#leaderboard-table thead');
 const $leaderboardBody = document.querySelector('#leaderboard-table tbody');
 
@@ -108,6 +108,10 @@ $navbar.addEventListener('click', function (event) {
     }
   }
 });
+$leaderboardSelect.addEventListener('change', function (event) {
+  clearLeaderboards();
+  renderLeaderboard(Number($leaderboardSelect.value));
+});
 
 function getLeaderboard() {
   const xhr = new XMLHttpRequest();
@@ -121,7 +125,7 @@ function getLeaderboard() {
       i++;
     }
     data.leaderboard = gameList;
-    renderLeaderboard(0);
+    renderLeaderboard(Number($leaderboardSelect.value));
   });
   xhr.send();
 }
@@ -746,22 +750,11 @@ function handleError(status, str) {
   }
 }
 
-/*
-<tr>
-  <th class="rank">Rank</th>
-  <th class="username">Name</th>
-  <th class="country">Country</th>
-  <th class="rating">Rating</th>
-  <th class="win-pct">Win %</th>
-</tr>
-/*
-
-/*
-<tr class="bg-white">
-  <td class="rank"></td>
-  <td class="username"></td>
-  <td class="country"><span></span></td>
-  <td class="rating"></td>
-  <td class="win-pct"></td>
-</tr>
-*/
+function clearLeaderboards() {
+  while ($leaderboardHeader.firstChild) {
+    $leaderboardHeader.removeChild($leaderboardHeader.firstChild);
+  }
+  while ($leaderboardBody.firstChild) {
+    $leaderboardBody.removeChild($leaderboardBody.firstChild);
+  }
+}
