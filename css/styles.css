@@ -287,7 +287,7 @@ span {
 
 #stats-table > tbody tr td,
 #clubs-table div {
-  padding: 0.1rem 0;
+  padding-top: 0.25rem;
 }
 
 #stats-table,
@@ -374,6 +374,11 @@ span {
 }
 
 @media only screen and (min-width: 768px) {
+  #stats-table > tbody tr td,
+  #clubs-table div {
+    padding-top: 0.5rem;
+  }
+
   .refresh-btn {
     font-size: 0.9rem;
   }

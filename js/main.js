@@ -103,10 +103,17 @@ function getPlayerInfo(event) {
         clearWPCTElement();
         clearTableElements();
         data.viewSwap($playerInfo);
-        insertAccountInfo(xhr.response);
-        insertStats(event.target.value);
-        insertClubs(event.target.value);
-        getArchive(event.target.value);
+        for (let i = 0; i < 4; i++) {
+          if (i === 0) {
+            insertAccountInfo(xhr.response);
+          } else if (i === 1) {
+            insertStats(event.target.value);
+          } else if (i === 2) {
+            insertClubs(event.target.value);
+          } else if (i === 3) {
+            getArchive(event.target.value);
+          }
+        }
         event.target.value = '';
       } else {
         $errorMsg.textContent = `Unable to find ${event.target.value}`;
