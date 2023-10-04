@@ -619,15 +619,9 @@ function clearWPCTElement() {
 }
 
 function clearTableElements() {
-  while ($statsTable.firstChild) {
-    $statsTable.removeChild($statsTable.firstChild);
-  }
-  while ($clubsTable.firstChild) {
-    $clubsTable.removeChild($clubsTable.firstChild);
-  }
-  while ($matchList.firstChild) {
-    $matchList.removeChild($matchList.firstChild);
-  }
+  clearStats();
+  clearClubs();
+  clearMatchList();
 }
 
 function clearStats() {
