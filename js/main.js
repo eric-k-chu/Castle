@@ -24,8 +24,12 @@ const $statsTable = document.querySelector('#stats-table > tbody');
 const $clubsTable = document.querySelector('#clubs-table');
 
 // Match History
-const $matchInfo = document.querySelector('#match-list-info');
+const $matchListDate = document.querySelector('#match-list-date');
 const $matchList = document.querySelector('#match-list');
+const $winPCT = document.querySelector('#win-pct');
+const $win = document.querySelector('#win');
+const $draw = document.querySelector('#draw');
+const $loss = document.querySelector('#loss');
 
 const months = [
   'January',
@@ -78,6 +82,8 @@ function getPlayerInfo(event) {
     xhr.responseType = 'json';
     xhr.addEventListener('load', function () {
       if (xhr.status === 200) {
+        clearWPCTElement();
+        clearTableElements();
         data.viewSwap($playerInfo);
         insertAccountInfo(xhr.response);
         insertStats(event.target.value);
@@ -216,9 +222,6 @@ function insertStats(username) {
   xhr.open('GET', `https://api.chess.com/pub/player/${username}/stats`);
   xhr.responseType = 'json';
   xhr.addEventListener('load', function (event) {
-    while ($statsTable.firstChild) {
-      $statsTable.removeChild($statsTable.firstChild);
-    }
     const gameModes = Object.keys(xhr.response);
     gameModes.forEach((key, index) => {
       if (key !== 'fide') {
@@ -259,9 +262,6 @@ function insertClubs(username) {
   xhr.open('GET', `https://api.chess.com/pub/player/${username}/clubs`);
   xhr.responseType = 'json';
   xhr.addEventListener('load', function (event) {
-    while ($clubsTable.firstChild) {
-      $clubsTable.removeChild($clubsTable.firstChild);
-    }
     const clubs = xhr.response.clubs;
     let maxDisplay = 0;
 
@@ -368,11 +368,8 @@ function insertArchives(game, username) {
   xhr.open('GET', game);
   xhr.responseType = 'json';
   xhr.addEventListener('load', function (event) {
-    while ($matchList.firstChild) {
-      $matchList.removeChild($matchList.firstChild);
-    }
     let limit;
-    if (xhr.response.games.length < 5) {
+    if (xhr.response.games.length < 10) {
       limit = xhr.response.games.length;
     } else {
       limit = 10;
@@ -385,6 +382,11 @@ function insertArchives(game, username) {
       count++;
       i--;
     }
+    $winPCT.textContent = `${data.getWPCT()}%`;
+    $win.textContent = data.win;
+    $draw.textContent = data.draw;
+    $loss.textContent = data.loss;
+    data.resetWDL();
   });
   xhr.send();
 }
@@ -395,11 +397,11 @@ function getArchive(username) {
   xhr.responseType = 'json';
   xhr.addEventListener('load', function (event) {
     if (xhr.response.archives.length === 0) {
-      $matchInfo.textContent = 'No games found.';
+      $matchListDate.textContent = 'No games found.';
     } else {
       const lastIndex = xhr.response.archives.length - 1;
       const gameEndpoint = xhr.response.archives[lastIndex];
-      $matchInfo.textContent = getMonthAndYear(gameEndpoint);
+      $matchListDate.textContent = getMonthAndYear(gameEndpoint);
       insertArchives(gameEndpoint, username);
     }
   });
@@ -481,25 +483,30 @@ function parsePGN(pgn, white, black, username) {
           result = 'Win';
           colorStr = 'text-green';
           bgColorStr = 'bg-win';
+          data.win++;
         } else {
           result = 'Loss';
           colorStr = 'text-red';
           bgColorStr = 'bg-loss';
+          data.loss++;
         }
       } else if (pgn[i] === '1') {
         if (username === black) {
           result = 'Win';
           colorStr = 'text-green';
           bgColorStr = 'bg-win';
+          data.win++;
         } else {
           result = 'Loss';
           colorStr = 'text-red';
           bgColorStr = 'bg-loss';
+          data.loss++;
         }
       } else if (pgn[i] === '2') {
         result = 'Draw';
         colorStr = 'text-gray';
         bgColorStr = 'bg-draw';
+        data.draw++;
       }
     }
     i--;
@@ -508,7 +515,7 @@ function parsePGN(pgn, white, black, username) {
   return { resultStr: result, moves: moveCount.join(''), color: colorStr, bgColor: bgColorStr };
 }
 
-// ..games/2021/07"
+// archive endpoint last part example: ..games/2021/07"
 function getMonthAndYear(endpointStr) {
   const year = [];
   const month = [];
@@ -541,4 +548,23 @@ function getMonthAndYear(endpointStr) {
   }
 
   return `${months[monthIndex]} ${year.join('')}`;
+}
+
+function clearWPCTElement() {
+  $winPCT.textContent = '';
+  $win.textContent = '';
+  $draw.textContent = '';
+  $loss.textContent = '';
+}
+
+function clearTableElements() {
+  while ($statsTable.firstChild) {
+    $statsTable.removeChild($statsTable.firstChild);
+  }
+  while ($clubsTable.firstChild) {
+    $clubsTable.removeChild($clubsTable.firstChild);
+  }
+  while ($matchList.firstChild) {
+    $matchList.removeChild($matchList.firstChild);
+  }
 }

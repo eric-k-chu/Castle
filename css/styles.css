@@ -18,6 +18,7 @@ span {
   color: #f5f5f5;
 }
 
+#win,
 .text-green {
   color: #81b64c;
 }
@@ -26,10 +27,12 @@ span {
   color: black;
 }
 
+#draw,
 .text-gray {
   color: #b3aca8;
 }
 
+#loss,
 .text-red {
   color: #ba0c2f;
 }
@@ -347,9 +350,21 @@ span {
   width: 2rem;
 }
 
+#win-pct {
+  margin: 0;
+}
+
+#match-header {
+  font-size: 0.6rem;
+}
+
 @media only screen and (min-width: 768px) {
   #match-info {
     width: 100%;
+    font-size: 1rem;
+  }
+
+  #match-header {
     font-size: 1rem;
   }
 

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AJAX Project</title>
+  <title>Castle</title>
   <link rel="icon" href="images/favicon.ico">
   <link rel="icon" href="images/favicon.ico">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
@@ -127,8 +127,14 @@
             </div>
 
             <div class="col">
-              <div class="row content-box justify-around">
-                <p id="match-list-info"></p>
+              <div class="row content-box justify-around align-center" id="match-header">
+                <h3 id="match-list-date"></h3>
+                <div class="col align-center">
+                  <h3 id="win-pct"></h3>
+                  <div>
+                    <span id="win"></span>|<span id="draw"></span>|<span id="loss"></span>
+                  </div>
+                </div>
               </div>
               <div id="match-list">
               </div>
