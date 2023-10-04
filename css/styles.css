@@ -18,8 +18,27 @@ span {
   color: #f5f5f5;
 }
 
+#win,
 .text-green {
   color: #81b64c;
+}
+
+.text-black {
+  color: black;
+}
+
+#draw,
+.text-gray {
+  color: #b3aca8;
+}
+
+#loss,
+.text-red {
+  color: #ba0c2f;
+}
+
+.text-gold {
+  color: #ca9372;
 }
 
 .text-center {
@@ -106,10 +125,6 @@ span {
   line-height: 3rem;
 }
 
-.nav-bar:hover {
-  cursor: pointer;
-}
-
 .height-500 {
   height: 500px;
 }
@@ -136,10 +151,12 @@ span {
 .league-wrapper {
   display: flex;
   align-items: center;
+  justify-content: center;
+  max-width: 3rem;
 }
 
 .league-wrapper img {
-  width: 60%;
+  width: 100%;
 }
 
 .club-icon-wrapper img {
@@ -193,9 +210,84 @@ span {
   margin-top: 1rem;
 }
 
+.match-entry {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  border-radius: 5px;
+  box-shadow: 2px 2px 2px black;
+  margin-top: 0.5rem;
+}
+
+.bg-win {
+  background:
+    linear-gradient(
+      90deg,
+      #81b64c 0%,
+      #81b64c 1.5%,
+      #363944 1.5%,
+      #363944 98.5%,
+      #81b64c 98.5%,
+      #81b64c 100%
+    );
+}
+
+.bg-draw {
+  background:
+    linear-gradient(
+      90deg,
+      #b3aca8 0%,
+      #b3aca8 1.5%,
+      #363944 1.5%,
+      #363944 98.5%,
+      #b3aca8 98.5%,
+      #b3aca8 100%
+    );
+}
+
+.bg-loss {
+  background:
+    linear-gradient(
+      90deg,
+      #ba0c2f 0%,
+      #ba0c2f 1.5%,
+      #363944 1.5%,
+      #363944 98.5%,
+      #ba0c2f 98.5%,
+      #ba0c2f 100%
+    );
+}
+
+.cell-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.info-cell,
+.user-cell,
+.result-cell,
+.rating-cell,
+.link-cell {
+  padding: 0.5rem 0.85rem;
+}
+
+.link-cell:hover,
+.nav-bar:hover,
+.refresh-btn {
+  cursor: pointer;
+}
+
+.rating-cell,
+.result-cell {
+  display: none;
+}
+
 #stats-table > tbody tr td,
 #clubs-table div {
-  padding-bottom: 5px;
+  padding-top: 0.25rem;
 }
 
 #stats-table,
@@ -207,8 +299,8 @@ span {
   margin: 0;
 }
 
-#account-stats > p:nth-of-type(1),
-#clubs > div > p:nth-of-type(1) {
+#account-stats > div:nth-of-type(1),
+#clubs > div > div:nth-of-type(1) {
   border-bottom: 1px solid #f5f5f5;
   font-size: 0.75rem;
   margin-top: 0;
@@ -250,7 +342,73 @@ span {
   text-align: right;
 }
 
+#match-info {
+  font-size: 0.5rem;
+}
+
+.cell-names {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 2rem;
+  width: 2rem;
+}
+
+#win-pct {
+  margin: 0;
+}
+
+#match-header {
+  font-size: 0.6rem;
+}
+
+.refresh-btn {
+  border: none;
+  background-color: #363944;
+  color: #fff;
+  font-size: 0.65rem;
+}
+
+#account-info-league {
+  font-size: 0.75rem;
+}
+
 @media only screen and (min-width: 768px) {
+  #stats-table > tbody tr td,
+  #clubs-table div {
+    padding-top: 0.5rem;
+  }
+
+  .refresh-btn {
+    font-size: 0.9rem;
+  }
+
+  #account-info-league {
+    font-size: 1rem;
+  }
+
+  #match-info {
+    width: 100%;
+    font-size: 1rem;
+  }
+
+  #match-header {
+    font-size: 1rem;
+  }
+
+  .info-cell,
+  .user-cell,
+  .result-cell,
+  .rating-cell,
+  .link-cell {
+    padding: 0.5rem 2rem;
+  }
+
+  .rating-cell,
+  .result-cell {
+    display: inline-block;
+  }
+
   #player-info-header {
     font-size: 0.8rem;
     height: 170px;
@@ -265,11 +423,6 @@ span {
     font-size: 0.75rem;
   }
 
-  #account-stats > p:nth-of-type(1),
-  #clubs > div > p:nth-of-type(1) {
-    font-size: 1rem;
-  }
-
   #clubs-table div > div:nth-of-type(2) > p:nth-of-type(1) {
     width: 8rem;
   }
@@ -278,6 +431,11 @@ span {
   #stats-table > tbody tr > td:nth-of-type(2) > p:nth-of-type(2),
   #stats-table > tbody tr > td:nth-of-type(3) > p:nth-of-type(2) {
     font-size: 0.65rem;
+  }
+
+  #account-stats > div:nth-of-type(1),
+  #clubs > div > div:nth-of-type(1) {
+    font-size: 1rem;
   }
 
   #stats-table > tbody tr > td:nth-of-type(1) {
@@ -292,8 +450,8 @@ span {
     max-width: 150px;
   }
 
-  .league-wrapper img {
-    width: 70%;
+  .league-wrapper {
+    max-width: 4rem;
   }
 
   .club-icon-wrapper {
@@ -313,5 +471,10 @@ span {
 
   #league-rank {
     font-size: 1rem;
+  }
+
+  .cell-names {
+    max-width: 5rem;
+    width: 5rem;
   }
 }

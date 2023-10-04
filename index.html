@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AJAX Project</title>
+  <title>Castle</title>
   <link rel="icon" href="images/favicon.ico">
   <link rel="icon" href="images/favicon.ico">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
@@ -108,10 +108,14 @@
 
               <div class="row content-box">
                 <div class="col column-full" id="account-stats">
-                  <p>Stats</p>
+                  <div class="row justify-between align-center">
+                    <span>Stats</span>
+                    <button type="button" class="refresh-btn" id="refresh-stats">
+                      <i class="fa-solid fa-rotate"></i>
+                    </button>
+                  </div>
                   <table id="stats-table">
                     <tbody>
-
                     </tbody>
                   </table>
                 </div>
@@ -119,7 +123,12 @@
 
               <div class="row content-box" id="clubs">
                 <div class="col column-full">
-                  <p>Clubs</p>
+                  <div class="row justify-between align-center">
+                    <span>Clubs</span>
+                    <button type="button" class="refresh-btn" id="refresh-clubs">
+                      <i class="fa-solid fa-rotate"></i>
+                    </button>
+                  </div>
                   <div id="clubs-table">
                   </div>
                 </div>
@@ -128,8 +137,23 @@
             </div>
 
             <div class="col">
-              <div class="row content-box justify-around" id="game-archives">
-                <p>No games found.</p>
+              <div class="row content-box justify-between align-center" id="match-header">
+                <h3 id="match-list-date"></h3>
+                <div class="col align-center">
+                  <h3 id="win-pct"></h3>
+                  <div id="wdl">
+                    <span id="win"></span>
+                    <span>|</span>
+                    <span id="draw"></span>
+                    <span>|</span>
+                    <span id="loss"></span>
+                  </div>
+                </div>
+                <button type="button" class="refresh-btn" id="refresh-matches">
+                  <i class="fa-solid fa-rotate"></i>
+                </button>
+              </div>
+              <div id="match-list">
               </div>
             </div>
           </div>

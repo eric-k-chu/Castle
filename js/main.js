@@ -23,6 +23,19 @@ const $leagueIcon = document.querySelector('#league-icon');
 const $statsTable = document.querySelector('#stats-table > tbody');
 const $clubsTable = document.querySelector('#clubs-table');
 
+// Match History
+const $matchListDate = document.querySelector('#match-list-date');
+const $matchList = document.querySelector('#match-list');
+const $winPCT = document.querySelector('#win-pct');
+
+// Win Percentage
+const $wdl = document.querySelectorAll('#wdl span');
+
+// Refresh buttons
+const $refreshStats = document.querySelector('#refresh-stats');
+const $refreshClubs = document.querySelector('#refresh-clubs');
+const $refreshMatches = document.querySelector('#refresh-matches');
+
 const months = [
   'January',
   'February',
@@ -38,6 +51,21 @@ const months = [
   'December'
 ];
 
+const monthsAbbr = [
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec'
+];
+
 const leagueIcons = {
   Wood: 'https://www.chess.com/bundles/web/images/leagues/badges/wood.b8940cb5.svg',
   Stone: 'https://www.chess.com/bundles/web/images/leagues/badges/stone.3434a62c.svg',
@@ -51,18 +79,41 @@ const leagueIcons = {
 
 $headerSearch.addEventListener('keydown', getPlayerInfo);
 $mainSearch.addEventListener('keydown', getPlayerInfo);
+$refreshStats.addEventListener('click', function (event) {
+  clearStats();
+  insertStats(data.currentUsername);
+});
+$refreshClubs.addEventListener('click', function (event) {
+  clearClubs();
+  insertClubs(data.currentUsername);
+});
+$refreshMatches.addEventListener('click', function (event) {
+  clearMatchList();
+  getArchive(data.currentUsername);
+});
 
 function getPlayerInfo(event) {
   if (event.key === 'Enter') {
+    data.currentUsername = event.target.value;
     const xhr = new XMLHttpRequest();
     xhr.open('GET', `https://api.chess.com/pub/player/${event.target.value}`);
     xhr.responseType = 'json';
     xhr.addEventListener('load', function () {
       if (xhr.status === 200) {
+        clearWPCTElement();
+        clearTableElements();
         data.viewSwap($playerInfo);
-        insertAccountInfo(xhr.response);
-        insertStats(event.target.value);
-        insertClubs(event.target.value);
+        for (let i = 0; i < 4; i++) {
+          if (i === 0) {
+            insertAccountInfo(xhr.response);
+          } else if (i === 1) {
+            insertStats(event.target.value);
+          } else if (i === 2) {
+            insertClubs(event.target.value);
+          } else if (i === 3) {
+            getArchive(event.target.value);
+          }
+        }
         event.target.value = '';
       } else {
         $errorMsg.textContent = `Unable to find ${event.target.value}`;
@@ -101,7 +152,7 @@ function insertAccountInfo(response) {
   }
 
   if (response.league === undefined) {
-    $accountInfoLeague.textContent = 'No league found.';
+    $accountInfoLeague.textContent = 'Unrated';
     $leagueIcon.src = '';
     $leagueIcon.alt = '';
   } else {
@@ -196,16 +247,17 @@ function insertStats(username) {
   xhr.open('GET', `https://api.chess.com/pub/player/${username}/stats`);
   xhr.responseType = 'json';
   xhr.addEventListener('load', function (event) {
-    while ($statsTable.firstChild) {
-      $statsTable.removeChild($statsTable.firstChild);
+    if (xhr.status === 200) {
+      const gameModes = Object.keys(xhr.response);
+      gameModes.forEach((key, index) => {
+        if (key !== 'fide') {
+          const $statBox = renderStat(key, xhr.response[key]);
+          $statsTable.appendChild($statBox);
+        }
+      });
+    } else {
+      handleError(xhr.status, 'stats');
     }
-    const gameModes = Object.keys(xhr.response);
-    gameModes.forEach((key, index) => {
-      if (key !== 'fide') {
-        const $statBox = renderStat(key, xhr.response[key]);
-        $statsTable.appendChild($statBox);
-      }
-    });
   });
   xhr.send();
 }
@@ -239,33 +291,154 @@ function insertClubs(username) {
   xhr.open('GET', `https://api.chess.com/pub/player/${username}/clubs`);
   xhr.responseType = 'json';
   xhr.addEventListener('load', function (event) {
-    while ($clubsTable.firstChild) {
-      $clubsTable.removeChild($clubsTable.firstChild);
-    }
-    const clubs = xhr.response.clubs;
-    let maxDisplay = 0;
+    if (xhr.status === 200) {
+      const clubs = xhr.response.clubs;
+      let maxDisplay = 0;
 
-    if (clubs.length < 1) {
-      const $msg = document.createElement('div');
-      $msg.className = 'row justify-center';
-      const $p = document.createElement('p');
-      $p.textContent = 'No clubs found.';
-      $msg.appendChild($p);
-      $clubsTable.append($msg);
-    } else {
-      if (clubs.length < 5) {
-        maxDisplay = clubs.length;
+      if (clubs.length < 1) {
+        const $msg = document.createElement('div');
+        $msg.className = 'row justify-center';
+        const $p = document.createElement('p');
+        $p.textContent = 'Not in any clubs';
+        $msg.appendChild($p);
+        $clubsTable.append($msg);
       } else {
-        maxDisplay = 5;
-      }
+        if (clubs.length < 5) {
+          maxDisplay = clubs.length;
+        } else {
+          maxDisplay = 5;
+        }
 
-      let count = 0;
-      let i = clubs.length - 1;
-      while (count < maxDisplay) {
-        $clubsTable.appendChild(renderClub(clubs[i]));
-        count++;
-        i--;
+        let count = 0;
+        let i = clubs.length - 1;
+        while (count < maxDisplay) {
+          $clubsTable.appendChild(renderClub(clubs[i]));
+          count++;
+          i--;
+        }
       }
+    } else {
+      handleError(xhr.status, 'clubs');
+    }
+  });
+  xhr.send();
+}
+
+function renderMatch(game, username) {
+  const mode = getMode(game.time_class, game.rules);
+  const date = getMatchDate(game.end_time);
+  const white = game.white.username;
+  const black = game.black.username;
+  const whiteRating = game.white.rating;
+  const blackRating = game.black.rating;
+  const url = game.url;
+
+  const result = parsePGN(game.pgn, white, black, username);
+
+  const $entry = `<div class="match-entry ${result.bgColor}">
+                    <table id="match-info">
+                      <tbody>
+                        <tr>
+                          <td class="info-cell">
+                            <div class="cell-wrapper">
+                              <div>
+                                <div>
+                                  <span>${mode}</span>
+                                </div>
+                                <div>
+                                  <span class="text-gray">${date}</span>
+                                </div>
+                              </div>
+                            </div>
+                          </td>
+                          <td class="user-cell">
+                            <div class="cell-wrapper">
+                              <div>
+                                <div class="cell-names">
+                                  <span>${white}</span>
+                                </div>
+                                <div class="cell-names">
+                                  <span class="text-black">${black}</span>
+                                </div>
+                              </div>
+                            </div>
+                          </td>
+                          <td class="rating-cell">
+                            <div class="cell-wrapper">
+                              <div>
+                                <div>
+                                  <span class="text-gold">${whiteRating}</span>
+                                </div>
+                                <div>
+                                  <span class="text-gold">${blackRating}</span>
+                                </div>
+                              </div>
+                            </div>
+                          </td>
+                          <td class="result-cell">
+                            <div class="cell-wrapper">
+                              <div>
+                                <div>
+                                  <span class="${result.color}">${result.resultStr}</span>
+                                </div>
+                                <div>
+                                  <span class="text-gray">${result.moves} moves</span>
+                                </div>
+                              </div>
+                            </div>
+                          </td>
+                          <td class="link-cell" align="right">
+                            <a href="${url}" target="_blank" class="text-white">
+                              <i class="fa-solid fa-link"></i>
+                            </a>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>`;
+  return $entry;
+}
+
+function insertArchives(game, username) {
+  const xhr = new XMLHttpRequest();
+  xhr.open('GET', game);
+  xhr.responseType = 'json';
+  xhr.addEventListener('load', function (event) {
+    let limit;
+    if (xhr.response.games.length < 10) {
+      limit = xhr.response.games.length;
+    } else {
+      limit = 10;
+    }
+
+    let count = 0;
+    let i = xhr.response.games.length - 1;
+    while (count < limit) {
+      $matchList.innerHTML += renderMatch(xhr.response.games[i], username);
+      count++;
+      i--;
+    }
+    updateWPCTElements();
+  });
+  xhr.send();
+}
+
+function getArchive(username) {
+  const xhr = new XMLHttpRequest();
+  xhr.open('GET', `https://api.chess.com/pub/player/${username}/games/archives`);
+  xhr.responseType = 'json';
+  xhr.addEventListener('load', function (event) {
+    if (xhr.status === 200) {
+      if (xhr.response.archives.length === 0) {
+        $matchListDate.textContent = 'No games have been played';
+      } else {
+        const lastIndex = xhr.response.archives.length - 1;
+        const gameEndpoint = xhr.response.archives[lastIndex];
+        $matchListDate.textContent = getMonthAndYear(gameEndpoint);
+        insertArchives(gameEndpoint, username);
+      }
+    } else {
+      handleError(xhr.status, 'matches');
     }
   });
   xhr.send();
@@ -283,4 +456,214 @@ function getJoinedDate(timestamp) {
   const month = months[date.getMonth()];
   const year = date.getFullYear();
   return ` Joined ${month} ${year}`;
+}
+
+function getMatchDate(timestamp) {
+  const date = new Date(timestamp * 1000);
+  const month = monthsAbbr[date.getMonth()];
+  const day = date.getDate();
+  const year = date.getFullYear();
+  return `${month} ${day}, ${year}`;
+}
+
+function getMode(timeClass, rules) {
+  if (rules === 'chess') {
+    return timeClass.charAt(0).toUpperCase() + timeClass.slice(1);
+  } else if (rules === 'chess960') {
+    return 'Daily 960';
+  } else if (rules === 'bughouse') {
+    return 'Bughouse';
+  } else if (rules === 'kingofthechill') {
+    return 'King of the Hill';
+  } else if (rules === 'threecheck') {
+    return '3-Check';
+  } else if (rules === 'crazyhouse') {
+    return 'Crazyhouse';
+  }
+}
+
+function parsePGN(pgn, white, black, username) {
+  let flag1 = false;
+  let flag2 = false;
+  const flag3 = pgn.includes('{');
+  const moveCount = [];
+  let result = '';
+  let colorStr = '';
+  let bgColorStr = '';
+
+  let i = pgn.length - 1;
+
+  while (moveCount.length < 2) {
+    if (flag2 === true && /[0-9]/.test(pgn[i])) {
+      moveCount.unshift(pgn[i]);
+    }
+
+    if (pgn[i] === '{') {
+      flag1 = true;
+    }
+
+    if (flag3 === true) {
+      if (flag1 === true && pgn[i] === '.') {
+        flag2 = true;
+      }
+    } else {
+      if (pgn[i] === '.') {
+        flag2 = true;
+      }
+    }
+
+    // penultimate character is always a number 0, 1, or 2
+    if (i === pgn.length - 2) {
+      if (pgn[i] === '0') {
+        if (username === white) {
+          result = 'Win';
+          colorStr = 'text-green';
+          bgColorStr = 'bg-win';
+          data.win++;
+        } else {
+          result = 'Loss';
+          colorStr = 'text-red';
+          bgColorStr = 'bg-loss';
+          data.loss++;
+        }
+      } else if (pgn[i] === '1') {
+        if (username === black) {
+          result = 'Win';
+          colorStr = 'text-green';
+          bgColorStr = 'bg-win';
+          data.win++;
+        } else {
+          result = 'Loss';
+          colorStr = 'text-red';
+          bgColorStr = 'bg-loss';
+          data.loss++;
+        }
+      } else if (pgn[i] === '2') {
+        result = 'Draw';
+        colorStr = 'text-gray';
+        bgColorStr = 'bg-draw';
+        data.draw++;
+      }
+    }
+    i--;
+  }
+
+  return { resultStr: result, moves: moveCount.join(''), color: colorStr, bgColor: bgColorStr };
+}
+
+// archive endpoint last part example: ..games/2021/07"
+function getMonthAndYear(endpointStr) {
+  const year = [];
+  const month = [];
+  let monthStr = '';
+  let monthIndex = 0;
+  let condition = false;
+  let count = 0;
+  let i = endpointStr.length - 1;
+
+  while (count < 8) {
+    if (endpointStr[i] === '/') {
+      condition = true;
+    }
+    if (endpointStr[i] !== '/') {
+      if (!condition) {
+        month.unshift(endpointStr[i]);
+      } else {
+        year.unshift(endpointStr[i]);
+      }
+    }
+    count++;
+    i--;
+  }
+  monthStr = month.join('');
+
+  if (month[0] === '0') {
+    monthIndex = Number(monthStr.slice(1)) - 1;
+  } else {
+    monthIndex = Number(monthStr) - 1;
+  }
+
+  return `${months[monthIndex]} ${year.join('')}`;
+}
+
+function updateWPCTElements() {
+  $winPCT.textContent = `${data.getWPCT()}%`;
+
+  for (let i = 0; i < $wdl.length; i++) {
+    switch (i) {
+      case 0:
+        $wdl[i].textContent = data.win;
+        break;
+      case 1:
+        $wdl[i].textContent = '|';
+        break;
+      case 2:
+        $wdl[i].textContent = data.draw;
+        break;
+      case 3:
+        $wdl[i].textContent = '|';
+        break;
+      case 4:
+        $wdl[i].textContent = data.loss;
+        break;
+    }
+  }
+  data.resetWDL();
+}
+
+function clearWPCTElement() {
+  $winPCT.textContent = '';
+  for (let i = 0; i < $wdl.length; i++) {
+    $wdl[i].textContent = '';
+  }
+}
+
+function clearTableElements() {
+  while ($statsTable.firstChild) {
+    $statsTable.removeChild($statsTable.firstChild);
+  }
+  while ($clubsTable.firstChild) {
+    $clubsTable.removeChild($clubsTable.firstChild);
+  }
+  while ($matchList.firstChild) {
+    $matchList.removeChild($matchList.firstChild);
+  }
+}
+
+function clearStats() {
+  while ($statsTable.firstChild) {
+    $statsTable.removeChild($statsTable.firstChild);
+  }
+}
+
+function clearClubs() {
+  while ($clubsTable.firstChild) {
+    $clubsTable.removeChild($clubsTable.firstChild);
+  }
+}
+
+function clearMatchList() {
+  while ($matchList.firstChild) {
+    $matchList.removeChild($matchList.firstChild);
+  }
+}
+
+function handleError(status, str) {
+  if (str === 'stats') {
+    const $error = document.createElement('tr');
+    const $td = document.createElement('td');
+    const $h3 = document.createElement('h3');
+    $h3.textContent = `Error: ${status}`;
+    $td.className = 'text-center';
+    $error.appendChild($td);
+    $td.appendChild($h3);
+    $statsTable.appendChild($error);
+  } else if (str === 'clubs') {
+    const $error = document.createElement('h3');
+    $error.className = 'text-center';
+    $error.textContent = `Error: ${status}`;
+    $clubsTable.appendChild($error);
+  } else if (str === 'matches') {
+    $matchListDate.textContent = `Error: ${status}`;
+  }
 }
