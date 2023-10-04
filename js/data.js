@@ -8,6 +8,7 @@ const data = {
   win: 0,
   draw: 0,
   loss: 0,
+  currentUsername: null,
 
   viewSwap: function (newView) {
     this.currentView.classList.toggle('hidden');

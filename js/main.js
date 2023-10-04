@@ -31,6 +31,11 @@ const $win = document.querySelector('#win');
 const $draw = document.querySelector('#draw');
 const $loss = document.querySelector('#loss');
 
+// Refresh buttons
+const $refreshStats = document.querySelector('#refresh-stats');
+const $refreshClubs = document.querySelector('#refresh-clubs');
+const $refreshMatches = document.querySelector('#refresh-matches');
+
 const months = [
   'January',
   'February',
@@ -74,9 +79,22 @@ const leagueIcons = {
 
 $headerSearch.addEventListener('keydown', getPlayerInfo);
 $mainSearch.addEventListener('keydown', getPlayerInfo);
+$refreshStats.addEventListener('click', function (event) {
+  clearStats();
+  insertStats(data.currentUsername);
+});
+$refreshClubs.addEventListener('click', function (event) {
+  clearClubs();
+  insertClubs(data.currentUsername);
+});
+$refreshMatches.addEventListener('click', function (event) {
+  clearMatchList();
+  getArchive(data.currentUsername);
+});
 
 function getPlayerInfo(event) {
   if (event.key === 'Enter') {
+    data.currentUsername = event.target.value;
     const xhr = new XMLHttpRequest();
     xhr.open('GET', `https://api.chess.com/pub/player/${event.target.value}`);
     xhr.responseType = 'json';
@@ -222,13 +240,24 @@ function insertStats(username) {
   xhr.open('GET', `https://api.chess.com/pub/player/${username}/stats`);
   xhr.responseType = 'json';
   xhr.addEventListener('load', function (event) {
-    const gameModes = Object.keys(xhr.response);
-    gameModes.forEach((key, index) => {
-      if (key !== 'fide') {
-        const $statBox = renderStat(key, xhr.response[key]);
-        $statsTable.appendChild($statBox);
-      }
-    });
+    if (xhr.status === 200) {
+      const gameModes = Object.keys(xhr.response);
+      gameModes.forEach((key, index) => {
+        if (key !== 'fide') {
+          const $statBox = renderStat(key, xhr.response[key]);
+          $statsTable.appendChild($statBox);
+        }
+      });
+    } else {
+      const $error = document.createElement('tr');
+      const $td = document.createElement('td');
+      const $h3 = document.createElement('h3');
+      $h3.textContent = `Error: ${xhr.status}`;
+      $td.className = 'text-center';
+      $error.appendChild($td);
+      $td.appendChild($h3);
+      $statsTable.appendChild($error);
+    }
   });
   xhr.send();
 }
@@ -262,30 +291,37 @@ function insertClubs(username) {
   xhr.open('GET', `https://api.chess.com/pub/player/${username}/clubs`);
   xhr.responseType = 'json';
   xhr.addEventListener('load', function (event) {
-    const clubs = xhr.response.clubs;
-    let maxDisplay = 0;
+    if (xhr.status === 200) {
+      const clubs = xhr.response.clubs;
+      let maxDisplay = 0;
 
-    if (clubs.length < 1) {
-      const $msg = document.createElement('div');
-      $msg.className = 'row justify-center';
-      const $p = document.createElement('p');
-      $p.textContent = 'No clubs found.';
-      $msg.appendChild($p);
-      $clubsTable.append($msg);
-    } else {
-      if (clubs.length < 5) {
-        maxDisplay = clubs.length;
+      if (clubs.length < 1) {
+        const $msg = document.createElement('div');
+        $msg.className = 'row justify-center';
+        const $p = document.createElement('p');
+        $p.textContent = 'No clubs found.';
+        $msg.appendChild($p);
+        $clubsTable.append($msg);
       } else {
-        maxDisplay = 5;
-      }
+        if (clubs.length < 5) {
+          maxDisplay = clubs.length;
+        } else {
+          maxDisplay = 5;
+        }
 
-      let count = 0;
-      let i = clubs.length - 1;
-      while (count < maxDisplay) {
-        $clubsTable.appendChild(renderClub(clubs[i]));
-        count++;
-        i--;
+        let count = 0;
+        let i = clubs.length - 1;
+        while (count < maxDisplay) {
+          $clubsTable.appendChild(renderClub(clubs[i]));
+          count++;
+          i--;
+        }
       }
+    } else {
+      const $error = document.createElement('h3');
+      $error.className = 'text-center';
+      $error.textContent = `Error: ${xhr.status}`;
+      $clubsTable.appendChild($error);
     }
   });
   xhr.send();
@@ -354,7 +390,7 @@ function renderMatch(game, username) {
                               </div>
                             </div>
                           </td>
-                          <td class="link-cell">
+                          <td class="link-cell" align="right">
                             <a href="${url}" target="_blank" class="text-white">
                               <i class="fa-solid fa-link"></i>
                             </a>
@@ -399,13 +435,17 @@ function getArchive(username) {
   xhr.open('GET', `https://api.chess.com/pub/player/${username}/games/archives`);
   xhr.responseType = 'json';
   xhr.addEventListener('load', function (event) {
-    if (xhr.response.archives.length === 0) {
-      $matchListDate.textContent = 'No games found.';
+    if (xhr.status === 200) {
+      if (xhr.response.archives.length === 0) {
+        $matchListDate.textContent = 'No games found.';
+      } else {
+        const lastIndex = xhr.response.archives.length - 1;
+        const gameEndpoint = xhr.response.archives[lastIndex];
+        $matchListDate.textContent = getMonthAndYear(gameEndpoint);
+        insertArchives(gameEndpoint, username);
+      }
     } else {
-      const lastIndex = xhr.response.archives.length - 1;
-      const gameEndpoint = xhr.response.archives[lastIndex];
-      $matchListDate.textContent = getMonthAndYear(gameEndpoint);
-      insertArchives(gameEndpoint, username);
+      $matchListDate.textContent = `Error: ${xhr.status}`;
     }
   });
   xhr.send();
@@ -567,6 +607,24 @@ function clearTableElements() {
   while ($clubsTable.firstChild) {
     $clubsTable.removeChild($clubsTable.firstChild);
   }
+  while ($matchList.firstChild) {
+    $matchList.removeChild($matchList.firstChild);
+  }
+}
+
+function clearStats() {
+  while ($statsTable.firstChild) {
+    $statsTable.removeChild($statsTable.firstChild);
+  }
+}
+
+function clearClubs() {
+  while ($clubsTable.firstChild) {
+    $clubsTable.removeChild($clubsTable.firstChild);
+  }
+}
+
+function clearMatchList() {
   while ($matchList.firstChild) {
     $matchList.removeChild($matchList.firstChild);
   }
