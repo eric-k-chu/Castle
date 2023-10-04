@@ -27,9 +27,9 @@ const $clubsTable = document.querySelector('#clubs-table');
 const $matchListDate = document.querySelector('#match-list-date');
 const $matchList = document.querySelector('#match-list');
 const $winPCT = document.querySelector('#win-pct');
-const $win = document.querySelector('#win');
-const $draw = document.querySelector('#draw');
-const $loss = document.querySelector('#loss');
+
+// Win Percentage
+const $wdl = document.querySelectorAll('#wdl span');
 
 // Refresh buttons
 const $refreshStats = document.querySelector('#refresh-stats');
@@ -145,7 +145,7 @@ function insertAccountInfo(response) {
   }
 
   if (response.league === undefined) {
-    $accountInfoLeague.textContent = 'No league found.';
+    $accountInfoLeague.textContent = 'Unrated';
     $leagueIcon.src = '';
     $leagueIcon.alt = '';
   } else {
@@ -249,14 +249,7 @@ function insertStats(username) {
         }
       });
     } else {
-      const $error = document.createElement('tr');
-      const $td = document.createElement('td');
-      const $h3 = document.createElement('h3');
-      $h3.textContent = `Error: ${xhr.status}`;
-      $td.className = 'text-center';
-      $error.appendChild($td);
-      $td.appendChild($h3);
-      $statsTable.appendChild($error);
+      handleError(xhr.status, 'stats');
     }
   });
   xhr.send();
@@ -299,7 +292,7 @@ function insertClubs(username) {
         const $msg = document.createElement('div');
         $msg.className = 'row justify-center';
         const $p = document.createElement('p');
-        $p.textContent = 'No clubs found.';
+        $p.textContent = 'Not in any clubs';
         $msg.appendChild($p);
         $clubsTable.append($msg);
       } else {
@@ -318,10 +311,7 @@ function insertClubs(username) {
         }
       }
     } else {
-      const $error = document.createElement('h3');
-      $error.className = 'text-center';
-      $error.textContent = `Error: ${xhr.status}`;
-      $clubsTable.appendChild($error);
+      handleError(xhr.status, 'clubs');
     }
   });
   xhr.send();
@@ -421,11 +411,7 @@ function insertArchives(game, username) {
       count++;
       i--;
     }
-    $winPCT.textContent = `${data.getWPCT()}%`;
-    $win.textContent = data.win;
-    $draw.textContent = data.draw;
-    $loss.textContent = data.loss;
-    data.resetWDL();
+    updateWPCTElements();
   });
   xhr.send();
 }
@@ -437,7 +423,7 @@ function getArchive(username) {
   xhr.addEventListener('load', function (event) {
     if (xhr.status === 200) {
       if (xhr.response.archives.length === 0) {
-        $matchListDate.textContent = 'No games found.';
+        $matchListDate.textContent = 'No games have been played';
       } else {
         const lastIndex = xhr.response.archives.length - 1;
         const gameEndpoint = xhr.response.archives[lastIndex];
@@ -445,7 +431,7 @@ function getArchive(username) {
         insertArchives(gameEndpoint, username);
       }
     } else {
-      $matchListDate.textContent = `Error: ${xhr.status}`;
+      handleError(xhr.status, 'matches');
     }
   });
   xhr.send();
@@ -593,11 +579,36 @@ function getMonthAndYear(endpointStr) {
   return `${months[monthIndex]} ${year.join('')}`;
 }
 
+function updateWPCTElements() {
+  $winPCT.textContent = `${data.getWPCT()}%`;
+
+  for (let i = 0; i < $wdl.length; i++) {
+    switch (i) {
+      case 0:
+        $wdl[i].textContent = data.win;
+        break;
+      case 1:
+        $wdl[i].textContent = '|';
+        break;
+      case 2:
+        $wdl[i].textContent = data.draw;
+        break;
+      case 3:
+        $wdl[i].textContent = '|';
+        break;
+      case 4:
+        $wdl[i].textContent = data.loss;
+        break;
+    }
+  }
+  data.resetWDL();
+}
+
 function clearWPCTElement() {
   $winPCT.textContent = '';
-  $win.textContent = '';
-  $draw.textContent = '';
-  $loss.textContent = '';
+  for (let i = 0; i < $wdl.length; i++) {
+    $wdl[i].textContent = '';
+  }
 }
 
 function clearTableElements() {
@@ -627,5 +638,25 @@ function clearClubs() {
 function clearMatchList() {
   while ($matchList.firstChild) {
     $matchList.removeChild($matchList.firstChild);
+  }
+}
+
+function handleError(status, str) {
+  if (str === 'stats') {
+    const $error = document.createElement('tr');
+    const $td = document.createElement('td');
+    const $h3 = document.createElement('h3');
+    $h3.textContent = `Error: ${status}`;
+    $td.className = 'text-center';
+    $error.appendChild($td);
+    $td.appendChild($h3);
+    $statsTable.appendChild($error);
+  } else if (str === 'clubs') {
+    const $error = document.createElement('h3');
+    $error.className = 'text-center';
+    $error.textContent = `Error: ${status}`;
+    $clubsTable.appendChild($error);
+  } else if (str === 'matches') {
+    $matchListDate.textContent = `Error: ${status}`;
   }
 }
