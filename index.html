@@ -35,8 +35,8 @@
     </div>
   </header>
   <div class="bg-blue-2">
-    <div class="row align-center justify-center">
-      <a href="#" class="text-white nav-bar">Leaderboards</a>
+    <div class="row align-center justify-around" id="nav-bar">
+      <button type="button" class="nav-item font-jetbrains" id="nav-leaderboard">Leaderboard</button>
     </div>
   </div>
   <main>
@@ -161,6 +161,33 @@
       </div>
     </div>
 
+    <div class="container mt-1 hidden" id="leaderboard">
+      <div class="col">
+        <div class="leaderboard-type">
+          <select class="font-jetbrains" id="leaderboard-select">
+            <option>Daily</option>
+            <option>Daily 960</option>
+            <option>Rapid</option>
+            <option>Blitz</option>
+            <option>Bullet</option>
+            <option>Bughouse</option>
+            <option>Blitz 960</option>
+            <option>3-Check</option>
+            <option>Crazyhouse</option>
+            <option>King of the Hill</option>
+            <option>Puzzles</option>
+            <option>Puzzle Rush</option>
+            <option>Puzzle Battle</option>
+          </select>
+        </div>
+        <table id="leaderboard-table">
+          <thead class="text-white">
+          </thead>
+          <tbody class="text-black">
+          </tbody>
+        </table>
+      </div>
+    </div>
   </main>
   <script src="js/data.js"></script>
   <script src="js/main.js"></script>

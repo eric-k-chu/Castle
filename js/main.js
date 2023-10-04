@@ -2,9 +2,13 @@
 const $headerSearch = document.querySelector('#header-search');
 const $mainSearch = document.querySelector('#main-search');
 
-// Pages
+// Nav bar
+const $navbar = document.querySelector('#nav-bar');
+
+// Views
 const $failedSearch = document.querySelector('#failed-search');
 const $playerInfo = document.querySelector('#player-info');
+const $leaderboard = document.querySelector('#leaderboard');
 
 const $errorMsg = document.querySelector('#error-msg');
 
@@ -35,6 +39,10 @@ const $wdl = document.querySelectorAll('#wdl span');
 const $refreshStats = document.querySelector('#refresh-stats');
 const $refreshClubs = document.querySelector('#refresh-clubs');
 const $refreshMatches = document.querySelector('#refresh-matches');
+
+// Leaderboard
+// const $leaderboardHeader = document.querySelector('#leaderboard-table thead');
+// const $leaderboardBody = document.querySelector('#leaderboard-table tbody');
 
 const months = [
   'January',
@@ -90,6 +98,11 @@ $refreshClubs.addEventListener('click', function (event) {
 $refreshMatches.addEventListener('click', function (event) {
   clearMatchList();
   getArchive(data.currentUsername);
+});
+$navbar.addEventListener('click', function (event) {
+  if (event.target.id === 'nav-leaderboard') {
+    data.viewSwap($leaderboard);
+  }
 });
 
 function getPlayerInfo(event) {
@@ -661,3 +674,23 @@ function handleError(status, str) {
     $matchListDate.textContent = `Error: ${status}`;
   }
 }
+
+/*
+<tr>
+  <th class="rank">Rank</th>
+  <th class="username">Name</th>
+  <th class="country">Country</th>
+  <th class="rating">Rating</th>
+  <th class="win-pct">Win %</th>
+</tr>
+/*
+
+/*
+<tr class="bg-white">
+  <td class="rank"></td>
+  <td class="username"></td>
+  <td class="country"><span></span></td>
+  <td class="rating"></td>
+  <td class="win-pct"></td>
+</tr>
+*/
