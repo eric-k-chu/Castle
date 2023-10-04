@@ -125,10 +125,6 @@ span {
   line-height: 3rem;
 }
 
-.nav-bar:hover {
-  cursor: pointer;
-}
-
 .height-500 {
   height: 500px;
 }
@@ -274,6 +270,11 @@ span {
 .rating-cell,
 .link-cell {
   padding: 0.5rem 0.85rem;
+}
+
+.link-cell:hover,
+.nav-bar:hover {
+  cursor: pointer;
 }
 
 .rating-cell,

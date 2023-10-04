@@ -298,6 +298,7 @@ function renderMatch(game, username) {
   const black = game.black.username;
   const whiteRating = game.white.rating;
   const blackRating = game.black.rating;
+  const url = game.url;
 
   const result = parsePGN(game.pgn, white, black, username);
 
@@ -354,7 +355,9 @@ function renderMatch(game, username) {
                             </div>
                           </td>
                           <td class="link-cell">
-                            <i class="fa-solid fa-link"></i>
+                            <a href="${url}" target="_blank" class="text-white">
+                              <i class="fa-solid fa-link"></i>
+                            </a>
                           </td>
                         </tr>
                       </tbody>
