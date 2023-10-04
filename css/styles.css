@@ -287,7 +287,7 @@ span {
 
 #stats-table > tbody tr td,
 #clubs-table div {
-  padding-bottom: 5px;
+  padding: 0.1rem 0;
 }
 
 #stats-table,
