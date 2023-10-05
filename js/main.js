@@ -430,16 +430,16 @@ function insertClubs(username) {
   xhr.send();
 }
 
-function renderMatch(game, username) {
+function renderMatch(game) {
   const mode = getMode(game.time_class, game.rules);
   const date = getMatchDate(game.end_time);
-  const white = game.white.username;
-  const black = game.black.username;
+  const white = game.white.username.toLowerCase();
+  const black = game.black.username.toLowerCase();
   const whiteRating = game.white.rating;
   const blackRating = game.black.rating;
   const url = game.url;
 
-  const result = parsePGN(game.pgn, white, black, username);
+  const result = parsePGN(game.pgn, white, black);
 
   const $entry = `<div class="match-entry ${result.bgColor}">
                     <table class="match-info">
@@ -512,13 +512,13 @@ function renderMatch(game, username) {
   return $entry;
 }
 
-function insertArchives(game, username) {
+function insertArchives(game) {
   const xhr = new XMLHttpRequest();
   xhr.open('GET', game);
   xhr.responseType = 'json';
   xhr.addEventListener('load', function (event) {
     for (let i = xhr.response.games.length - 1; i >= 0; i--) {
-      $matchList.innerHTML += renderMatch(xhr.response.games[i], username);
+      $matchList.innerHTML += renderMatch(xhr.response.games[i]);
     }
 
     updateWPCTElements();
@@ -541,7 +541,7 @@ function getArchive(username) {
         const lastIndex = xhr.response.archives.length - 1;
         const gameEndpoint = xhr.response.archives[lastIndex];
         $matchListDate.textContent = getMonthAndYear(gameEndpoint);
-        insertArchives(gameEndpoint, username);
+        insertArchives(gameEndpoint);
       }
     } else {
       handleError(xhr.status, 'matches');
@@ -588,7 +588,7 @@ function getMode(timeClass, rules) {
   }
 }
 
-function parsePGN(pgn, white, black, username) {
+function parsePGN(pgn, white, black) {
   let flag1 = false;
   let flag2 = false;
   const flag3 = pgn.includes('{');
@@ -621,7 +621,7 @@ function parsePGN(pgn, white, black, username) {
     // penultimate character is always a number 0, 1, or 2
     if (i === pgn.length - 2) {
       if (pgn[i] === '0') {
-        if (username === white) {
+        if (data.currentUsername === white) {
           result = 'Win';
           colorStr = 'text-green';
           bgColorStr = 'bg-win';
@@ -633,7 +633,7 @@ function parsePGN(pgn, white, black, username) {
           data.loss++;
         }
       } else if (pgn[i] === '1') {
-        if (username === black) {
+        if (data.currentUsername === black) {
           result = 'Win';
           colorStr = 'text-green';
           bgColorStr = 'bg-win';
