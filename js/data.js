@@ -10,6 +10,8 @@ const data = {
   loss: 0,
   currentUsername: null,
   leaderboard: null,
+  bookmarks: null,
+  bookmarkID: 0,
 
   viewSwap: function (newView) {
     this.currentView.classList.toggle('hidden');

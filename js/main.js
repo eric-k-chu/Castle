@@ -443,7 +443,7 @@ function renderMatch(game) {
 
   const result = parsePGN(game.pgn, white, black);
 
-  const $entry = `<div class="match-entry ${result.bgColor}">
+  const $entry = `<div class="match-entry ${result.bgColor}" data-id="${data.bookmarkID}">
                     <table class="match-info">
                       <tbody>
                         <tr class="row justify-around">
@@ -511,6 +511,7 @@ function renderMatch(game) {
                       </tbody>
                     </table>
                   </div>`;
+  data.bookmarkID++;
   return $entry;
 }
 
