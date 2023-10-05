@@ -434,7 +434,7 @@ function renderMatch(game, username) {
   const result = parsePGN(game.pgn, white, black, username);
 
   const $entry = `<div class="match-entry ${result.bgColor}">
-                    <table id="match-info">
+                    <table class="match-info">
                       <tbody>
                         <tr>
                           <td class="info-cell">
@@ -485,10 +485,17 @@ function renderMatch(game, username) {
                               </div>
                             </div>
                           </td>
-                          <td class="link-cell" align="right">
-                            <a href="${url}" target="_blank" class="text-white">
-                              <i class="fa-solid fa-link"></i>
-                            </a>
+                          <td class="link-cell">
+                            <div class="row justify-center">
+                              <a href="${url}" target="_blank" class="text-white">
+                                <i class="fa-solid fa-link"></i>
+                              </a>
+                            </div>
+                            <div class="row justify-center">
+                              <button type="button" class="bookmark-btn">
+                                <i class="fa-regular fa-bookmark"></i>
+                              </button>
+                            </div>
                           </td>
                         </tr>
                       </tbody>

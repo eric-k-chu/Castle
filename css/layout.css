@@ -5,6 +5,12 @@
   padding: 0 1rem;
 }
 
+.container-2 {
+  width: 75%;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
 .hidden {
   display: none !important;
 }
