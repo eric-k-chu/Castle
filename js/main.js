@@ -97,16 +97,18 @@ const leagueIcons = {
 $headerSearch.addEventListener('keydown', getPlayerInfo);
 $mainSearch.addEventListener('keydown', getPlayerInfo);
 $refreshBtns.addEventListener('click', function (event) {
-  const target = event.target.closest('button').id;
-  if (target === 'refresh-stats') {
-    clearStats();
-    insertStats(data.currentUsername);
-  } else if (target === 'refresh-clubs') {
-    clearClubs();
-    insertClubs(data.currentUsername);
-  } else if (target === 'refresh-matches') {
-    clearMatchList();
-    getArchive(data.currentUsername);
+  if (event.target.closest('button')) {
+    const target = event.target.closest('button').id;
+    if (target === 'refresh-stats') {
+      clearStats();
+      insertStats(data.currentUsername);
+    } else if (target === 'refresh-clubs') {
+      clearClubs();
+      insertClubs(data.currentUsername);
+    } else if (target === 'refresh-matches') {
+      clearMatchList();
+      getArchive(data.currentUsername);
+    }
   }
 });
 
@@ -196,7 +198,7 @@ function renderLeaderboard(index) {
 
 function getPlayerInfo(event) {
   if (event.key === 'Enter') {
-    data.currentUsername = event.target.value;
+    data.currentUsername = event.target.value.toLowerCase();
     const xhr = new XMLHttpRequest();
     xhr.open('GET', `https://api.chess.com/pub/player/${event.target.value}`);
     xhr.responseType = 'json';
