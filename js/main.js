@@ -138,8 +138,16 @@ $logo.addEventListener('click', function (event) {
 $matchList.addEventListener('click', function (event) {
   if (event.target.closest('div.match-entry')) {
     const $entry = event.target.closest('div.match-entry').cloneNode(true);
-    data.bookmarks.push($entry);
+    data.bookmarks.set($entry.getAttribute('data-id'), $entry);
     $bookmarksList.appendChild($entry);
+  }
+});
+
+$bookmarksList.addEventListener('click', function (event) {
+  if (event.target.closest('div.match-entry')) {
+    const $entry = event.target.closest('div.match-entry');
+    data.bookmarks.delete($entry.getAttribute('data-id'));
+    $bookmarksList.removeChild($entry);
   }
 });
 
@@ -517,6 +525,11 @@ function renderMatch(game) {
                             <div class="row justify-center">
                               <button type="button" class="bookmark-btn">
                                 <i class="fa-regular fa-bookmark"></i>
+                              </button>
+                            </div>
+                            <div class="row justify-center">
+                              <button type="button" class="delete-btn">
+                                <i class="fa-solid fa-trash-can"></i>
                               </button>
                             </div>
                           </td>

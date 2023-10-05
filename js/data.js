@@ -10,7 +10,7 @@ const data = {
   loss: 0,
   currentUsername: null,
   leaderboard: null,
-  bookmarks: [],
+  bookmarks: new Map(),
   bookmarkID: 0,
 
   viewSwap: function (newView) {

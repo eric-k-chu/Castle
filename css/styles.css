@@ -308,7 +308,8 @@ span {
 }
 
 .refresh-btn,
-.bookmark-btn {
+.bookmark-btn,
+.delete-btn {
   border: none;
   background-color: #363944;
   color: #fff;
@@ -317,6 +318,7 @@ span {
 
 .link-cell > div > a > i:hover,
 .link-cell > div:nth-of-type(2) > button > i:hover,
+.link-cell > div:nth-of-type(3) > button > i:hover,
 .refresh-btn:hover,
 #nav-leaderboard:hover,
 #nav-bookmarks:hover {
@@ -488,6 +490,16 @@ td.username {
   padding: 0.5rem 0;
 }
 
+/* Hide bookmark icon in the bookmarks list */
+#bookmarks-list div.match-entry > table > tbody > tr td.link-cell div:nth-of-type(2) {
+  display: none;
+}
+
+/* Hide trashcan icon in the match list */
+#match-list div.match-entry > table > tbody > tr td.link-cell div:nth-of-type(3) {
+  display: none;
+}
+
 @media only screen and (min-width: 486px) {
   .result-cell,
   #bookmarks-list div.match-entry > table > tbody > tr td.result-cell {
@@ -510,7 +522,8 @@ td.username {
   }
 
   .refresh-btn,
-  .bookmark-btn {
+  .bookmark-btn,
+  .delete-btn {
     font-size: 0.9rem;
   }
 
