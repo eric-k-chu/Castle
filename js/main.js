@@ -517,20 +517,10 @@ function insertArchives(game, username) {
   xhr.open('GET', game);
   xhr.responseType = 'json';
   xhr.addEventListener('load', function (event) {
-    let limit;
-    if (xhr.response.games.length < 10) {
-      limit = xhr.response.games.length;
-    } else {
-      limit = 10;
+    for (let i = xhr.response.games.length - 1; i >= 0; i--) {
+      $matchList.innerHTML += renderMatch(xhr.response.games[i], username);
     }
 
-    let count = 0;
-    let i = xhr.response.games.length - 1;
-    while (count < limit) {
-      $matchList.innerHTML += renderMatch(xhr.response.games[i], username);
-      count++;
-      i--;
-    }
     updateWPCTElements();
   });
   xhr.send();
