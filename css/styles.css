@@ -99,7 +99,7 @@ span {
 
 .search-box,
 .search-box-main {
-  border-radius: 5px;
+  border-radius: 3px;
   background-color: #f5f5f5;
   border: 1px solid #f5f5f5;
   padding: 0.2rem 0.5rem;
@@ -153,7 +153,7 @@ span {
 
 .avatar-wrapper img {
   max-width: 125px;
-  border-radius: 5px;
+  border-radius: 3px;
   border: 1px solid black;
   box-shadow: 2px 2px 2px black;
 }
@@ -171,7 +171,7 @@ span {
 
 .club-icon-wrapper img {
   width: 30px;
-  border-radius: 5px;
+  border-radius: 3px;
   border: 1px solid black;
 }
 
@@ -196,7 +196,7 @@ span {
 
 #account-info-country {
   border: 1px solid black;
-  border-radius: 2px;
+  border-radius: 3px;
   font-size: 1rem;
 }
 
@@ -213,7 +213,7 @@ span {
 }
 
 .content-box {
-  border-radius: 5px;
+  border-radius: 3px;
   box-shadow: 2px 2px 2px black;
   background-color: #363944;
   padding: 0.5rem;
@@ -226,7 +226,7 @@ span {
   align-items: center;
   padding-left: 0.5rem;
   padding-right: 0.5rem;
-  border-radius: 5px;
+  border-radius: 3px;
   box-shadow: 2px 2px 2px black;
   margin-top: 0.5rem;
 }
