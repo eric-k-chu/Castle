@@ -138,7 +138,7 @@ function renderLeaderboard(index) {
                 <th class="rank">Rank</th>
                 <th class="username">Name</th>
                 <th class="country">Country</th>
-                <th class="rating">Rating</th>
+                <th class="rating">Score</th>
               </tr>`;
     $leaderboardHeader.innerHTML += $header;
     for (let i = 0; i < rankingList.length; i++) {
