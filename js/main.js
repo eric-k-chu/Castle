@@ -46,6 +46,9 @@ const $leaderboardSelect = document.querySelector('#leaderboard-select');
 const $leaderboardHeader = document.querySelector('#leaderboard-table thead');
 const $leaderboardBody = document.querySelector('#leaderboard-table tbody');
 
+// Bookmarks
+const $bookmarksList = document.querySelector('#bookmarks-list');
+
 const months = [
   'January',
   'February',
@@ -122,12 +125,22 @@ $navbar.addEventListener('click', function (event) {
     data.viewSwap($bookmarks);
   }
 });
+
 $leaderboardSelect.addEventListener('change', function (event) {
   clearLeaderboards();
   renderLeaderboard(Number($leaderboardSelect.value));
 });
+
 $logo.addEventListener('click', function (event) {
   data.viewSwap($homePage);
+});
+
+$matchList.addEventListener('click', function (event) {
+  if (event.target.closest('div.match-entry')) {
+    const $entry = event.target.closest('div.match-entry').cloneNode(true);
+    data.bookmarks.push($entry);
+    $bookmarksList.appendChild($entry);
+  }
 });
 
 function getLeaderboard() {
