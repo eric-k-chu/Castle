@@ -65,8 +65,16 @@ span {
   justify-content: space-evenly;
 }
 
+.justify-end {
+  justify-content: flex-end;
+}
+
 .align-center {
   align-items: center;
+}
+
+.align-end {
+  align-items: flex-end;
 }
 
 .icon-base {
@@ -463,10 +471,6 @@ td.username {
 
 #bookmarks-list div.match-entry {
   padding: 0.5rem 0;
-}
-
-#match-list-date {
-  padding-left: 0.75rem;
 }
 
 @media only screen and (min-width: 486px) {

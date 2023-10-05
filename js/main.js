@@ -436,7 +436,7 @@ function renderMatch(game, username) {
   const $entry = `<div class="match-entry ${result.bgColor}">
                     <table class="match-info">
                       <tbody>
-                        <tr>
+                        <tr class="row justify-around">
                           <td class="info-cell">
                             <div class="cell-wrapper">
                               <div>

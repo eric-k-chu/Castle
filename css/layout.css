@@ -39,3 +39,11 @@
 #leaderboard-table {
   flex-basis: 50%;
 }
+
+.column-9 {
+  flex-basis: 90%;
+}
+
+.column-1 {
+  flex-basis: 10%;
+}

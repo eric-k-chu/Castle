@@ -177,23 +177,27 @@
                 <div
                   class="row content-box justify-between align-center"
                   id="match-header">
-                  <h3 id="match-list-date"></h3>
-                  <div class="col align-center">
-                    <h3 id="win-pct"></h3>
-                    <div id="wdl">
-                      <span id="win"></span>
-                      <span>|</span>
-                      <span id="draw"></span>
-                      <span>|</span>
-                      <span id="loss"></span>
+                  <div class="row justify-around align-center column-9">
+                    <h3 id="match-list-date"></h3>
+                    <div class="col align-center">
+                      <h3 id="win-pct"></h3>
+                      <div id="wdl">
+                        <span id="win"></span>
+                        <span>|</span>
+                        <span id="draw"></span>
+                        <span>|</span>
+                        <span id="loss"></span>
+                      </div>
                     </div>
                   </div>
-                  <button
-                    type="button"
-                    class="refresh-btn"
-                    id="refresh-matches">
-                    <i class="fa-solid fa-rotate"></i>
-                  </button>
+                  <div class="column-1 col align-end">
+                    <button
+                      type="button"
+                      class="refresh-btn"
+                      id="refresh-matches">
+                      <i class="fa-solid fa-rotate"></i>
+                    </button>
+                  </div>
                 </div>
                 <div id="match-list"></div>
               </div>
@@ -235,7 +239,7 @@
             <div class="match-entry bg-win">
               <table class="match-info">
                 <tbody>
-                  <tr>
+                  <tr class="row justify-around">
                     <td class="info-cell">
                       <div class="cell-wrapper">
                         <div>
