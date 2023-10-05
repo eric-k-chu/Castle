@@ -3,12 +3,15 @@ const $headerSearch = document.querySelector('#header-search');
 const $mainSearch = document.querySelector('#main-search');
 
 // Nav bar
+const $logo = document.querySelector('#logo');
 const $navbar = document.querySelector('#nav-bar');
 
 // Views
+const $homePage = document.querySelector('#home');
 const $failedSearch = document.querySelector('#failed-search');
 const $playerInfo = document.querySelector('#player-info');
 const $leaderboard = document.querySelector('#leaderboard');
+const $bookmarks = document.querySelector('#bookmarks');
 
 const $errorMsg = document.querySelector('#error-msg');
 
@@ -113,11 +116,16 @@ $navbar.addEventListener('click', function (event) {
     if (!data.leaderboard) {
       getLeaderboard();
     }
+  } else if (event.target.id === 'nav-bookmarks') {
+    data.viewSwap($bookmarks);
   }
 });
 $leaderboardSelect.addEventListener('change', function (event) {
   clearLeaderboards();
   renderLeaderboard(Number($leaderboardSelect.value));
+});
+$logo.addEventListener('click', function (event) {
+  data.viewSwap($homePage);
 });
 
 function getLeaderboard() {

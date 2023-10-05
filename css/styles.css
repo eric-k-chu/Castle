@@ -2,6 +2,21 @@ span {
   white-space: pre;
 }
 
+#logo {
+  background-color: transparent;
+  border: none;
+}
+
+#logo span {
+  font-size: 1.5rem;
+  font-weight: 600;
+  padding: 1.2rem 0;
+}
+
+#logo:hover {
+  cursor: pointer;
+}
+
 .bg-blue-1 {
   background-color: #363944;
 }
