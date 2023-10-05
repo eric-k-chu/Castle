@@ -2,9 +2,13 @@
 const $headerSearch = document.querySelector('#header-search');
 const $mainSearch = document.querySelector('#main-search');
 
-// Pages
+// Nav bar
+const $navbar = document.querySelector('#nav-bar');
+
+// Views
 const $failedSearch = document.querySelector('#failed-search');
 const $playerInfo = document.querySelector('#player-info');
+const $leaderboard = document.querySelector('#leaderboard');
 
 const $errorMsg = document.querySelector('#error-msg');
 
@@ -35,6 +39,11 @@ const $wdl = document.querySelectorAll('#wdl span');
 const $refreshStats = document.querySelector('#refresh-stats');
 const $refreshClubs = document.querySelector('#refresh-clubs');
 const $refreshMatches = document.querySelector('#refresh-matches');
+
+// Leaderboard
+const $leaderboardSelect = document.querySelector('#leaderboard-select');
+const $leaderboardHeader = document.querySelector('#leaderboard-table thead');
+const $leaderboardBody = document.querySelector('#leaderboard-table tbody');
 
 const months = [
   'January',
@@ -91,6 +100,85 @@ $refreshMatches.addEventListener('click', function (event) {
   clearMatchList();
   getArchive(data.currentUsername);
 });
+$navbar.addEventListener('click', function (event) {
+  if (event.target.id === 'nav-leaderboard') {
+    data.viewSwap($leaderboard);
+    if (!data.leaderboard) {
+      getLeaderboard();
+    }
+  }
+});
+$leaderboardSelect.addEventListener('change', function (event) {
+  clearLeaderboards();
+  renderLeaderboard(Number($leaderboardSelect.value));
+});
+
+function getLeaderboard() {
+  const xhr = new XMLHttpRequest();
+  xhr.open('GET', 'https://api.chess.com/pub/leaderboards');
+  xhr.responseType = 'json';
+  xhr.addEventListener('load', function () {
+    const gameList = new Map();
+    let i = 0;
+    for (const key in xhr.response) {
+      gameList.set(i, xhr.response[key]);
+      i++;
+    }
+    data.leaderboard = gameList;
+    renderLeaderboard(Number($leaderboardSelect.value));
+  });
+  xhr.send();
+}
+
+function renderLeaderboard(index) {
+  const rankingList = data.leaderboard.get(index);
+
+  if (index > 9) {
+    const $header = `<tr>
+                <th class="rank">Rank</th>
+                <th class="username">Name</th>
+                <th class="country">Country</th>
+                <th class="rating">Score</th>
+              </tr>`;
+    $leaderboardHeader.innerHTML += $header;
+    for (let i = 0; i < rankingList.length; i++) {
+      const user = rankingList[i];
+      const countryCode = user.country.slice(-2).toLowerCase();
+
+      const $entry = `<tr class="bg-white">
+                  <td class="rank">${user.rank}</td>
+                  <td class="username">${user.username}</td>
+                  <td class="country"><span class="fi fi-${countryCode}"></span></td>
+                  <td class="rating">${user.score}</td>
+                </tr>`;
+      $leaderboardBody.innerHTML += $entry;
+    }
+  } else {
+    const $header = `<tr>
+                <th class="rank">Rank</th>
+                <th class="username">Name</th>
+                <th class="country">Country</th>
+                <th class="rating">Rating</th>
+                <th class="win-pct">Win %</th>
+              </tr>`;
+    $leaderboardHeader.innerHTML += $header;
+    for (let i = 0; i < rankingList.length; i++) {
+      const user = rankingList[i];
+      const countryCode = user.country.slice(-2).toLowerCase();
+      const wpct = getWPCT(user.win_count, user.draw_count, user.loss_count);
+
+      const $entry = `<tr class="bg-white">
+                  <td class="rank">${user.rank}</td>
+                  <td class="username">${user.username}</td>
+                  <td class="country"><span class="fi fi-${countryCode}"></span></td>
+                  <td class="rating">${user.score}</td>
+                  <td class="win-pct">${wpct}</td>
+                </tr>`;
+      $leaderboardBody.innerHTML += $entry;
+    }
+  }
+
+}
 
 function getPlayerInfo(event) {
   if (event.key === 'Enter') {
@@ -619,15 +707,9 @@ function clearWPCTElement() {
 }
 
 function clearTableElements() {
-  while ($statsTable.firstChild) {
-    $statsTable.removeChild($statsTable.firstChild);
-  }
-  while ($clubsTable.firstChild) {
-    $clubsTable.removeChild($clubsTable.firstChild);
-  }
-  while ($matchList.firstChild) {
-    $matchList.removeChild($matchList.firstChild);
-  }
+  clearStats();
+  clearClubs();
+  clearMatchList();
 }
 
 function clearStats() {
@@ -665,5 +747,14 @@ function handleError(status, str) {
     $clubsTable.appendChild($error);
   } else if (str === 'matches') {
     $matchListDate.textContent = `Error: ${status}`;
+  }
+}
+
+function clearLeaderboards() {
+  while ($leaderboardHeader.firstChild) {
+    $leaderboardHeader.removeChild($leaderboardHeader.firstChild);
+  }
+  while ($leaderboardBody.firstChild) {
+    $leaderboardBody.removeChild($leaderboardBody.firstChild);
   }
 }
