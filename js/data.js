@@ -18,8 +18,8 @@ const data = {
   },
 
   getWPCT: function () {
-    const upper = (2 * this.win + this.draw);
-    const lower = (2 * (this.win + this.loss + this.draw));
+    const upper = 2 * this.win + this.draw;
+    const lower = 2 * (this.win + this.loss + this.draw);
     return ((upper / lower) * 100).toFixed(2);
   },
 

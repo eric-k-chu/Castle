@@ -77,13 +77,20 @@ const monthsAbbr = [
 
 const leagueIcons = {
   Wood: 'https://www.chess.com/bundles/web/images/leagues/badges/wood.b8940cb5.svg',
-  Stone: 'https://www.chess.com/bundles/web/images/leagues/badges/stone.3434a62c.svg',
-  Bronze: 'https://www.chess.com/bundles/web/images/leagues/badges/bronze.b529d5c1.svg',
-  Silver: 'https://www.chess.com/bundles/web/images/leagues/badges/silver.6e7fa8dc.svg',
-  Crystal: 'https://www.chess.com/bundles/web/images/leagues/badges/crystal.232d0aa5.svg',
-  Elite: 'https://www.chess.com/bundles/web/images/leagues/badges/elite.970af95e.svg',
-  Champion: 'https://www.chess.com/bundles/web/images/leagues/badges/champion.0c764ca5.svg',
-  Legend: 'https://www.chess.com/bundles/web/images/leagues/badges/legend.1ea014f3.svg'
+  Stone:
+    'https://www.chess.com/bundles/web/images/leagues/badges/stone.3434a62c.svg',
+  Bronze:
+    'https://www.chess.com/bundles/web/images/leagues/badges/bronze.b529d5c1.svg',
+  Silver:
+    'https://www.chess.com/bundles/web/images/leagues/badges/silver.6e7fa8dc.svg',
+  Crystal:
+    'https://www.chess.com/bundles/web/images/leagues/badges/crystal.232d0aa5.svg',
+  Elite:
+    'https://www.chess.com/bundles/web/images/leagues/badges/elite.970af95e.svg',
+  Champion:
+    'https://www.chess.com/bundles/web/images/leagues/badges/champion.0c764ca5.svg',
+  Legend:
+    'https://www.chess.com/bundles/web/images/leagues/badges/legend.1ea014f3.svg'
 };
 
 $headerSearch.addEventListener('keydown', getPlayerInfo);
@@ -177,7 +184,6 @@ function renderLeaderboard(index) {
       $leaderboardBody.innerHTML += $entry;
     }
   }
-
 }
 
 function getPlayerInfo(event) {
@@ -316,7 +322,11 @@ function renderStat(type, stats) {
     $icon.className = game.icon;
     $p1.textContent = game.name;
     $p2.textContent = stats.last.rating;
-    $p3.textContent = getWPCT(stats.record.win, stats.record.loss, stats.record.draw);
+    $p3.textContent = getWPCT(
+      stats.record.win,
+      stats.record.loss,
+      stats.record.draw
+    );
     $p4.textContent = 'Win %';
   }
 
@@ -513,7 +523,10 @@ function insertArchives(game, username) {
 
 function getArchive(username) {
   const xhr = new XMLHttpRequest();
-  xhr.open('GET', `https://api.chess.com/pub/player/${username}/games/archives`);
+  xhr.open(
+    'GET',
+    `https://api.chess.com/pub/player/${username}/games/archives`
+  );
   xhr.responseType = 'json';
   xhr.addEventListener('load', function (event) {
     if (xhr.status === 200) {
@@ -636,7 +649,12 @@ function parsePGN(pgn, white, black, username) {
     i--;
   }
 
-  return { resultStr: result, moves: moveCount.join(''), color: colorStr, bgColor: bgColorStr };
+  return {
+    resultStr: result,
+    moves: moveCount.join(''),
+    color: colorStr,
+    bgColor: bgColorStr
+  };
 }
 
 // archive endpoint last part example: ..games/2021/07"
