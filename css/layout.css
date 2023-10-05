@@ -20,11 +20,11 @@
 }
 
 #player-info-body > div > div > div:nth-of-type(1) {
-  flex-basis: 40%;
+  flex-basis: 20%;
 }
 
 #player-info-body > div > div > div:nth-of-type(2) {
-  flex-basis: 60%;
+  flex-basis: 80%;
 }
 
 .col {
@@ -38,14 +38,4 @@
 
 #leaderboard-table {
   flex-basis: 50%;
-}
-
-@media only screen and (min-width: 768px) {
-  #player-info-body > div > div > div:nth-of-type(1) {
-    flex-basis: 20%;
-  }
-
-  #player-info-body > div > div > div:nth-of-type(2) {
-    flex-basis: 80%;
-  }
 }

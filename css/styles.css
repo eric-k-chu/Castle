@@ -465,6 +465,10 @@ td.username {
   padding: 0.5rem 0;
 }
 
+#match-list-date {
+  padding-left: 0.75rem;
+}
+
 @media only screen and (min-width: 486px) {
   .result-cell,
   #bookmarks-list div.match-entry > table > tbody > tr td.result-cell {
