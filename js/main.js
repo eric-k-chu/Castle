@@ -2,7 +2,7 @@
 const $headerSearch = document.querySelector('#header-search');
 const $mainSearch = document.querySelector('#main-search');
 
-// Nav bar
+// Header
 const $logo = document.querySelector('#logo');
 const $navbar = document.querySelector('#nav-bar');
 
@@ -39,9 +39,7 @@ const $winPCT = document.querySelector('#win-pct');
 const $wdl = document.querySelectorAll('#wdl span');
 
 // Refresh buttons
-const $refreshStats = document.querySelector('#refresh-stats');
-const $refreshClubs = document.querySelector('#refresh-clubs');
-const $refreshMatches = document.querySelector('#refresh-matches');
+const $refreshBtns = document.querySelector('#player-info-body');
 
 // Leaderboard
 const $leaderboardSelect = document.querySelector('#leaderboard-select');
@@ -98,18 +96,20 @@ const leagueIcons = {
 
 $headerSearch.addEventListener('keydown', getPlayerInfo);
 $mainSearch.addEventListener('keydown', getPlayerInfo);
-$refreshStats.addEventListener('click', function (event) {
-  clearStats();
-  insertStats(data.currentUsername);
+$refreshBtns.addEventListener('click', function (event) {
+  const target = event.target.closest('button').id;
+  if (target === 'refresh-stats') {
+    clearStats();
+    insertStats(data.currentUsername);
+  } else if (target === 'refresh-clubs') {
+    clearClubs();
+    insertClubs(data.currentUsername);
+  } else if (target === 'refresh-matches') {
+    clearMatchList();
+    getArchive(data.currentUsername);
+  }
 });
-$refreshClubs.addEventListener('click', function (event) {
-  clearClubs();
-  insertClubs(data.currentUsername);
-});
-$refreshMatches.addEventListener('click', function (event) {
-  clearMatchList();
-  getArchive(data.currentUsername);
-});
+
 $navbar.addEventListener('click', function (event) {
   if (event.target.id === 'nav-leaderboard') {
     data.viewSwap($leaderboard);
