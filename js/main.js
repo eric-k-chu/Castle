@@ -48,6 +48,9 @@ const $leaderboardBody = document.querySelector('#leaderboard-table tbody');
 
 // Bookmarks
 const $bookmarksList = document.querySelector('#bookmarks-list');
+const $bookmarkModal = document.querySelector('.bookmark-modal');
+const $modalMsg = document.querySelector('.bookmark-modal p');
+const $modalIcon = document.querySelector('.bookmark-modal i');
 
 const months = [
   'January',
@@ -137,9 +140,20 @@ $logo.addEventListener('click', function (event) {
 
 $matchList.addEventListener('click', function (event) {
   if (event.target.closest('div.match-entry')) {
-    const $entry = event.target.closest('div.match-entry').cloneNode(true);
-    data.bookmarks.set($entry.getAttribute('data-id'), $entry);
-    $bookmarksList.appendChild($entry);
+    const $selected = event.target.closest('div.match-entry');
+    if (!data.bookmarks.has($selected.getAttribute('data-id'))) {
+      const $entry = $selected.cloneNode(true);
+      const key = $selected.getAttribute('data-id');
+      data.bookmarks.set(key, $entry);
+      $bookmarksList.appendChild($entry);
+      setBookmarkModal('Game added.');
+    } else {
+      setBookmarkModal('Game already saved.');
+    }
+    $bookmarkModal.classList.toggle('hidden');
+    setTimeout(function () {
+      $bookmarkModal.classList.toggle('hidden');
+    }, 1000);
   }
 });
 
@@ -148,6 +162,11 @@ $bookmarksList.addEventListener('click', function (event) {
     const $entry = event.target.closest('div.match-entry');
     data.bookmarks.delete($entry.getAttribute('data-id'));
     $bookmarksList.removeChild($entry);
+    setBookmarkModal('Game deleted.');
+    $bookmarkModal.classList.toggle('hidden');
+    setTimeout(function () {
+      $bookmarkModal.classList.toggle('hidden');
+    }, 1000);
   }
 });
 
@@ -809,4 +828,13 @@ function clearLeaderboards() {
   while ($leaderboardBody.firstChild) {
     $leaderboardBody.removeChild($leaderboardBody.firstChild);
   }
+}
+
+function setBookmarkModal(str) {
+  if (str === 'Game added.' || str === 'Game deleted.') {
+    $modalIcon.className = 'fa-regular fa-circle-check text-green';
+  } else if (str === 'Game already saved.') {
+    $modalIcon.className = 'fa-regular fa-circle-xmark text-red';
+  }
+  $modalMsg.textContent = str;
 }

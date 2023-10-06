@@ -486,6 +486,13 @@ td.username {
   margin-top: 1rem;
 }
 
+.bookmark-modal {
+  position: fixed;
+  top: 1rem;
+  width: 100%;
+  margin: 0 auto;
+}
+
 #bookmarks-list div.match-entry {
   padding: 0.5rem 0;
 }
