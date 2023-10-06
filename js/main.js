@@ -157,16 +157,22 @@ $matchList.addEventListener('click', function (event) {
 $bookmarksList.addEventListener('click', function (event) {
   if (event.target.closest('div.match-entry')) {
     const $entry = event.target.closest('div.match-entry');
-    data.bookmarks.delete($entry.getAttribute('data-id'));
-    $bookmarksList.removeChild($entry);
-    setBookmarkModal('Game deleted.');
-    displayBookmarkModal();
+    $entry.classList.toggle('zoom-delete');
+    data.entryToDelete = $entry;
   }
 });
 
 $bookmarkModal.addEventListener('animationend', function (event) {
   $bookmarkModal.classList.toggle('hidden');
   $bookmarkModal.classList.toggle('fade-out');
+});
+
+$bookmarksList.addEventListener('animationend', function (event) {
+  data.bookmarks.delete(data.entryToDelete.getAttribute('data-id'));
+  $bookmarksList.removeChild(data.entryToDelete);
+  setBookmarkModal('Game deleted.');
+  displayBookmarkModal();
+  data.entryToDelete = null;
 });
 
 function getLeaderboard() {
