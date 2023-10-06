@@ -507,6 +507,17 @@ td.username {
   display: none;
 }
 
+#match-list-date {
+  border: none;
+  background-color: #363944;
+  color: #f5f5f5;
+  font-weight: bold;
+  font-size: 0.6rem;
+  font-family:
+    "JetBrains Mono",
+    monospace;
+}
+
 /* duration, easing function, delay, iterations, animation function */
 .fade-out {
   animation: 1s ease-out 1s 1 fade-out;
@@ -583,7 +594,8 @@ td.username {
     font-size: 1rem;
   }
 
-  #match-header {
+  #match-header,
+  #match-list-date {
     font-size: 1rem;
   }
 

@@ -32,6 +32,7 @@ const $clubsTable = document.querySelector('#clubs-table');
 
 // Match History
 const $matchListDate = document.querySelector('#match-list-date');
+const $matchErrorMsg = document.querySelector('#match-error-msg');
 const $matchList = document.querySelector('#match-list');
 const $winPCT = document.querySelector('#win-pct');
 
@@ -251,6 +252,7 @@ function getPlayerInfo(event) {
       if (xhr.status === 200) {
         clearWPCTElement();
         clearTableElements();
+        clearMatchErrorMsg();
         viewSwap($playerInfo);
         for (let i = 0; i < 4; i++) {
           if (i === 0) {
@@ -589,12 +591,16 @@ function getArchive() {
   xhr.addEventListener('load', function (event) {
     if (xhr.status === 200) {
       if (xhr.response.archives.length === 0) {
-        $matchListDate.textContent = 'No games have been played';
+        toggleMatchErrorMsg();
       } else {
+
         const lastIndex = xhr.response.archives.length - 1;
-        const gameEndpoint = xhr.response.archives[lastIndex];
-        $matchListDate.textContent = getMonthAndYear(gameEndpoint);
-        insertArchives(gameEndpoint);
+        for (let i = xhr.response.archives.length - 1; i >= 0; i--) {
+          const endpoint = xhr.response.archives[i];
+          $matchListDate.appendChild(renderOption(getMonthAndYear(endpoint)));
+        }
+        const lastEndpoint = xhr.response.archives[lastIndex];
+        insertArchives(lastEndpoint);
       }
     } else {
       handleError(xhr.status, 'matches');
@@ -822,7 +828,7 @@ function handleError(status, str) {
     $error.textContent = `Error: ${status}`;
     $clubsTable.appendChild($error);
   } else if (str === 'matches') {
-    $matchListDate.textContent = `Error: ${status}`;
+    toggleMatchErrorMsg();
   }
 }
 
@@ -865,4 +871,21 @@ function viewSwap(newView) {
   data.currentView.classList.toggle('hidden');
   newView.classList.toggle('hidden');
   data.currentView = newView;
+}
+
+function renderOption(str) {
+  const $option = document.createElement('option');
+  $option.textContent = str;
+  return $option;
+}
+
+function clearMatchErrorMsg() {
+  if ($matchListDate.className.includes('hidden')) {
+    toggleMatchErrorMsg();
+  }
+}
+
+function toggleMatchErrorMsg() {
+  $matchListDate.classList.toggle('hidden');
+  $matchErrorMsg.classList.toggle('hidden');
 }
