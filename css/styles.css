@@ -18,15 +18,15 @@ span {
 }
 
 .bg-blue-1 {
-  background-color: #31313c;
+  background-color: #302e2b;
 }
 
 .bg-blue-2 {
-  background-color: #292b33;
+  background-color: #262522;
 }
 
 .bg-dark-gray {
-  background-color: #1c1c1f;
+  background-color: #302e2b;
 }
 
 .bg-white {
@@ -178,7 +178,7 @@ span {
   max-width: 125px;
   border-radius: 3px;
   border: 1px solid black;
-  box-shadow: 2px 2px 2px black;
+  box-shadow: 0 4px #1d1c1a;
 }
 
 .league-wrapper {
@@ -238,15 +238,15 @@ span {
 .content-box,
 .header-box {
   border-radius: 3px;
-  box-shadow: 2px 2px 2px black;
-  background-color: #31313c;
+  box-shadow: 0 4px #1d1c1a;
+  background-color: #262522;
   padding: 0.5rem;
-  margin-top: 0.05rem;
+  margin-top: 0.5rem;
 }
 
 .header-box {
   padding: 0.25rem;
-  margin-top: 0.5rem;
+  margin-top: 0.75rem;
 }
 
 .header-box > div {
@@ -260,7 +260,7 @@ span {
   padding-left: 0.5rem;
   padding-right: 0.5rem;
   border-radius: 3px;
-  box-shadow: 2px 2px 2px black;
+  box-shadow: 0 4px #1d1c1a;
   margin-top: 0.5rem;
 }
 
@@ -270,8 +270,8 @@ span {
       90deg,
       #81b64c 0%,
       #81b64c 1.5%,
-      #31313c 1.5%,
-      #31313c 98.5%,
+      #262522 1.5%,
+      #262522 98.5%,
       #81b64c 98.5%,
       #81b64c 100%
     );
@@ -283,8 +283,8 @@ span {
       90deg,
       #b3aca8 0%,
       #b3aca8 1.5%,
-      #31313c 1.5%,
-      #31313c 98.5%,
+      #262522 1.5%,
+      #262522 98.5%,
       #b3aca8 98.5%,
       #b3aca8 100%
     );
@@ -296,8 +296,8 @@ span {
       90deg,
       #ba0c2f 0%,
       #ba0c2f 1.5%,
-      #31313c 1.5%,
-      #31313c 98.5%,
+      #262522 1.5%,
+      #262522 98.5%,
       #ba0c2f 98.5%,
       #ba0c2f 100%
     );
@@ -321,7 +321,7 @@ span {
 .bookmark-btn,
 .delete-btn {
   border: none;
-  background-color: #31313c;
+  background-color: #262522;
   color: #fff;
   font-size: 0.65rem;
 }
@@ -412,7 +412,7 @@ span {
 
 #leaderboard-select {
   border: none;
-  background-color: #31313c;
+  background-color: #262522;
   color: #f5f5f5;
   width: 100%;
   font-size: 1.5rem;
@@ -421,8 +421,8 @@ span {
 }
 
 #leaderboard > div.col {
-  box-shadow: 2px 2px 2px black;
-  background-color: #31313c;
+  box-shadow: 0 4px #1d1c1a;
+  background-color: #262522;
 }
 
 #leaderboard-table {
@@ -430,7 +430,7 @@ span {
 }
 
 #leaderboard-table thead {
-  background-color: #31313c;
+  background-color: #262522;
 }
 
 #leaderboard-table th {
@@ -490,7 +490,6 @@ td.username {
 }
 
 #bookmarks div.header-box > div {
-  color: #f5f5f5;
   font-weight: 300;
   font-size: 1rem;
   padding: 0.5rem 0;
@@ -498,7 +497,6 @@ td.username {
 
 #bookmarks div.header-box {
   padding: 0 1rem;
-  margin: 0 1rem;
 }
 
 #bookmarks-list div.match-entry {
@@ -517,7 +515,7 @@ td.username {
 
 #match-list-date {
   border: none;
-  background-color: #31313c;
+  background-color: #262522;
   color: #f5f5f5;
   font-weight: bold;
   font-size: 0.6rem;
