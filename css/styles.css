@@ -507,6 +507,15 @@ td.username {
   display: none;
 }
 
+.bookmark-modal.fade-out {
+  animation: 1s ease-out 2s 1 fade-out;
+}
+
+@keyframes fade-out {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
 @media only screen and (min-width: 486px) {
   .result-cell,
   #bookmarks-list div.match-entry > table > tbody > tr td.result-cell {

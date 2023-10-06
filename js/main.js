@@ -150,10 +150,7 @@ $matchList.addEventListener('click', function (event) {
     } else {
       setBookmarkModal('Game already saved.');
     }
-    $bookmarkModal.classList.toggle('hidden');
-    setTimeout(function () {
-      $bookmarkModal.classList.toggle('hidden');
-    }, 1000);
+    displayBookmarkModal();
   }
 });
 
@@ -163,11 +160,13 @@ $bookmarksList.addEventListener('click', function (event) {
     data.bookmarks.delete($entry.getAttribute('data-id'));
     $bookmarksList.removeChild($entry);
     setBookmarkModal('Game deleted.');
-    $bookmarkModal.classList.toggle('hidden');
-    setTimeout(function () {
-      $bookmarkModal.classList.toggle('hidden');
-    }, 1000);
+    displayBookmarkModal();
   }
+});
+
+$bookmarkModal.addEventListener('animationend', function (event) {
+  $bookmarkModal.classList.toggle('hidden');
+  $bookmarkModal.classList.toggle('fade-out');
 });
 
 function getLeaderboard() {
@@ -837,4 +836,9 @@ function setBookmarkModal(str) {
     $modalIcon.className = 'fa-regular fa-circle-xmark text-red';
   }
   $modalMsg.textContent = str;
+}
+
+function displayBookmarkModal() {
+  $bookmarkModal.classList.toggle('hidden');
+  $bookmarkModal.classList.toggle('fade-out');
 }
