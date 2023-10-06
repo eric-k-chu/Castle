@@ -2,13 +2,16 @@
 const $headerSearch = document.querySelector('#header-search');
 const $mainSearch = document.querySelector('#main-search');
 
-// Nav bar
+// Header
+const $logo = document.querySelector('#logo');
 const $navbar = document.querySelector('#nav-bar');
 
 // Views
+const $homePage = document.querySelector('#home');
 const $failedSearch = document.querySelector('#failed-search');
 const $playerInfo = document.querySelector('#player-info');
 const $leaderboard = document.querySelector('#leaderboard');
+const $bookmarks = document.querySelector('#bookmarks');
 
 const $errorMsg = document.querySelector('#error-msg');
 
@@ -36,14 +39,18 @@ const $winPCT = document.querySelector('#win-pct');
 const $wdl = document.querySelectorAll('#wdl span');
 
 // Refresh buttons
-const $refreshStats = document.querySelector('#refresh-stats');
-const $refreshClubs = document.querySelector('#refresh-clubs');
-const $refreshMatches = document.querySelector('#refresh-matches');
+const $refreshBtns = document.querySelector('#player-info-body');
 
 // Leaderboard
 const $leaderboardSelect = document.querySelector('#leaderboard-select');
 const $leaderboardHeader = document.querySelector('#leaderboard-table thead');
 const $leaderboardBody = document.querySelector('#leaderboard-table tbody');
+
+// Bookmarks
+const $bookmarksList = document.querySelector('#bookmarks-list');
+const $bookmarkModal = document.querySelector('.bookmark-modal');
+const $modalMsg = document.querySelector('.bookmark-modal p');
+const $modalIcon = document.querySelector('.bookmark-modal i');
 
 const months = [
   'January',
@@ -95,29 +102,77 @@ const leagueIcons = {
 
 $headerSearch.addEventListener('keydown', getPlayerInfo);
 $mainSearch.addEventListener('keydown', getPlayerInfo);
-$refreshStats.addEventListener('click', function (event) {
-  clearStats();
-  insertStats(data.currentUsername);
+$refreshBtns.addEventListener('click', function (event) {
+  if (event.target.closest('button')) {
+    const target = event.target.closest('button').id;
+    if (target === 'refresh-stats') {
+      clearStats();
+      insertStats(data.currentUsername);
+    } else if (target === 'refresh-clubs') {
+      clearClubs();
+      insertClubs(data.currentUsername);
+    } else if (target === 'refresh-matches') {
+      clearMatchList();
+      getArchive(data.currentUsername);
+    }
+  }
 });
-$refreshClubs.addEventListener('click', function (event) {
-  clearClubs();
-  insertClubs(data.currentUsername);
-});
-$refreshMatches.addEventListener('click', function (event) {
-  clearMatchList();
-  getArchive(data.currentUsername);
-});
+
 $navbar.addEventListener('click', function (event) {
   if (event.target.id === 'nav-leaderboard') {
     data.viewSwap($leaderboard);
     if (!data.leaderboard) {
       getLeaderboard();
     }
+  } else if (event.target.id === 'nav-bookmarks') {
+    data.viewSwap($bookmarks);
   }
 });
+
 $leaderboardSelect.addEventListener('change', function (event) {
   clearLeaderboards();
   renderLeaderboard(Number($leaderboardSelect.value));
+});
+
+$logo.addEventListener('click', function (event) {
+  data.viewSwap($homePage);
+});
+
+$matchList.addEventListener('click', function (event) {
+  if (event.target.closest('div.match-entry')) {
+    const $selected = event.target.closest('div.match-entry');
+    if (!data.bookmarks.has($selected.getAttribute('data-id'))) {
+      const $entry = $selected.cloneNode(true);
+      const key = $selected.getAttribute('data-id');
+      data.bookmarks.set(key, $entry);
+      $bookmarksList.appendChild($entry);
+      setBookmarkModal('Game added.');
+    } else {
+      setBookmarkModal('Game already saved.');
+    }
+    displayBookmarkModal();
+  }
+});
+
+$bookmarksList.addEventListener('click', function (event) {
+  if (event.target.closest('div.match-entry')) {
+    const $entry = event.target.closest('div.match-entry');
+    $entry.classList.toggle('zoom-delete');
+    data.entryToDelete = $entry;
+  }
+});
+
+$bookmarkModal.addEventListener('animationend', function (event) {
+  $bookmarkModal.classList.toggle('hidden');
+  $bookmarkModal.classList.toggle('fade-out');
+});
+
+$bookmarksList.addEventListener('animationend', function (event) {
+  data.bookmarks.delete(data.entryToDelete.getAttribute('data-id'));
+  $bookmarksList.removeChild(data.entryToDelete);
+  setBookmarkModal('Game deleted.');
+  displayBookmarkModal();
+  data.entryToDelete = null;
 });
 
 function getLeaderboard() {
@@ -188,7 +243,7 @@ function renderLeaderboard(index) {
 
 function getPlayerInfo(event) {
   if (event.key === 'Enter') {
-    data.currentUsername = event.target.value;
+    data.currentUsername = event.target.value.toLowerCase();
     const xhr = new XMLHttpRequest();
     xhr.open('GET', `https://api.chess.com/pub/player/${event.target.value}`);
     xhr.responseType = 'json';
@@ -422,21 +477,22 @@ function insertClubs(username) {
   xhr.send();
 }
 
-function renderMatch(game, username) {
+function renderMatch(game) {
   const mode = getMode(game.time_class, game.rules);
   const date = getMatchDate(game.end_time);
-  const white = game.white.username;
-  const black = game.black.username;
+  const white = game.white.username.toLowerCase();
+  const black = game.black.username.toLowerCase();
   const whiteRating = game.white.rating;
   const blackRating = game.black.rating;
   const url = game.url;
+  const uuid = game.uuid;
 
-  const result = parsePGN(game.pgn, white, black, username);
+  const result = parsePGN(game.pgn, white, black);
 
-  const $entry = `<div class="match-entry ${result.bgColor}">
-                    <table id="match-info">
+  const $entry = `<div class="match-entry ${result.bgColor}" data-id="${uuid}">
+                    <table class="match-info">
                       <tbody>
-                        <tr>
+                        <tr class="row justify-around">
                           <td class="info-cell">
                             <div class="cell-wrapper">
                               <div>
@@ -485,10 +541,22 @@ function renderMatch(game, username) {
                               </div>
                             </div>
                           </td>
-                          <td class="link-cell" align="right">
-                            <a href="${url}" target="_blank" class="text-white">
-                              <i class="fa-solid fa-link"></i>
-                            </a>
+                          <td class="link-cell">
+                            <div class="row justify-center">
+                              <a href="${url}" target="_blank" class="text-white">
+                                <i class="fa-solid fa-link"></i>
+                              </a>
+                            </div>
+                            <div class="row justify-center">
+                              <button type="button" class="bookmark-btn">
+                                <i class="fa-regular fa-bookmark"></i>
+                              </button>
+                            </div>
+                            <div class="row justify-center">
+                              <button type="button" class="delete-btn">
+                                <i class="fa-solid fa-trash-can"></i>
+                              </button>
+                            </div>
                           </td>
                         </tr>
                       </tbody>
@@ -497,25 +565,15 @@ function renderMatch(game, username) {
   return $entry;
 }
 
-function insertArchives(game, username) {
+function insertArchives(game) {
   const xhr = new XMLHttpRequest();
   xhr.open('GET', game);
   xhr.responseType = 'json';
   xhr.addEventListener('load', function (event) {
-    let limit;
-    if (xhr.response.games.length < 10) {
-      limit = xhr.response.games.length;
-    } else {
-      limit = 10;
+    for (let i = xhr.response.games.length - 1; i >= 0; i--) {
+      $matchList.innerHTML += renderMatch(xhr.response.games[i]);
     }
 
-    let count = 0;
-    let i = xhr.response.games.length - 1;
-    while (count < limit) {
-      $matchList.innerHTML += renderMatch(xhr.response.games[i], username);
-      count++;
-      i--;
-    }
     updateWPCTElements();
   });
   xhr.send();
@@ -536,7 +594,7 @@ function getArchive(username) {
         const lastIndex = xhr.response.archives.length - 1;
         const gameEndpoint = xhr.response.archives[lastIndex];
         $matchListDate.textContent = getMonthAndYear(gameEndpoint);
-        insertArchives(gameEndpoint, username);
+        insertArchives(gameEndpoint);
       }
     } else {
       handleError(xhr.status, 'matches');
@@ -583,7 +641,7 @@ function getMode(timeClass, rules) {
   }
 }
 
-function parsePGN(pgn, white, black, username) {
+function parsePGN(pgn, white, black) {
   let flag1 = false;
   let flag2 = false;
   const flag3 = pgn.includes('{');
@@ -616,7 +674,7 @@ function parsePGN(pgn, white, black, username) {
     // penultimate character is always a number 0, 1, or 2
     if (i === pgn.length - 2) {
       if (pgn[i] === '0') {
-        if (username === white) {
+        if (data.currentUsername === white) {
           result = 'Win';
           colorStr = 'text-green';
           bgColorStr = 'bg-win';
@@ -628,7 +686,7 @@ function parsePGN(pgn, white, black, username) {
           data.loss++;
         }
       } else if (pgn[i] === '1') {
-        if (username === black) {
+        if (data.currentUsername === black) {
           result = 'Win';
           colorStr = 'text-green';
           bgColorStr = 'bg-win';
@@ -775,4 +833,18 @@ function clearLeaderboards() {
   while ($leaderboardBody.firstChild) {
     $leaderboardBody.removeChild($leaderboardBody.firstChild);
   }
+}
+
+function setBookmarkModal(str) {
+  if (str === 'Game added.' || str === 'Game deleted.') {
+    $modalIcon.className = 'fa-regular fa-circle-check text-green';
+  } else if (str === 'Game already saved.') {
+    $modalIcon.className = 'fa-regular fa-circle-xmark text-red';
+  }
+  $modalMsg.textContent = str;
+}
+
+function displayBookmarkModal() {
+  $bookmarkModal.classList.toggle('hidden');
+  $bookmarkModal.classList.toggle('fade-out');
 }
