@@ -11,7 +11,6 @@ const data = {
   currentUsername: null,
   leaderboard: null,
   bookmarks: new Map(),
-  bookmarkID: 0,
 
   viewSwap: function (newView) {
     this.currentView.classList.toggle('hidden');
