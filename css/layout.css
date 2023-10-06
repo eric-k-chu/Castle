@@ -44,6 +44,10 @@
   flex-basis: 100%;
 }
 
+.column-half {
+  flex-basis: 50%;
+}
+
 #leaderboard-table {
   flex-basis: 50%;
 }
