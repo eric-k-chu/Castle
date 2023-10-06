@@ -120,12 +120,12 @@ $refreshBtns.addEventListener('click', function (event) {
 
 $navbar.addEventListener('click', function (event) {
   if (event.target.id === 'nav-leaderboard') {
-    data.viewSwap($leaderboard);
+    viewSwap($leaderboard);
     if (!data.leaderboard) {
       getLeaderboard();
     }
   } else if (event.target.id === 'nav-bookmarks') {
-    data.viewSwap($bookmarks);
+    viewSwap($bookmarks);
   }
 });
 
@@ -135,17 +135,17 @@ $leaderboardSelect.addEventListener('change', function (event) {
 });
 
 $logo.addEventListener('click', function (event) {
-  data.viewSwap($homePage);
+  viewSwap($homePage);
 });
 
 $matchList.addEventListener('click', function (event) {
   if (event.target.closest('div.match-entry')) {
     const $selected = event.target.closest('div.match-entry');
     if (!data.bookmarks.has($selected.getAttribute('data-id'))) {
-      const $entry = $selected.cloneNode(true);
+      const entryHTML = $selected.cloneNode(true).outerHTML;
       const key = $selected.getAttribute('data-id');
-      data.bookmarks.set(key, $entry);
-      $bookmarksList.appendChild($entry);
+      data.bookmarks.set(key, entryHTML);
+      $bookmarksList.innerHTML = entryHTML;
       setBookmarkModal('Game added.');
     } else {
       setBookmarkModal('Game already saved.');
@@ -227,7 +227,7 @@ function renderLeaderboard(index) {
     for (let i = 0; i < rankingList.length; i++) {
       const user = rankingList[i];
       const countryCode = user.country.slice(-2).toLowerCase();
-      const wpct = getWPCT(user.win_count, user.draw_count, user.loss_count);
+      const wpct = getWPCTStr(user.win_count, user.draw_count, user.loss_count);
 
       const $entry = `<tr class="bg-white">
                   <td class="rank">${user.rank}</td>
@@ -251,7 +251,7 @@ function getPlayerInfo(event) {
       if (xhr.status === 200) {
         clearWPCTElement();
         clearTableElements();
-        data.viewSwap($playerInfo);
+        viewSwap($playerInfo);
         for (let i = 0; i < 4; i++) {
           if (i === 0) {
             insertAccountInfo(xhr.response);
@@ -266,7 +266,7 @@ function getPlayerInfo(event) {
         event.target.value = '';
       } else {
         $errorMsg.textContent = `Unable to find ${event.target.value}`;
-        data.viewSwap($failedSearch);
+        viewSwap($failedSearch);
         event.target.value = '';
       }
     });
@@ -377,7 +377,7 @@ function renderStat(type, stats) {
     $icon.className = game.icon;
     $p1.textContent = game.name;
     $p2.textContent = stats.last.rating;
-    $p3.textContent = getWPCT(
+    $p3.textContent = getWPCTStr(
       stats.record.win,
       stats.record.loss,
       stats.record.draw
@@ -603,7 +603,7 @@ function getArchive() {
   xhr.send();
 }
 
-function getWPCT(win, loss, draw) {
+function getWPCTStr(win, loss, draw) {
   const total = win + loss + draw;
   const dec = (2 * win + draw) / (2 * total);
   const pct = Math.trunc(dec * 100);
@@ -751,7 +751,7 @@ function getMonthAndYear(endpointStr) {
 }
 
 function updateWPCTElements() {
-  $winPCT.textContent = `${data.getWPCT()}%`;
+  $winPCT.textContent = `${getWPCT()}%`;
 
   for (let i = 0; i < $wdl.length; i++) {
     switch (i) {
@@ -772,7 +772,7 @@ function updateWPCTElements() {
         break;
     }
   }
-  data.resetWDL();
+  resetWDL();
 }
 
 function clearWPCTElement() {
@@ -847,4 +847,22 @@ function setBookmarkModal(str) {
 function displayBookmarkModal() {
   $bookmarkModal.classList.toggle('hidden');
   $bookmarkModal.classList.toggle('fade-out');
+}
+
+function getWPCT() {
+  const upper = 2 * data.win + data.draw;
+  const lower = 2 * (data.win + data.loss + data.draw);
+  return ((upper / lower) * 100).toFixed(2);
+}
+
+function resetWDL() {
+  data.win = 0;
+  data.loss = 0;
+  data.draw = 0;
+}
+
+function viewSwap(newView) {
+  data.currentView.classList.toggle('hidden');
+  newView.classList.toggle('hidden');
+  data.currentView = newView;
 }
