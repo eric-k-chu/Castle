@@ -107,13 +107,13 @@ $refreshBtns.addEventListener('click', function (event) {
     const target = event.target.closest('button').id;
     if (target === 'refresh-stats') {
       clearStats();
-      insertStats(data.currentUsername);
+      insertStats();
     } else if (target === 'refresh-clubs') {
       clearClubs();
-      insertClubs(data.currentUsername);
+      insertClubs();
     } else if (target === 'refresh-matches') {
       clearMatchList();
-      getArchive(data.currentUsername);
+      getArchive();
     }
   }
 });
@@ -395,9 +395,9 @@ function renderStat(type, stats) {
   return $tr;
 }
 
-function insertStats(username) {
+function insertStats() {
   const xhr = new XMLHttpRequest();
-  xhr.open('GET', `https://api.chess.com/pub/player/${username}/stats`);
+  xhr.open('GET', `https://api.chess.com/pub/player/${data.currentUsername}/stats`);
   xhr.responseType = 'json';
   xhr.addEventListener('load', function (event) {
     if (xhr.status === 200) {
@@ -439,9 +439,9 @@ function renderClub(club) {
   return $row;
 }
 
-function insertClubs(username) {
+function insertClubs() {
   const xhr = new XMLHttpRequest();
-  xhr.open('GET', `https://api.chess.com/pub/player/${username}/clubs`);
+  xhr.open('GET', `https://api.chess.com/pub/player/${data.currentUsername}/clubs`);
   xhr.responseType = 'json';
   xhr.addEventListener('load', function (event) {
     if (xhr.status === 200) {
@@ -579,11 +579,11 @@ function insertArchives(game) {
   xhr.send();
 }
 
-function getArchive(username) {
+function getArchive() {
   const xhr = new XMLHttpRequest();
   xhr.open(
     'GET',
-    `https://api.chess.com/pub/player/${username}/games/archives`
+    `https://api.chess.com/pub/player/${data.currentUsername}/games/archives`
   );
   xhr.responseType = 'json';
   xhr.addEventListener('load', function (event) {
