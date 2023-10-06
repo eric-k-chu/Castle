@@ -55,7 +55,7 @@
       </div>
     </div>
 
-    <div class="bg-blue-2">
+    <div class="bg-blue-1">
       <div class="row align-center justify-evenly" id="nav-bar">
         <button
           type="button"
@@ -71,6 +71,7 @@
         </button>
       </div>
     </div>
+
     <main>
       <div class="container" id="home">
         <div class="col justify-center align-center height-500">
@@ -143,6 +144,10 @@
           <div class="container text-white">
             <div class="row">
               <div class="col mr-1">
+
+                <div class="row header-box">
+                  <div>League</div>
+                </div>
                 <div class="row content-box justify-center">
                   <div class="league-wrapper">
                     <img src="" alt="" id="league-icon" />
@@ -150,64 +155,63 @@
                   <p id="account-info-league" class="text-center"></p>
                 </div>
 
-                <div class="row content-box">
-                  <div class="col column-full" id="account-stats">
-                    <div class="row justify-between align-center">
-                      <span>Stats</span>
-                      <button
+                <div class="row header-box justify-between">
+                  <div>Stats</div>
+                  <button
                         type="button"
                         class="refresh-btn"
                         id="refresh-stats">
-                        <i class="fa-solid fa-rotate"></i>
-                      </button>
-                    </div>
+                    <i class="fa-solid fa-rotate"></i>
+                  </button>
+                </div>
+                <div class="row content-box">
+                  <div class="col column-full" id="account-stats">
                     <table id="stats-table">
                       <tbody></tbody>
                     </table>
                   </div>
                 </div>
 
-                <div class="row content-box" id="clubs">
-                  <div class="col column-full">
-                    <div class="row justify-between align-center">
-                      <span>Clubs</span>
-                      <button
+                <div class="row header-box justify-between">
+                  <div>Clubs</div>
+                  <button
                         type="button"
                         class="refresh-btn"
                         id="refresh-clubs">
-                        <i class="fa-solid fa-rotate"></i>
-                      </button>
-                    </div>
+                    <i class="fa-solid fa-rotate"></i>
+                  </button>
+                </div>
+                <div class="row content-box" id="clubs">
+                  <div class="col column-full">
                     <div id="clubs-table"></div>
                   </div>
                 </div>
               </div>
 
               <div class="col">
-                <div
-                  class="row content-box justify-between align-center"
-                  id="match-header">
-                  <div class="row justify-around align-center column-9">
-                    <select id="match-list-date"></select>
-                    <h3 class="hidden" id="match-error-msg">No games found.</h3>
-                    <div class="col align-center">
-                      <h3 id="win-pct"></h3>
-                      <div id="wdl">
-                        <span id="win"></span>
-                        <span>|</span>
-                        <span id="draw"></span>
-                        <span>|</span>
-                        <span id="loss"></span>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="column-1 col align-end">
-                    <button
+                <div class="row header-box justify-between">
+                  <div>Game Archives</div>
+                  <button
                       type="button"
                       class="refresh-btn"
                       id="refresh-matches">
-                      <i class="fa-solid fa-rotate"></i>
-                    </button>
+                    <i class="fa-solid fa-rotate"></i>
+                  </button>
+                </div>
+                <div
+                  class="row content-box justify-between align-center"
+                  id="match-header">
+                  <select id="match-list-date"></select>
+                  <h3 class="hidden" id="match-error-msg">No games found.</h3>
+                  <div class="col align-center">
+                    <h3 id="win-pct"></h3>
+                    <div id="wdl">
+                      <span id="win"></span>
+                      <span>|</span>
+                      <span id="draw"></span>
+                      <span>|</span>
+                      <span id="loss"></span>
+                    </div>
                   </div>
                 </div>
                 <div id="match-list"></div>
@@ -217,9 +221,9 @@
         </div>
       </div>
 
-      <div class="container mt-1 hidden" id="leaderboard">
+      <div class="container mt-1 mb-1 hidden" id="leaderboard">
         <div class="col">
-          <div class="leaderboard-type">
+          <div class="text-white">
             <select class="font-jetbrains" id="leaderboard-select">
               <option value="0">Daily</option>
               <option value="1">Daily 960</option>
@@ -243,12 +247,16 @@
         </div>
       </div>
 
-      <div class="container mt-1 hidden" id="bookmarks">
-        <h3 class="text-center text-white">Bookmarks</h3>
+      <div class="container mt-1 mb-1 hidden" id="bookmarks">
+
+        <div class="row header-box justify-around">
+          <div>Bookmarks</div>
+        </div>
         <div class="container-2 text-white">
           <div id="bookmarks-list">
           </div>
         </div>
+
       </div>
     </main>
     <script src="js/data.js"></script>

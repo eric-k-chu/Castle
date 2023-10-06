@@ -36,6 +36,7 @@ if (previousDataJSON) {
   data.draw = 0;
   data.loss = 0;
   data.currentUsername = null;
+  data.leaderboard = null;
 }
 
 function loadBookmarks() {
