@@ -188,6 +188,11 @@ $forms[1].addEventListener('submit', function (event) {
   viewSwap($playerInfo);
 });
 
+$matchListDate.addEventListener('change', function (event) {
+  clearMatchList();
+  insertArchives(getMonthlyGameEndpoint($matchListDate.value));
+});
+
 function getLeaderboard() {
   const xhr = new XMLHttpRequest();
   xhr.open('GET', 'https://api.chess.com/pub/leaderboards');
@@ -764,6 +769,15 @@ function getMonthAndYear(endpointStr) {
   }
 
   return `${months[monthIndex]} ${year.join('')}`;
+}
+
+// 'string' will be in the format "Month Year"
+function getMonthlyGameEndpoint(string) {
+  const date = string.split(' ');
+  date.splice(1, 0, '1, ');
+  const month = `0${new Date(Date.parse(date)).getMonth() + 1}`;
+  const year = date[2];
+  return `https://api.chess.com/pub/player/${data.currentUsername}/games/${year}/${month}`;
 }
 
 function updateWPCTElements() {
