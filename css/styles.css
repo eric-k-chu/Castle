@@ -116,17 +116,19 @@ span {
   gap: 1rem;
 }
 
+.col-gap-1 {
+  column-gap: 1rem;
+}
+
 .font-jetbrains {
   font-family: "JetBrains Mono", monospace;
 }
 
 .search-box,
 .search-box-main {
-  border-radius: 3px;
   background-color: #f5f5f5;
-  border: 1px solid #f5f5f5;
+  border: none;
   padding: 0.2rem 0.5rem;
-  padding-right: 2.5rem;
   font-size: 0.7rem;
 }
 
@@ -134,16 +136,25 @@ span {
   font-size: 1rem;
 }
 
+.search-box:focus,
+.search-box-main:focus {
+  outline: none;
+}
+
+.search-icon,
+.search-icon-main {
+  background-color: #f5f5f5;
+  padding: 0.2rem 0.5rem;
+}
+
+.search-icon {
+  font-size: 0.7rem;
+}
+
 .input-icon {
   position: absolute;
   right: 10px;
   top: 1px;
-}
-
-.input-icon-main {
-  position: absolute;
-  right: 12px;
-  top: 4px;
 }
 
 .input-group {
@@ -174,6 +185,10 @@ span {
 
 .mtb-three-fourths {
   margin: 0.75rem 0;
+}
+
+.border-rad-3 {
+  border-radius: 3px;
 }
 
 .avatar-wrapper img {
