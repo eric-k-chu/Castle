@@ -178,7 +178,6 @@ span {
   max-width: 125px;
   border-radius: 3px;
   border: 1px solid black;
-  box-shadow: 0 4px #1d1c1a;
 }
 
 .league-wrapper {
@@ -205,9 +204,12 @@ span {
   margin-right: 0.5rem;
 }
 
-#player-info-header {
+.header-box > div {
+  font-size: 0.75rem;
+}
+
+#player-info-header > div {
   font-size: 0.6rem;
-  height: 150px;
 }
 
 #account-info-name,
@@ -241,16 +243,12 @@ span {
   box-shadow: 0 4px #1d1c1a;
   background-color: #262522;
   padding: 0.5rem;
-  margin-top: 0.5rem;
+  margin-top: 0.3rem;
 }
 
 .header-box {
   padding: 0.25rem;
   margin-top: 0.75rem;
-}
-
-.header-box > div {
-  font-size: 0.75rem;
 }
 
 .match-entry {
@@ -477,10 +475,6 @@ td.username {
   margin-top: 1rem;
 }
 
-.mb-1 {
-  margin-bottom: 1rem;
-}
-
 .bookmark-modal {
   position: fixed;
   z-index: 1;
@@ -522,6 +516,14 @@ td.username {
   font-family:
     "JetBrains Mono",
     monospace;
+}
+
+#match-list-date:hover {
+  cursor: pointer;
+}
+
+.padding-1 {
+  padding: 1rem;
 }
 
 /* duration, easing function, delay, iterations, animation function */
@@ -585,6 +587,10 @@ td.username {
     font-size: 1rem;
   }
 
+  #player-info-header > div {
+    font-size: 0.8rem;
+  }
+
   #bookmarks div.header-box > div {
     font-size: 1.5rem;
   }
@@ -623,11 +629,6 @@ td.username {
 
   .result-cell {
     display: inline-block;
-  }
-
-  #player-info-header {
-    font-size: 0.8rem;
-    height: 170px;
   }
 
   #account-info-country {

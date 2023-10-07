@@ -1,108 +1,90 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Castle</title>
-    <link rel="icon" href="images/favicon.ico" />
-    <link rel="icon" href="images/favicon.ico" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap"
-      rel="stylesheet" />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@6.11.0/css/flag-icons.min.css" />
-    <link rel="stylesheet" href="css/reset.css" />
-    <link rel="stylesheet" href="css/layout.css" />
-    <link rel="stylesheet" href="css/styles.css" />
-  </head>
-  <body class="bg-dark-gray">
-    <header class="bg-blue-2">
-      <div class="container">
-        <div class="column-full">
-          <div class="row align-center justify-between">
-            <button class="row align-center gap-half" type="button" id="logo">
-              <i class="fa-regular fa-chess-rook text-green icon-med"></i>
-              <span class="text-white font-jetbrains">CASTLE</span>
-            </button>
-            <div class="input-group">
-              <input
-                type="text"
-                class="search-box font-jetbrains"
-                id="header-search"
-                placeholder="Search Players"
-                maxlength="32" />
-              <div class="input-icon">
-                <i class="fa-solid fa-magnifying-glass text-green icon-sm"></i>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </header>
 
-    <div class="bookmark-modal hidden">
-      <div class="container-modal bg-white">
-        <div class="row justify-center align-center gap-half">
-          <i></i>
-          <p></p>
-        </div>
-      </div>
-    </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Castle</title>
+  <link rel="icon" href="images/favicon.ico" />
+  <link rel="icon" href="images/favicon.ico" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@6.11.0/css/flag-icons.min.css" />
+  <link rel="stylesheet" href="css/reset.css" />
+  <link rel="stylesheet" href="css/layout.css" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
 
-    <div class="bg-blue-2">
-      <div class="row align-center justify-evenly" id="nav-bar">
-        <button
-          type="button"
-          class="nav-item font-jetbrains"
-          id="nav-leaderboard">
-          Leaderboard
-        </button>
-        <button
-          type="button"
-          class="nav-item font-jetbrains"
-          id="nav-bookmarks">
-          Bookmarks
-        </button>
-      </div>
-    </div>
-
-    <main>
-      <div class="container" id="home">
-        <div class="col justify-center align-center height-500">
-          <i class="fa-solid text-white icon-xxl fa-chess" id="main-logo"></i>
-          <div class="input-group mt-3">
-            <input
-              type="text"
-              class="search-box-main font-jetbrains"
-              id="main-search"
-              placeholder="Search Players"
+<body class="bg-dark-gray">
+  <header class="bg-blue-2">
+    <div class="container">
+      <div class="column-full">
+        <div class="row align-center justify-between">
+          <button class="row align-center gap-half" type="button" id="logo">
+            <i class="fa-regular fa-chess-rook text-green icon-med"></i>
+            <span class="text-white font-jetbrains">CASTLE</span>
+          </button>
+          <div class="input-group">
+            <input type="text" class="search-box font-jetbrains" id="header-search" placeholder="Search Players"
               maxlength="32" />
-            <div class="input-icon-main">
-              <i class="fa-solid fa-magnifying-glass text-green icon-base"></i>
+            <div class="input-icon">
+              <i class="fa-solid fa-magnifying-glass text-green icon-sm"></i>
             </div>
           </div>
         </div>
       </div>
+    </div>
+  </header>
 
-      <div class="container hidden" id="failed-search">
-        <div class="col align-center justify-center text-white height-500">
-          <i class="fa-solid text-white icon-xxl fa-person-circle-question"></i>
-          <h3 id="error-msg"></h3>
+  <div class="bookmark-modal hidden">
+    <div class="container-modal bg-white">
+      <div class="row justify-center align-center gap-half">
+        <i></i>
+        <p></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-blue-2">
+    <div class="row align-center justify-evenly" id="nav-bar">
+      <button type="button" class="nav-item font-jetbrains" id="nav-leaderboard">
+        Leaderboard
+      </button>
+      <button type="button" class="nav-item font-jetbrains" id="nav-bookmarks">
+        Bookmarks
+      </button>
+    </div>
+  </div>
+
+  <main>
+    <div class="container" id="home">
+      <div class="col justify-center align-center height-500">
+        <i class="fa-solid text-white icon-xxl fa-chess" id="main-logo"></i>
+        <div class="input-group mt-3">
+          <input type="text" class="search-box-main font-jetbrains" id="main-search" placeholder="Search Players"
+            maxlength="32" />
+          <div class="input-icon-main">
+            <i class="fa-solid fa-magnifying-glass text-green icon-base"></i>
+          </div>
         </div>
       </div>
+    </div>
 
-      <div class="hidden" id="player-info">
-        <div class="bg-blue-2">
-          <div
-            class="container text-white col justify-center"
-            id="player-info-header">
-            <div class="row align-center">
+    <div class="container hidden" id="failed-search">
+      <div class="col align-center justify-center text-white height-500">
+        <i class="fa-solid text-white icon-xxl fa-person-circle-question"></i>
+        <h3 id="error-msg"></h3>
+      </div>
+    </div>
+
+    <div class="bg-dark-gray mt-1 hidden" id="player-info">
+
+      <div id="player-info-header">
+        <div class="container text-white">
+          <div class="row align-center">
+            <div class="row column-full content-box align-center padding-1">
               <div class="mr-1">
                 <div class="avatar-wrapper">
                   <img id="account-info-img" src="" alt="user avatar" />
@@ -118,148 +100,133 @@
                 </div>
                 <div class="row gap-1 mtb-three-fourths">
                   <i class="fa-solid fa-user">
-                    <span
-                      class="font-jetbrains font-thin"
-                      id="account-info-followers"></span>
+                    <span class="font-jetbrains font-thin" id="account-info-followers"></span>
                   </i>
                   <i class="fa-solid fa-location-dot">
-                    <span
-                      class="font-jetbrains font-thin"
-                      id="account-info-location"></span>
+                    <span class="font-jetbrains font-thin" id="account-info-location"></span>
                   </i>
                 </div>
                 <div class="row mtb-three-fourths">
                   <i class="fa-regular fa-calendar-days">
-                    <span
-                      class="font-jetbrains font-thin"
-                      id="account-info-joined"></span>
+                    <span class="font-jetbrains font-thin" id="account-info-joined"></span>
                   </i>
                 </div>
               </div>
             </div>
           </div>
         </div>
+      </div>
 
-        <div class="bg-dark-gray" id="player-info-body">
-          <div class="container text-white">
-            <div class="row">
-              <div class="col mr-1">
+      <div id="player-info-body">
+        <div class="container text-white">
+          <div class="row">
+            <div class="col mr-1">
 
-                <div class="row header-box">
-                  <div>League</div>
+              <div class="row header-box">
+                <div>League</div>
+              </div>
+              <div class="row content-box justify-center">
+                <div class="league-wrapper">
+                  <img src="" alt="" id="league-icon" />
                 </div>
-                <div class="row content-box justify-center">
-                  <div class="league-wrapper">
-                    <img src="" alt="" id="league-icon" />
-                  </div>
-                  <p id="account-info-league" class="text-center"></p>
-                </div>
+                <p id="account-info-league" class="text-center"></p>
+              </div>
 
-                <div class="row header-box justify-between">
-                  <div>Stats</div>
-                  <button
-                        type="button"
-                        class="refresh-btn"
-                        id="refresh-stats">
-                    <i class="fa-solid fa-rotate"></i>
-                  </button>
-                </div>
-                <div class="row content-box">
-                  <div class="col column-full" id="account-stats">
-                    <table id="stats-table">
-                      <tbody></tbody>
-                    </table>
-                  </div>
-                </div>
-
-                <div class="row header-box justify-between">
-                  <div>Clubs</div>
-                  <button
-                        type="button"
-                        class="refresh-btn"
-                        id="refresh-clubs">
-                    <i class="fa-solid fa-rotate"></i>
-                  </button>
-                </div>
-                <div class="row content-box" id="clubs">
-                  <div class="col column-full">
-                    <div id="clubs-table"></div>
-                  </div>
+              <div class="row header-box justify-between">
+                <div>Stats</div>
+                <button type="button" class="refresh-btn" id="refresh-stats">
+                  <i class="fa-solid fa-rotate"></i>
+                </button>
+              </div>
+              <div class="row content-box">
+                <div class="col column-full" id="account-stats">
+                  <table id="stats-table">
+                    <tbody></tbody>
+                  </table>
                 </div>
               </div>
 
-              <div class="col">
-                <div class="row header-box justify-between">
-                  <div>Game Archives</div>
-                  <button
-                      type="button"
-                      class="refresh-btn"
-                      id="refresh-matches">
-                    <i class="fa-solid fa-rotate"></i>
-                  </button>
+              <div class="row header-box justify-between">
+                <div>Clubs</div>
+                <button type="button" class="refresh-btn" id="refresh-clubs">
+                  <i class="fa-solid fa-rotate"></i>
+                </button>
+              </div>
+              <div class="row content-box" id="clubs">
+                <div class="col column-full">
+                  <div id="clubs-table"></div>
                 </div>
-                <div
-                  class="row content-box justify-between align-center"
-                  id="match-header">
-                  <select id="match-list-date"></select>
-                  <h3 class="hidden" id="match-error-msg">No games found.</h3>
-                  <div class="col align-center">
-                    <h3 id="win-pct"></h3>
-                    <div id="wdl">
-                      <span id="win"></span>
-                      <span>|</span>
-                      <span id="draw"></span>
-                      <span>|</span>
-                      <span id="loss"></span>
-                    </div>
+              </div>
+            </div>
+
+            <div class="col">
+              <div class="row header-box justify-between">
+                <div>Game Archives</div>
+                <button type="button" class="refresh-btn" id="refresh-matches">
+                  <i class="fa-solid fa-rotate"></i>
+                </button>
+              </div>
+              <div class="row content-box justify-around align-center" id="match-header">
+                <select id="match-list-date"></select>
+                <h3 class="hidden" id="match-error-msg">No games found.</h3>
+                <div class="col align-center">
+                  <h3 id="win-pct"></h3>
+                  <div id="wdl">
+                    <span id="win"></span>
+                    <span>|</span>
+                    <span id="draw"></span>
+                    <span>|</span>
+                    <span id="loss"></span>
                   </div>
                 </div>
-                <div id="match-list"></div>
               </div>
+              <div id="match-list"></div>
             </div>
           </div>
         </div>
       </div>
+    </div>
 
-      <div class="container mt-1 mb-1 hidden" id="leaderboard">
-        <div class="col">
-          <div class="text-white">
-            <select class="font-jetbrains" id="leaderboard-select">
-              <option value="0">Daily</option>
-              <option value="1">Daily 960</option>
-              <option value="2">Rapid</option>
-              <option value="3">Blitz</option>
-              <option value="4">Bullet</option>
-              <option value="5">Bughouse</option>
-              <option value="6">Blitz 960</option>
-              <option value="7">3-Check</option>
-              <option value="8">Crazyhouse</option>
-              <option value="9">King of the Hill</option>
-              <option value="10">Puzzles</option>
-              <option value="11">Puzzle Rush</option>
-              <option value="12">Puzzle Battle</option>
-            </select>
-          </div>
-          <table id="leaderboard-table">
-            <thead class="text-white"></thead>
-            <tbody class="text-black"></tbody>
-          </table>
+    <div class="container mt-1 mb-1 hidden" id="leaderboard">
+      <div class="col">
+        <div class="text-white">
+          <select class="font-jetbrains" id="leaderboard-select">
+            <option value="0">Daily</option>
+            <option value="1">Daily 960</option>
+            <option value="2">Rapid</option>
+            <option value="3">Blitz</option>
+            <option value="4">Bullet</option>
+            <option value="5">Bughouse</option>
+            <option value="6">Blitz 960</option>
+            <option value="7">3-Check</option>
+            <option value="8">Crazyhouse</option>
+            <option value="9">King of the Hill</option>
+            <option value="10">Puzzles</option>
+            <option value="11">Puzzle Rush</option>
+            <option value="12">Puzzle Battle</option>
+          </select>
+        </div>
+        <table id="leaderboard-table">
+          <thead class="text-white"></thead>
+          <tbody class="text-black"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="container mt-1 mb-1 hidden" id="bookmarks">
+
+      <div class="container-2 text-white">
+        <div class="row header-box justify-around">
+          <div>Bookmarks</div>
+        </div>
+        <div id="bookmarks-list">
         </div>
       </div>
 
-      <div class="container mt-1 mb-1 hidden" id="bookmarks">
+    </div>
+  </main>
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+</body>
 
-        <div class="container-2 text-white">
-          <div class="row header-box justify-around">
-            <div>Bookmarks</div>
-          </div>
-          <div id="bookmarks-list">
-          </div>
-        </div>
-
-      </div>
-    </main>
-    <script src="js/data.js"></script>
-    <script src="js/main.js"></script>
-  </body>
 </html>

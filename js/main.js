@@ -258,11 +258,11 @@ function getPlayerInfo(event) {
           if (i === 0) {
             insertAccountInfo(xhr.response);
           } else if (i === 1) {
-            insertStats(event.target.value);
+            insertStats();
           } else if (i === 2) {
-            insertClubs(event.target.value);
+            insertClubs();
           } else if (i === 3) {
-            getArchive(event.target.value);
+            getArchive();
           }
         }
         event.target.value = '';
