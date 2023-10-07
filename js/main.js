@@ -871,9 +871,11 @@ function resetWDL() {
 }
 
 function viewSwap(newView) {
-  data.currentView.classList.toggle('hidden');
-  newView.classList.toggle('hidden');
-  data.currentView = newView;
+  if (newView !== data.currentView) {
+    data.currentView.classList.toggle('hidden');
+    newView.classList.toggle('hidden');
+    data.currentView = newView;
+  }
 }
 
 function renderOption(str) {
