@@ -5,6 +5,7 @@ const $mainSearch = document.querySelector('#main-search');
 // Header
 const $logo = document.querySelector('#logo');
 const $navbar = document.querySelector('#nav-bar');
+const $navItems = document.querySelectorAll('.nav-item');
 
 // Views
 const $homePage = document.querySelector('#home');
@@ -120,12 +121,14 @@ $refreshBtns.addEventListener('click', function (event) {
 });
 
 $navbar.addEventListener('click', function (event) {
-  if (event.target.id === 'nav-leaderboard') {
+  if (event.target === $navItems[0]) {
+    viewSwap($homePage);
+  } else if (event.target === $navItems[1]) {
     viewSwap($leaderboard);
     if (!data.leaderboard) {
       getLeaderboard();
     }
-  } else if (event.target.id === 'nav-bookmarks') {
+  } else if (event.target === $navItems[2]) {
     viewSwap($bookmarks);
   }
 });
