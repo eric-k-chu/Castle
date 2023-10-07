@@ -152,10 +152,10 @@ span {
 }
 
 .nav-item {
-  border: none;
+  border: 1px solid transparent;
   background-color: transparent;
   color: #f5f5f5;
-  padding: 0.75rem 0;
+  padding: 0.75rem;
 }
 
 .height-500 {
@@ -328,10 +328,13 @@ span {
 .link-cell > div:nth-of-type(2) > button > i:hover,
 .link-cell > div:nth-of-type(3) > button > i:hover,
 .refresh-btn:hover,
-#nav-leaderboard:hover,
-#nav-bookmarks:hover {
+.nav-item:hover {
   cursor: pointer;
   color: #ca9372;
+}
+
+.nav-item:hover {
+  border-bottom: 1px solid #f5f5f5;
 }
 
 .rating-cell,
