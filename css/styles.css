@@ -583,6 +583,13 @@ td.username {
   }
 }
 
+@media only screen and (width <= 486px) {
+  .scroll {
+    overflow-x: scroll;
+    scrollbar-color: 262522;
+  }
+}
+
 @media only screen and (min-width: 486px) {
   .result-cell,
   #bookmarks-list div.match-entry > table > tbody > tr td.result-cell {
