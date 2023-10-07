@@ -586,7 +586,6 @@ td.username {
 @media only screen and (width <= 486px) {
   .scroll {
     overflow-x: scroll;
-    scrollbar-color: 262522;
   }
 }
 
