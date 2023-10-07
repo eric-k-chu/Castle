@@ -26,12 +26,15 @@
           <i class="fa-regular fa-chess-rook text-green icon-med"></i>
           <span class="text-white font-jetbrains">CASTLE</span>
         </button>
-        <div class="search-bar">
-          <input type="text" class="search-box font-jetbrains" id="header-search" placeholder="Search Players" maxlength="32" />
-          <div class="search-icon">
-            <i class="fa-solid fa-magnifying-glass text-green icon-sm"></i>
+        <form>
+          <div class="search-bar">
+            <input type="text" class="search-box font-jetbrains" id="header-search" placeholder="Search Players"
+              maxlength="32" required />
+            <button class="search-icon" type="submit">
+              <i class="fa-solid fa-magnifying-glass text-green icon-sm"></i>
+            </button>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   </header>
@@ -69,13 +72,15 @@
       <div class="col justify-center align-center height-500">
         <i class="fa-solid text-white icon-xxl fa-chess" id="main-logo"></i>
 
-        <div class="search-bar mt-3">
-          <input type="text" class="search-box-main font-jetbrains" id="main-search" placeholder="Search Players"
-            maxlength="32" />
-          <div class="search-icon-main">
-            <i class="fa-solid fa-magnifying-glass text-green icon-base"></i>
+        <form>
+          <div class="search-bar mt-3">
+            <input type="text" class="search-box-main font-jetbrains" id="main-search" placeholder="Search Players"
+              maxlength="32" required />
+            <button class="search-icon-main" type="submit">
+              <i class="fa-solid fa-magnifying-glass text-green icon-base"></i>
+            </button>
           </div>
-        </div>
+        </form>
       </div>
     </div>
 
@@ -175,7 +180,7 @@
               </div>
               <div class="row content-box justify-around align-center" id="match-header">
                 <select id="match-list-date"></select>
-                <h3 class="hidden" id="match-error-msg">No games found.</h3>
+                <h3 class="column-full text-center hidden" id="match-error-msg">No games found.</h3>
                 <div class="col align-center">
                   <h3 id="win-pct"></h3>
                   <div id="wdl">

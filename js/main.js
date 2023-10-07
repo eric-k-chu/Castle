@@ -1,6 +1,5 @@
 // Search bars
-const $headerSearch = document.querySelector('#header-search');
-const $mainSearch = document.querySelector('#main-search');
+const $forms = document.querySelectorAll('form');
 
 // Header
 const $logo = document.querySelector('#logo');
@@ -102,8 +101,6 @@ const leagueIcons = {
     'https://www.chess.com/bundles/web/images/leagues/badges/legend.1ea014f3.svg'
 };
 
-$headerSearch.addEventListener('keydown', getPlayerInfo);
-$mainSearch.addEventListener('keydown', getPlayerInfo);
 $refreshBtns.addEventListener('click', function (event) {
   if (event.target.closest('button')) {
     const target = event.target.closest('button').id;
@@ -179,6 +176,18 @@ $bookmarksList.addEventListener('animationend', function (event) {
   data.entryToDelete = null;
 });
 
+$forms[0].addEventListener('submit', function (event) {
+  event.preventDefault();
+  getPlayerInfo($forms[0][0].value);
+  viewSwap($playerInfo);
+});
+
+$forms[1].addEventListener('submit', function (event) {
+  event.preventDefault();
+  getPlayerInfo($forms[1][0].value);
+  viewSwap($playerInfo);
+});
+
 function getLeaderboard() {
   const xhr = new XMLHttpRequest();
   xhr.open('GET', 'https://api.chess.com/pub/leaderboards');
@@ -245,38 +254,36 @@ function renderLeaderboard(index) {
   }
 }
 
-function getPlayerInfo(event) {
-  if (event.key === 'Enter') {
-    data.currentUsername = event.target.value.toLowerCase();
-    const xhr = new XMLHttpRequest();
-    xhr.open('GET', `https://api.chess.com/pub/player/${event.target.value}`);
-    xhr.responseType = 'json';
-    xhr.addEventListener('load', function () {
-      if (xhr.status === 200) {
-        clearWPCTElement();
-        clearTableElements();
-        clearMatchErrorMsg();
-        viewSwap($playerInfo);
-        for (let i = 0; i < 4; i++) {
-          if (i === 0) {
-            insertAccountInfo(xhr.response);
-          } else if (i === 1) {
-            insertStats();
-          } else if (i === 2) {
-            insertClubs();
-          } else if (i === 3) {
-            getArchive();
-          }
+function getPlayerInfo(username) {
+  data.currentUsername = username.toLowerCase();
+  const xhr = new XMLHttpRequest();
+  xhr.open('GET', `https://api.chess.com/pub/player/${username.toLowerCase()}`);
+  xhr.responseType = 'json';
+  xhr.addEventListener('load', function () {
+    if (xhr.status === 200) {
+      clearWPCTElement();
+      clearTableElements();
+      clearMatchErrorMsg();
+      viewSwap($playerInfo);
+      for (let i = 0; i < 4; i++) {
+        if (i === 0) {
+          insertAccountInfo(xhr.response);
+        } else if (i === 1) {
+          insertStats();
+        } else if (i === 2) {
+          insertClubs();
+        } else if (i === 3) {
+          getArchive();
         }
-        event.target.value = '';
-      } else {
-        $errorMsg.textContent = `Unable to find ${event.target.value}`;
-        viewSwap($failedSearch);
-        event.target.value = '';
       }
-    });
-    xhr.send();
-  }
+      event.target.value = '';
+    } else {
+      $errorMsg.textContent = `Unable to find ${event.target.value}`;
+      viewSwap($failedSearch);
+      event.target.value = '';
+    }
+  });
+  xhr.send();
 }
 
 function insertAccountInfo(response) {
