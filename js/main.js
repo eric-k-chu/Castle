@@ -190,7 +190,9 @@ $forms[1].addEventListener('submit', function (event) {
 
 $matchListDate.addEventListener('change', function (event) {
   clearMatchList();
-  insertArchives(getMonthlyGameEndpoint($matchListDate.value));
+  const month = $matchListDate.value;
+  const year = $matchListDate.options[$matchListDate.selectedIndex].parentElement.label;
+  insertArchives(getMonthlyGameEndpoint(month, year));
 });
 
 function getLeaderboard() {
@@ -593,11 +595,18 @@ function getArchive() {
       if (xhr.response.archives.length === 0) {
         toggleMatchErrorMsg();
       } else {
-
         const lastIndex = xhr.response.archives.length - 1;
         for (let i = xhr.response.archives.length - 1; i >= 0; i--) {
           const endpoint = xhr.response.archives[i];
-          $matchListDate.appendChild(renderOption(getMonthAndYear(endpoint)));
+          const [month, year] = getMonthAndYear(endpoint);
+
+          const $optGroup = document.querySelector(`#match-list-date optgroup[label="${year}"`);
+          if (!$optGroup) {
+            const $newOptGroup = $matchListDate.appendChild(renderOptGroup(year));
+            $newOptGroup.appendChild(renderOption(month));
+          } else {
+            $optGroup.appendChild(renderOption(month));
+          }
         }
         const lastEndpoint = xhr.response.archives[lastIndex];
         insertArchives(lastEndpoint);
@@ -753,16 +762,14 @@ function getMonthAndYear(endpointStr) {
     monthIndex = Number(monthStr) - 1;
   }
 
-  return `${months[monthIndex]} ${year.join('')}`;
+  return [months[monthIndex], year.join('')];
 }
 
 // 'string' will be in the format "Month Year"
-function getMonthlyGameEndpoint(string) {
-  const date = string.split(' ');
-  date.splice(1, 0, '1, ');
-  const month = `0${new Date(Date.parse(date)).getMonth() + 1}`;
-  const year = date[2];
-  return `https://api.chess.com/pub/player/${data.currentUsername}/games/${year}/${month}`;
+function getMonthlyGameEndpoint(month, year) {
+  const date = [month, '1, ', year];
+  const monthNum = `0${new Date(Date.parse(date)).getMonth() + 1}`;
+  return `https://api.chess.com/pub/player/${data.currentUsername}/games/${year}/${monthNum}`;
 }
 
 function updateWPCTElements() {
@@ -888,6 +895,12 @@ function renderOption(str) {
   const $option = document.createElement('option');
   $option.textContent = str;
   return $option;
+}
+
+function renderOptGroup(year) {
+  const $optGroup = document.createElement('optgroup');
+  $optGroup.label = `${year}`;
+  return $optGroup;
 }
 
 function clearMatchErrorMsg() {
