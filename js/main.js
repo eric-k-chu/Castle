@@ -366,32 +366,27 @@ function renderStat(type, stats) {
   const game = getGame(type);
 
   const $tr = document.createElement('tr');
-  const $tdIcon = document.createElement('td');
   const $tdMode = document.createElement('td');
   const $tdStat = document.createElement('td');
 
-  const $icon = document.createElement('i');
   const $p1 = document.createElement('p');
   const $p2 = document.createElement('p');
   const $p3 = document.createElement('p');
   const $p4 = document.createElement('p');
 
   if (game.name === 'Puzzles') {
-    $icon.className = game.icon;
     $p1.textContent = game.name;
-    $p2.textContent = `Lowest (${stats.lowest.rating})`;
+    $p2.textContent = `${stats.lowest.rating}`;
     $p3.textContent = stats.highest.rating;
     $p4.textContent = 'Highest';
   } else if (game.name === 'Puzzle Rush') {
     if (Object.keys(stats).length > 0) {
-      $icon.className = game.icon;
       $p1.textContent = game.name;
-      $p2.textContent = `Attempts (${stats.best.total_attempts})`;
+      $p2.textContent = `${stats.best.total_attempts}`;
       $p3.textContent = stats.best.score;
       $p4.textContent = 'Score';
     }
   } else {
-    $icon.className = game.icon;
     $p1.textContent = game.name;
     $p2.textContent = stats.last.rating;
     $p3.textContent = getWPCTStr(
@@ -402,10 +397,8 @@ function renderStat(type, stats) {
     $p4.textContent = 'Win %';
   }
 
-  $tr.appendChild($tdIcon);
   $tr.appendChild($tdMode);
   $tr.appendChild($tdStat);
-  $tdIcon.appendChild($icon);
   $tdMode.append($p1, $p2);
   $tdStat.append($p3, $p4);
 
@@ -526,22 +519,14 @@ function renderMatch(game) {
                             <div class="cell-wrapper">
                               <div>
                                 <div class="cell-names">
+                                  <i class="fa-solid fa-chess-pawn text-white"></i>
                                   <span>${white}</span>
+                                  <span class="text-gray">${whiteRating}</span>
                                 </div>
                                 <div class="cell-names">
-                                  <span class="text-black">${black}</span>
-                                </div>
-                              </div>
-                            </div>
-                          </td>
-                          <td class="rating-cell">
-                            <div class="cell-wrapper">
-                              <div>
-                                <div>
-                                  <span class="text-gold">${whiteRating}</span>
-                                </div>
-                                <div>
-                                  <span class="text-gold">${blackRating}</span>
+                                  <i class="fa-solid fa-chess-pawn text-gray-2"></i>
+                                  <span>${black}</span>
+                                  <span class="text-gray">${blackRating}</span>
                                 </div>
                               </div>
                             </div>

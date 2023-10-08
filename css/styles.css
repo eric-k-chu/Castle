@@ -7,12 +7,6 @@ span {
   border: none;
 }
 
-#logo span {
-  font-size: 1.5rem;
-  font-weight: 600;
-  padding: 1.2rem 0;
-}
-
 .bg-blue-1 {
   background-color: #302e2b;
 }
@@ -120,6 +114,10 @@ span {
   font-family: "JetBrains Mono", monospace;
 }
 
+.text-gray-2 {
+  color: #565352;
+}
+
 .search-box,
 .search-box-main {
   background-color: #f5f5f5;
@@ -203,7 +201,7 @@ span {
 }
 
 .club-icon-wrapper img {
-  width: 30px;
+  width: 1rem;
   border-radius: 3px;
   border: 1px solid black;
 }
@@ -212,11 +210,14 @@ span {
   display: flex;
   align-items: center;
   flex-basis: 25%;
-  margin-right: 0.5rem;
 }
 
 .header-box > div {
   font-size: 0.75rem;
+}
+
+#clubs-table div {
+  padding: 0.1rem;
 }
 
 #player-info-header > div {
@@ -253,12 +254,11 @@ span {
   border-radius: 3px;
   box-shadow: 0 4px #1d1c1a;
   background-color: #262522;
-  padding: 0.5rem;
+  padding: 0.1rem 0.25rem;
   margin-top: 0.3rem;
 }
 
 .header-box {
-  padding: 0.25rem;
   margin-top: 0.75rem;
 }
 
@@ -321,9 +321,8 @@ span {
 .info-cell,
 .user-cell,
 .result-cell,
-.rating-cell,
 .link-cell {
-  padding: 0.5rem 0.85rem;
+  padding: 0.5rem 0.25rem;
 }
 
 .refresh-btn,
@@ -348,7 +347,6 @@ span {
   border-bottom: 1px solid #f5f5f5;
 }
 
-.rating-cell,
 .result-cell {
   display: none;
 }
@@ -358,8 +356,18 @@ span {
   font-size: 0.5rem;
 }
 
-#stats-table tbody tr td > p {
+#stats-table > tbody tr {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.1rem 0;
+}
+
+#stats-table > tbody tr td > p {
   margin: 0;
+}
+
+#clubs-table div > div:nth-of-type(1) {
+  padding-right: 0.25rem;
 }
 
 #clubs-table div > div:nth-of-type(2) > p:nth-of-type(1) {
@@ -375,8 +383,8 @@ span {
 }
 
 #clubs-table div > div:nth-of-type(2) > p:nth-of-type(2),
-#stats-table > tbody tr > td:nth-of-type(2) > p:nth-of-type(2),
-#stats-table > tbody tr > td:nth-of-type(3) > p:nth-of-type(2) {
+#stats-table > tbody tr > td:nth-of-type(1) > p:nth-of-type(2),
+#stats-table > tbody tr > td:nth-of-type(2) > p:nth-of-type(2) {
   color: #aaa;
   font-size: 0.4rem;
 }
@@ -385,15 +393,7 @@ span {
   font-size: 0.75rem;
 }
 
-#stats-table > tbody tr > td:nth-of-type(1) {
-  width: 15px;
-}
-
-#stats-table > tbody tr > td:nth-of-type(1) > i {
-  font-size: 0.75rem;
-}
-
-#stats-table > tbody tr > td:nth-of-type(3) {
+#stats-table > tbody tr > td:nth-of-type(2) {
   text-align: right;
 }
 
@@ -402,12 +402,29 @@ span {
   font-size: 0.5rem;
 }
 
+#bookmarks-list div.match-entry > .match-info {
+  font-size: 0.75rem;
+}
+
 .cell-names {
+  display: flex;
+  align-items: center;
+  column-gap: 5px;
+}
+
+.cell-names span:nth-of-type(1) {
+  display: inline-block;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
   max-width: 2rem;
   width: 2rem;
+}
+
+#logo span {
+  font-size: 1.5rem;
+  font-weight: 600;
+  padding: 1.2rem 0;
 }
 
 #win-pct {
@@ -594,15 +611,15 @@ td.username {
   #bookmarks-list div.match-entry > table > tbody > tr td.result-cell {
     display: inline-block;
   }
-
-  #bookmarks-list div.match-entry > .match-info {
-    font-size: 0.75rem;
-  }
 }
 
 @media only screen and (min-width: 768px) {
+  .content-box {
+    padding: 0.25rem 0.5rem;
+  }
+
   .header-box {
-    padding: 0.25rem;
+    padding: 0.5rem;
     margin-top: 1rem;
   }
 
@@ -612,10 +629,6 @@ td.username {
 
   #player-info-header > div {
     font-size: 0.8rem;
-  }
-
-  #bookmarks div.header-box > div {
-    font-size: 1.5rem;
   }
 
   .country {
@@ -632,9 +645,8 @@ td.username {
     font-size: 1rem;
   }
 
-  .match-info,
-  #bookmarks-list div.match-entry > .match-info {
-    font-size: 1rem;
+  .match-info {
+    font-size: 0.8rem;
   }
 
   #match-header,
@@ -645,9 +657,8 @@ td.username {
   .info-cell,
   .user-cell,
   .result-cell,
-  .rating-cell,
   .link-cell {
-    padding: 0.5rem 2rem;
+    padding: 0.5rem 1rem;
   }
 
   .result-cell {
@@ -663,26 +674,26 @@ td.username {
     font-size: 0.75rem;
   }
 
+  #bookmarks div.header-box > div {
+    font-size: 1.5rem;
+  }
+
+  #bookmarks-list div.match-entry > .match-info {
+    font-size: 1rem;
+  }
+
+  #clubs-table div > div:nth-of-type(1) {
+    padding-right: 0.5rem;
+  }
+
   #clubs-table div > div:nth-of-type(2) > p:nth-of-type(1) {
     width: 8rem;
   }
 
   #clubs-table div > div:nth-of-type(2) > p:nth-of-type(2),
-  #stats-table > tbody tr > td:nth-of-type(2) > p:nth-of-type(2),
-  #stats-table > tbody tr > td:nth-of-type(3) > p:nth-of-type(2) {
+  #stats-table > tbody tr > td:nth-of-type(1) > p:nth-of-type(2),
+  #stats-table > tbody tr > td:nth-of-type(2) > p:nth-of-type(2) {
     font-size: 0.65rem;
-  }
-
-  #stats-table > tbody tr > td:nth-of-type(1) {
-    width: 20px;
-  }
-
-  #stats-table > tbody tr > td:nth-of-type(1) > i {
-    font-size: 1rem;
-  }
-
-  #bookmarks-list div.match-entry > table > tbody > tr td.rating-cell {
-    display: none;
   }
 
   .avatar-wrapper img {
@@ -693,15 +704,8 @@ td.username {
     max-width: 4rem;
   }
 
-  .club-icon-wrapper {
-    display: flex;
-    align-items: center;
-    flex-basis: 25%;
-    margin-right: 0.5rem;
-  }
-
   .club-icon-wrapper img {
-    width: 40px;
+    width: 2rem;
   }
 
   #clubs-table div > div:nth-of-type(2) {
@@ -713,19 +717,11 @@ td.username {
   }
 
   .cell-names {
-    max-width: 5rem;
-    width: 5rem;
+    column-gap: 10px;
   }
-}
 
-@media only screen and (min-width: 918px) {
-  .rating-cell {
-    display: inline-block;
-  }
-}
-
-@media only screen and (min-width: 968px) {
-  #bookmarks-list div.match-entry > table > tbody > tr td.rating-cell {
-    display: inline-block;
+  .cell-names span:nth-of-type(1) {
+    max-width: 8rem;
+    width: 8rem;
   }
 }
