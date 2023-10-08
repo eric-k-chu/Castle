@@ -596,7 +596,7 @@ function getArchive() {
         toggleMatchErrorMsg();
       } else {
         const lastIndex = xhr.response.archives.length - 1;
-        for (let i = xhr.response.archives.length - 1; i >= 0; i--) {
+        for (let i = lastIndex; i >= 0; i--) {
           const endpoint = xhr.response.archives[i];
           const [month, year] = getMonthAndYear(endpoint);
 
