@@ -819,13 +819,13 @@ function updateWPCTElements() {
         $wdl[i].textContent = '|';
         break;
       case 2:
-        $wdl[i].textContent = data.draw;
+        $wdl[i].textContent = data.loss;
         break;
       case 3:
         $wdl[i].textContent = '|';
         break;
       case 4:
-        $wdl[i].textContent = data.loss;
+        $wdl[i].textContent = data.draw;
         break;
     }
   }
