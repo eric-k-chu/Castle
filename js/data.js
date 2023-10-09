@@ -15,7 +15,8 @@ let data = {
   currentUsername: null,
   leaderboard: null,
   bookmarks: new Map(),
-  entryToDelete: null
+  entryToDelete: null,
+  dailyPuzzle: null
 };
 
 window.addEventListener('beforeunload', function (event) {
@@ -37,6 +38,7 @@ if (previousDataJSON) {
   data.loss = 0;
   data.currentUsername = null;
   data.leaderboard = null;
+  data.dailyPuzzle = null;
 }
 
 function loadBookmarks() {

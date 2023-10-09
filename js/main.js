@@ -55,10 +55,10 @@ const $modalMsg = document.querySelector('.bookmark-modal p');
 const $modalIcon = document.querySelector('.bookmark-modal i');
 
 // Daily Puzzle
-// const $dailyPuzzleLink = document.querySelector('.board-wrapper');
-// const $dailyPuzzleImg = document.querySelector('.board-wrapper img');
-// const $dailyPuzzleTitle = document.querySelector('.daily-puzzle-title');
-// const $dailyPuzzleTime = document.querySelector('.daily-puzzle-time');
+const $dailyPuzzleLink = document.querySelector('.board-wrapper');
+const $dailyPuzzleImg = document.querySelector('.board-wrapper img');
+const $dailyPuzzleTitle = document.querySelector('.daily-puzzle-title');
+const $dailyPuzzleTime = document.querySelector('.daily-puzzle-time');
 
 const months = [
   'January',
@@ -136,6 +136,9 @@ $navbar.addEventListener('click', function (event) {
     viewSwap($bookmarks);
   } else if (event.target === $navItems[3]) {
     viewSwap($dailyPuzzle);
+    if (!data.dailyPuzzle) {
+      getDailyPuzzle();
+    }
   }
 });
 
@@ -308,7 +311,8 @@ function insertAccountInfo(response) {
   const countryCode = response.country.slice(-2).toLowerCase();
   $accountInfoCountry.className = `fi fi-${countryCode}`;
   $accountInfoFollowers.textContent = ` ${response.followers}`;
-  $accountInfoJoined.textContent = getJoinedDate(response.joined);
+  const { monthFull, day, year } = getDateObj(response.joined);
+  $accountInfoJoined.textContent = `Joined ${monthFull} ${day}, ${year}`;
 
   if (response.name === undefined) {
     $accountInfoName.textContent = 'N/A';
@@ -451,7 +455,9 @@ function renderClub(club) {
   const $p1 = document.createElement('p');
   const $p2 = document.createElement('p');
   $p1.textContent = club.name;
-  $p2.textContent = getJoinedDate(club.joined);
+
+  const { monthAbbr, day, year } = getDateObj(club.joined);
+  $p2.textContent = `Joined ${monthAbbr} ${day}, ${year}`;
 
   $row.append($iconWrapper, $clubDesc);
   $iconWrapper.appendChild($icon);
@@ -500,7 +506,8 @@ function insertClubs() {
 
 function renderMatch(game) {
   const mode = getMode(game.time_class, game.rules);
-  const date = getMatchDate(game.end_time);
+  const { monthAbbr, day, year } = getDateObj(game.end_time);
+  const date = `${monthAbbr} ${day}, ${year}`;
   const white = game.white.username.toLowerCase();
   const black = game.black.username.toLowerCase();
   const whiteRating = game.white.rating;
@@ -634,19 +641,13 @@ function getWPCTStr(win, loss, draw) {
   return `${pct}%`;
 }
 
-function getJoinedDate(timestamp) {
+function getDateObj(timestamp) {
   const date = new Date(timestamp * 1000);
-  const month = months[date.getMonth()];
-  const year = date.getFullYear();
-  return ` Joined ${month} ${year}`;
-}
-
-function getMatchDate(timestamp) {
-  const date = new Date(timestamp * 1000);
-  const month = monthsAbbr[date.getMonth()];
+  const monthFull = months[date.getMonth()];
+  const monthAbbr = monthsAbbr[date.getMonth()];
   const day = date.getDate();
   const year = date.getFullYear();
-  return `${month} ${day}, ${year}`;
+  return { monthFull, monthAbbr, day, year };
 }
 
 function getMode(timeClass, rules) {
@@ -921,4 +922,19 @@ function clearMatchErrorMsg() {
 function toggleMatchErrorMsg() {
   $matchListDate.classList.toggle('hidden');
   $matchErrorMsg.classList.toggle('hidden');
+}
+
+function getDailyPuzzle() {
+  const xhr = new XMLHttpRequest();
+  xhr.open('GET', 'https://api.chess.com/pub/puzzle');
+  xhr.responseType = 'json';
+  xhr.addEventListener('load', function (event) {
+    data.dailyPuzzle = xhr.response;
+    $dailyPuzzleLink.href = data.dailyPuzzle.url;
+    $dailyPuzzleImg.src = data.dailyPuzzle.image;
+    $dailyPuzzleTitle.textContent = data.dailyPuzzle.title;
+    const { monthFull, day, year } = getDateObj(data.dailyPuzzle.publish_time);
+    $dailyPuzzleTime.textContent = `${monthFull} ${day}, ${year}`;
+  });
+  xhr.send();
 }
