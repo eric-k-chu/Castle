@@ -12,6 +12,7 @@ const $failedSearch = document.querySelector('#failed-search');
 const $playerInfo = document.querySelector('#player-info');
 const $leaderboard = document.querySelector('#leaderboard');
 const $bookmarks = document.querySelector('#bookmarks');
+const $dailyPuzzle = document.querySelector('#daily-puzzle');
 
 const $errorMsg = document.querySelector('#error-msg');
 
@@ -127,6 +128,8 @@ $navbar.addEventListener('click', function (event) {
     }
   } else if (event.target === $navItems[2]) {
     viewSwap($bookmarks);
+  } else if (event.target === $navItems[3]) {
+    viewSwap($dailyPuzzle);
   }
 });
 
