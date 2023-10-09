@@ -224,6 +224,12 @@ span {
   font-size: 0.6rem;
 }
 
+#player-info-header > div > div > div {
+  box-shadow: none;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
 #account-info-name,
 #account-info-followers,
 #account-info-location,
@@ -570,6 +576,15 @@ td.username {
 
 .padding-1 {
   padding: 1rem;
+}
+
+.tab-container {
+  display: flex;
+  align-items: center;
+  border-radius: 3px;
+  box-shadow: 0 4px #1d1c1a;
+  background-color: #262522;
+  padding: 0.5rem;
 }
 
 /* duration, easing function, delay, iterations, animation function */
