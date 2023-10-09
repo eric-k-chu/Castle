@@ -330,80 +330,65 @@ function getPlayerInfo(username) {
   xhr.send();
 }
 
-function insertAccountInfo(response) {
-  $accountInfoUser.textContent = response.username;
-  $accountInfoImg.alt = `${response.username} avatar`;
-  const countryCode = response.country.slice(-2).toLowerCase();
+function insertAccountInfo({ avatar, name, username, followers, country, location, joined, league }) {
+  $accountInfoUser.textContent = username;
+  $accountInfoImg.alt = `${username} avatar`;
+  const countryCode = country.slice(-2).toLowerCase();
   $accountInfoCountry.className = `fi fi-${countryCode}`;
-  $accountInfoFollowers.textContent = ` ${response.followers}`;
-  const { monthFull, day, year } = getDateObj(response.joined);
+  $accountInfoFollowers.textContent = ` ${followers}`;
+  const { monthFull, day, year } = getDateObj(joined);
   $accountInfoJoined.textContent = `Joined ${monthFull} ${day}, ${year}`;
 
-  if (response.name === undefined) {
+  if (name === undefined) {
     $accountInfoName.textContent = 'N/A';
   } else {
-    $accountInfoName.textContent = response.name;
+    $accountInfoName.textContent = name;
   }
 
-  if (response.location === undefined) {
+  if (location === undefined) {
     $accountInfoLocation.textContent = ' N/A';
   } else {
-    $accountInfoLocation.textContent = ` ${response.location}`;
+    $accountInfoLocation.textContent = ` ${location}`;
   }
 
-  if (response.avatar === undefined) {
+  if (avatar === undefined) {
     $accountInfoImg.src = '/images/placeholder-image-square.jpg';
   } else {
-    $accountInfoImg.src = response.avatar;
+    $accountInfoImg.src = avatar;
   }
 
-  if (response.league === undefined) {
+  if (league === undefined) {
     $accountInfoLeague.textContent = 'Unrated';
     $leagueIcon.src = '';
     $leagueIcon.alt = '';
   } else {
-    $accountInfoLeague.textContent = response.league;
-    $leagueIcon.src = leagueIcons[response.league];
-    $leagueIcon.alt = response.league;
+    $accountInfoLeague.textContent = league;
+    $leagueIcon.src = leagueIcons[league];
+    $leagueIcon.alt = league;
   }
 }
 
 function getGame(string) {
-  const obj = {};
   switch (string) {
     case 'chess_daily':
-      obj.name = 'Daily';
-      obj.icon = 'fa-solid fa-sun';
-      return obj;
+      return 'Daily';
     case 'chess960_daily':
-      obj.name = 'Daily 960';
-      obj.icon = 'fa-regular fa-sun';
-      return obj;
+      return 'Daily 960';
     case 'chess_rapid':
-      obj.name = 'Rapid';
-      obj.icon = 'fa-solid fa-stopwatch';
-      return obj;
+      return 'Rapid';
     case 'chess_bullet':
-      obj.name = 'Bullet';
-      obj.icon = 'fa-solid fa-rocket';
-      return obj;
+      return 'Bullet';
     case 'chess_blitz':
-      obj.name = 'Blitz';
-      obj.icon = 'fa-solid fa-bolt';
-      return obj;
+      return 'Blitz';
     case 'tactics':
-      obj.name = 'Puzzles';
-      obj.icon = 'fa-solid fa-puzzle-piece';
-      return obj;
+      return 'Puzzles';
     case 'puzzle_rush':
-      obj.name = 'Puzzle Rush';
-      obj.icon = 'fa-solid fa-bolt-lightning';
-      return obj;
+      return 'Puzzle Rush';
   }
 }
 
 function renderStat(type, stats) {
-  const game = getGame(type);
+  const name = getGame(type);
 
   const $tr = document.createElement('tr');
   const $tdMode = document.createElement('td');
@@ -414,20 +399,20 @@ function renderStat(type, stats) {
   const $p3 = document.createElement('p');
   const $p4 = document.createElement('p');
 
-  if (game.name === 'Puzzles') {
-    $p1.textContent = game.name;
+  if (name === 'Puzzles') {
+    $p1.textContent = name;
     $p2.textContent = `${stats.lowest.rating}`;
     $p3.textContent = stats.highest.rating;
     $p4.textContent = 'Highest';
-  } else if (game.name === 'Puzzle Rush') {
+  } else if (name === 'Puzzle Rush') {
     if (Object.keys(stats).length > 0) {
-      $p1.textContent = game.name;
+      $p1.textContent = name;
       $p2.textContent = `${stats.best.total_attempts}`;
       $p3.textContent = stats.best.score;
       $p4.textContent = 'Score';
     }
   } else {
-    $p1.textContent = game.name;
+    $p1.textContent = name;
     $p2.textContent = stats.last.rating;
     $p3.textContent = getWPCTStr(
       stats.record.win,
