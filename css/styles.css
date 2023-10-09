@@ -224,10 +224,38 @@ span {
   font-size: 0.6rem;
 }
 
-#player-info-header > div > div > div {
+#player-info-header > div > div {
   box-shadow: none;
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
+  border: none;
+}
+
+.tab-views {
+  margin-top: 1px;
+}
+
+.tab-container {
+  display: flex;
+  align-items: center;
+  border-radius: 3px;
+  background-color: #262522;
+  box-shadow: 0 4px #1d1c1a;
+}
+
+.tab {
+  padding: 0.5rem;
+  font-size: 0.75rem;
+  border-right: 1.5px solid #1d1c1a;
+}
+
+.tab:hover {
+  cursor: pointer;
+  background-color: #3b3936;
+}
+
+.tab.active {
+  color: #ca9372;
 }
 
 #account-info-name,
@@ -576,15 +604,6 @@ td.username {
 
 .padding-1 {
   padding: 1rem;
-}
-
-.tab-container {
-  display: flex;
-  align-items: center;
-  border-radius: 3px;
-  box-shadow: 0 4px #1d1c1a;
-  background-color: #262522;
-  padding: 0.5rem;
 }
 
 /* duration, easing function, delay, iterations, animation function */

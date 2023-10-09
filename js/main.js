@@ -41,7 +41,7 @@ const $winPCT = document.querySelector('#win-pct');
 const $wdl = document.querySelectorAll('#wdl span');
 
 // Refresh buttons
-const $refreshBtns = document.querySelector('#player-info-body');
+const $refreshBtns = document.querySelector('#player-summary');
 
 // Leaderboard
 const $leaderboardSelect = document.querySelector('#leaderboard-select');
@@ -59,6 +59,11 @@ const $dailyPuzzleLink = document.querySelector('.board-wrapper');
 const $dailyPuzzleImg = document.querySelector('.board-wrapper img');
 const $dailyPuzzleTitle = document.querySelector('.daily-puzzle-title');
 const $dailyPuzzleTime = document.querySelector('.daily-puzzle-time');
+
+// Tabs
+const $tabContainer = document.querySelector('.tab-container');
+const $tabs = document.querySelectorAll('.tab');
+const $views = document.querySelectorAll('.view');
 
 const months = [
   'January',
@@ -107,6 +112,26 @@ const leagueIcons = {
   Legend:
     'https://www.chess.com/bundles/web/images/leagues/badges/legend.1ea014f3.svg'
 };
+
+$tabContainer.addEventListener('click', function (event) {
+  if (event.target.matches('.tab')) {
+    for (const tab of $tabs) {
+      if (tab === event.target) {
+        tab.className = 'tab active';
+      } else {
+        tab.className = 'tab';
+      }
+    }
+    const dataView = event.target.getAttribute('data-view');
+    for (const view of $views) {
+      if (view.getAttribute('data-view') === dataView) {
+        view.className = 'view';
+      } else {
+        view.className = 'view hidden';
+      }
+    }
+  }
+});
 
 $refreshBtns.addEventListener('click', function (event) {
   if (event.target.closest('button')) {

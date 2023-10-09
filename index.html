@@ -68,7 +68,7 @@
   </div>
 
   <main>
-    <div class="container hidden" id="home">
+    <div class="container" id="home">
       <div class="col justify-center align-center height-500">
         <i class="fa-solid text-white icon-xxl fa-chess" id="main-logo"></i>
 
@@ -91,38 +91,36 @@
       </div>
     </div>
 
-    <div class="bg-dark-gray mt-1" id="player-info">
+    <div class="bg-dark-gray mt-1 hidden" id="player-info">
 
       <div id="player-info-header">
         <div class="container text-white">
-          <div class="row align-center">
-            <div class="row column-full content-box align-center padding-1">
-              <div class="mr-1">
-                <div class="avatar-wrapper">
-                  <img id="account-info-img" src="" alt="user avatar" />
-                </div>
+          <div class="row align-center column-full content-box padding-1">
+            <div class="mr-1">
+              <div class="avatar-wrapper">
+                <img id="account-info-img" src="" alt="user avatar" />
               </div>
-              <div class="col">
-                <div class="row gap-1 align-center leading-1">
-                  <h3 id="account-info-username"></h3>
-                  <span id="account-info-country"></span>
-                </div>
-                <div class="row">
-                  <p id="account-info-name" class="font-italic"></p>
-                </div>
-                <div class="row gap-1 mtb-three-fourths">
-                  <i class="fa-solid fa-user">
-                    <span class="font-jetbrains font-thin" id="account-info-followers"></span>
-                  </i>
-                  <i class="fa-solid fa-location-dot">
-                    <span class="font-jetbrains font-thin" id="account-info-location"></span>
-                  </i>
-                </div>
-                <div class="row mtb-three-fourths">
-                  <i class="fa-regular fa-calendar-days">
-                    <span class="font-jetbrains font-thin" id="account-info-joined"></span>
-                  </i>
-                </div>
+            </div>
+            <div class="col">
+              <div class="row gap-1 align-center leading-1">
+                <h3 id="account-info-username"></h3>
+                <span id="account-info-country"></span>
+              </div>
+              <div class="row">
+                <p id="account-info-name" class="font-italic"></p>
+              </div>
+              <div class="row gap-1 mtb-three-fourths">
+                <i class="fa-solid fa-user">
+                  <span class="font-jetbrains font-thin" id="account-info-followers"></span>
+                </i>
+                <i class="fa-solid fa-location-dot">
+                  <span class="font-jetbrains font-thin" id="account-info-location"></span>
+                </i>
+              </div>
+              <div class="row mtb-three-fourths">
+                <i class="fa-regular fa-calendar-days">
+                  <span class="font-jetbrains font-thin" id="account-info-joined"></span>
+                </i>
               </div>
             </div>
           </div>
@@ -132,13 +130,13 @@
       <div class="tab-views">
         <div class="container text-white">
           <div class="tab-container">
-            <div>Summary</div>
-            <div>Tournaments</div>
+            <div class="tab active" data-view="summary">Summary</div>
+            <div class="tab" data-view="tournaments">Tournaments</div>
           </div>
         </div>
       </div>
 
-      <div id="player-info-body">
+      <div class="view" id="player-summary" data-view="summary">
         <div class="container text-white">
           <div class="row">
             <div class="col mr-1">
@@ -206,6 +204,12 @@
           </div>
         </div>
       </div>
+
+      <div class="view hidden" id="player-tournaments" data-view="tournaments">
+        <div class="container text-white">
+        </div>
+      </div>
+
     </div>
 
     <div class="container mt-1 mb-1 hidden" id="leaderboard">

@@ -27,11 +27,11 @@
   display: flex;
 }
 
-#player-info-body > div > div > div:nth-of-type(1) {
+#player-summary > div > div > div:nth-of-type(1) {
   flex-basis: 20%;
 }
 
-#player-info-body > div > div > div:nth-of-type(2) {
+#player-summary > div > div > div:nth-of-type(2) {
   flex-basis: 80%;
 }
 
