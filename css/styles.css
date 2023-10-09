@@ -303,7 +303,6 @@ span {
   padding-left: 0.5rem;
   padding-right: 0.5rem;
   border-radius: 3px;
-  box-shadow: 0 4px #1d1c1a;
   margin-top: 0.5rem;
 }
 
@@ -363,7 +362,7 @@ span {
 .bookmark-btn,
 .delete-btn {
   border: none;
-  background-color: #262522;
+  background-color: transparent;
   color: #fff;
   font-size: 0.65rem;
 }
