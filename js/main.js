@@ -38,7 +38,7 @@ const $matchList = document.querySelector('#match-list');
 const $winPCT = document.querySelector('#win-pct');
 
 // Win Percentage
-const $wdl = document.querySelectorAll('#wdl span');
+const $wld = document.querySelectorAll('#wld span');
 
 // Refresh buttons
 const $refreshBtns = document.querySelector('#player-summary');
@@ -810,32 +810,32 @@ function getMonthlyGameEndpoint(month, year) {
 function updateWPCTElements() {
   $winPCT.textContent = `${getWPCT()}%`;
 
-  for (let i = 0; i < $wdl.length; i++) {
+  for (let i = 0; i < $wld.length; i++) {
     switch (i) {
       case 0:
-        $wdl[i].textContent = data.win;
+        $wld[i].textContent = data.win;
         break;
       case 1:
-        $wdl[i].textContent = '|';
+        $wld[i].textContent = '|';
         break;
       case 2:
-        $wdl[i].textContent = data.loss;
+        $wld[i].textContent = data.loss;
         break;
       case 3:
-        $wdl[i].textContent = '|';
+        $wld[i].textContent = '|';
         break;
       case 4:
-        $wdl[i].textContent = data.draw;
+        $wld[i].textContent = data.draw;
         break;
     }
   }
-  resetWDL();
+  resetwld();
 }
 
 function clearWPCTElement() {
   $winPCT.textContent = '';
-  for (let i = 0; i < $wdl.length; i++) {
-    $wdl[i].textContent = '';
+  for (let i = 0; i < $wld.length; i++) {
+    $wld[i].textContent = '';
   }
 }
 
@@ -912,7 +912,7 @@ function getWPCT() {
   return ((upper / lower) * 100).toFixed(2);
 }
 
-function resetWDL() {
+function resetwld() {
   data.win = 0;
   data.loss = 0;
   data.draw = 0;
