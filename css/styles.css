@@ -258,6 +258,37 @@ span {
   color: #ca9372;
 }
 
+.tournament-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  font-size: 0.65rem;
+}
+
+.tournament-table thead > tr {
+  background-color: #262522;
+}
+
+.tournament-table th {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.tournament-table td {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  background-color: #f5f5f5;
+  color: #262522;
+}
+
+.tournament-table tbody tr > td:nth-of-type(2) {
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: fit-content;
+}
+
 #account-info-name,
 #account-info-followers,
 #account-info-location,

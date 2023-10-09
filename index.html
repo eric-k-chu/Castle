@@ -68,7 +68,7 @@
   </div>
 
   <main>
-    <div class="container" id="home">
+    <div class="container hidden" id="home">
       <div class="col justify-center align-center height-500">
         <i class="fa-solid text-white icon-xxl fa-chess" id="main-logo"></i>
 
@@ -91,7 +91,7 @@
       </div>
     </div>
 
-    <div class="bg-dark-gray mt-1 hidden" id="player-info">
+    <div class="bg-dark-gray mt-1" id="player-info">
 
       <div id="player-info-header">
         <div class="container text-white">
@@ -136,7 +136,7 @@
         </div>
       </div>
 
-      <div class="view" id="player-summary" data-view="summary">
+      <div class="view hidden" id="player-summary" data-view="summary">
         <div class="container text-white">
           <div class="row">
             <div class="col mr-1">
@@ -205,8 +205,28 @@
         </div>
       </div>
 
-      <div class="view hidden" id="player-tournaments" data-view="tournaments">
+      <div class="view" id="player-tournaments" data-view="tournaments">
         <div class="container text-white">
+          <div class="col column-full">
+            <table class="tournament-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Name</th>
+                  <th>Placement</th>
+                  <th>Points</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>100 years of chemotherapy remembrance tournament</td>
+                  <td>10</td>
+                  <td>31</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
 
