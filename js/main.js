@@ -529,18 +529,14 @@ function insertClubs() {
   xhr.send();
 }
 
-function renderMatch(game) {
-  const mode = getMode(game.time_class, game.rules);
-  const { monthAbbr, day, year } = getDateObj(game.end_time);
+function renderMatch({ url, pgn, end_time: endTime, uuid, time_class: timeClass, rules, white, black }) {
+  const mode = getMode(timeClass, rules);
+  const { monthAbbr, day, year } = getDateObj(endTime);
   const date = `${monthAbbr} ${day}, ${year}`;
-  const white = game.white.username.toLowerCase();
-  const black = game.black.username.toLowerCase();
-  const whiteRating = game.white.rating;
-  const blackRating = game.black.rating;
-  const url = game.url;
-  const uuid = game.uuid;
+  const whiteUser = white.username.toLowerCase();
+  const blackUser = black.username.toLowerCase();
 
-  const result = parsePGN(game.pgn, white, black);
+  const result = parsePGN(pgn, whiteUser, blackUser);
 
   const $entry = `<div class="match-entry ${result.bgColor}" data-id="${uuid}">
                     <table class="match-info">
@@ -563,13 +559,13 @@ function renderMatch(game) {
                               <div>
                                 <div class="cell-names">
                                   <i class="fa-solid fa-chess-pawn text-white"></i>
-                                  <span>${white}</span>
-                                  <span class="text-gray">${whiteRating}</span>
+                                  <span>${whiteUser}</span>
+                                  <span class="text-gray">${white.rating}</span>
                                 </div>
                                 <div class="cell-names">
                                   <i class="fa-solid fa-chess-pawn text-gray-2"></i>
-                                  <span>${black}</span>
-                                  <span class="text-gray">${blackRating}</span>
+                                  <span>${blackUser}</span>
+                                  <span class="text-gray">${black.rating}</span>
                                 </div>
                               </div>
                             </div>
