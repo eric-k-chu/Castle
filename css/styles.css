@@ -549,10 +549,22 @@ td.username {
     monospace;
 }
 
+.board-wrapper {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 0 5rem;
+}
+
+.board-wrapper img {
+  width: 100%;
+}
+
 #match-list-date:hover,
 #logo:hover,
 .search-icon:hover,
-.search-icon-main:hover {
+.search-icon-main:hover,
+.board-wrapper:hover {
   cursor: pointer;
 }
 

@@ -54,6 +54,12 @@ const $bookmarkModal = document.querySelector('.bookmark-modal');
 const $modalMsg = document.querySelector('.bookmark-modal p');
 const $modalIcon = document.querySelector('.bookmark-modal i');
 
+// Daily Puzzle
+// const $dailyPuzzleLink = document.querySelector('.board-wrapper');
+// const $dailyPuzzleImg = document.querySelector('.board-wrapper img');
+// const $dailyPuzzleTitle = document.querySelector('.daily-puzzle-title');
+// const $dailyPuzzleTime = document.querySelector('.daily-puzzle-time');
+
 const months = [
   'January',
   'February',
