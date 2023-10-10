@@ -264,16 +264,11 @@ function clearTournamentTable() {
 
 function renderTournamentTable(tournamentList) {
   clearTournamentTable();
-  for (let i = 0; i < tournamentList.length; i++) {
-    let { url, placement, points_awarded: points } = tournamentList[i];
-    const id = tournamentList[i]['@id'];
-    if (!placement) {
-      placement = '-';
-    }
-
-    if (!points) {
-      points = '-';
-    }
+  tournamentList.forEach((n, i) => {
+    let { url, placement, points_awarded: points } = n;
+    const id = n['@id'];
+    placement = placement ?? '-';
+    points = points ?? '-';
     const name = getTournamentName(id);
 
     const $tr = `<tr>
@@ -285,7 +280,7 @@ function renderTournamentTable(tournamentList) {
                   <td>${points}</td>
                 </tr>`;
     $tournamentTable.innerHTML += $tr;
-  }
+  });
 }
 
 function getTournamentName(url) {
@@ -340,18 +335,16 @@ function renderLeaderboard(index) {
                 <th class="rating">Score</th>
               </tr>`;
     $leaderboardHeader.innerHTML += $header;
-    for (let i = 0; i < rankingList.length; i++) {
-      const user = rankingList[i];
-      const countryCode = user.country.slice(-2).toLowerCase();
-
+    rankingList.forEach((n, i) => {
+      const countryCode = n.country.slice(-2).toLowerCase();
       const $entry = `<tr class="bg-white">
-                  <td class="rank">${user.rank}</td>
-                  <td class="username">${user.username}</td>
-                  <td class="country"><span class="fi fi-${countryCode}"></span></td>
-                  <td class="rating">${user.score}</td>
-                </tr>`;
+            <td class="rank">${n.rank}</td>
+            <td class="username">${n.username}</td>
+            <td class="country"><span class="fi fi-${countryCode}"></span></td>
+            <td class="rating">${n.score}</td>
+          </tr>`;
       $leaderboardBody.innerHTML += $entry;
-    }
+    });
   } else {
     const $header = `<tr>
                 <th class="rank">Rank</th>
@@ -361,20 +354,19 @@ function renderLeaderboard(index) {
                 <th class="win-pct">Win %</th>
               </tr>`;
     $leaderboardHeader.innerHTML += $header;
-    for (let i = 0; i < rankingList.length; i++) {
-      const user = rankingList[i];
-      const countryCode = user.country.slice(-2).toLowerCase();
-      const wpct = getWPCTStr(user.win_count, user.draw_count, user.loss_count);
-
+    rankingList.forEach((n, i) => {
+      const countryCode = n.country.slice(-2).toLowerCase();
+      const wpct = getWPCTStr(n.win_count, n.draw_count, n.loss_count);
       const $entry = `<tr class="bg-white">
-                  <td class="rank">${user.rank}</td>
-                  <td class="username">${user.username}</td>
+                  <td class="rank">${n.rank}</td>
+                  <td class="username">${n.username}</td>
                   <td class="country"><span class="fi fi-${countryCode}"></span></td>
-                  <td class="rating">${user.score}</td>
+                  <td class="rating">${n.score}</td>
                   <td class="win-pct">${wpct}</td>
                 </tr>`;
       $leaderboardBody.innerHTML += $entry;
-    }
+    });
+
   }
 }
 
@@ -566,7 +558,6 @@ function insertClubs() {
     if (xhr.status === 200) {
       data.currentPlayer.clubs = xhr.response;
       const clubs = xhr.response.clubs;
-      let maxDisplay = 0;
 
       if (clubs.length < 1) {
         const $msg = document.createElement('div');
@@ -576,19 +567,7 @@ function insertClubs() {
         $msg.appendChild($p);
         $clubsTable.append($msg);
       } else {
-        if (clubs.length < 5) {
-          maxDisplay = clubs.length;
-        } else {
-          maxDisplay = 5;
-        }
-
-        let count = 0;
-        let i = clubs.length - 1;
-        while (count < maxDisplay) {
-          $clubsTable.appendChild(renderClub(clubs[i]));
-          count++;
-          i--;
-        }
+        clubs.forEach((n, i) => { $clubsTable.appendChild(renderClub(n)); });
       }
     } else {
       handleError(xhr.status, 'clubs');
@@ -679,10 +658,11 @@ function insertArchives(game) {
   xhr.open('GET', game);
   xhr.responseType = 'json';
   xhr.addEventListener('load', function (event) {
-    for (let i = xhr.response.games.length - 1; i >= 0; i--) {
-      $matchList.innerHTML += renderMatch(xhr.response.games[i]);
-    }
+    const lastIndex = xhr.response.games.length - 1;
 
+    xhr.response.games.forEach((n, i, arr) => {
+      $matchList.innerHTML += renderMatch(arr[lastIndex - i]);
+    });
     updateWPCTElements();
   });
   xhr.send();
@@ -702,23 +682,19 @@ function getArchive() {
         toggleMatchErrorMsg();
       } else {
         const lastIndex = xhr.response.archives.length - 1;
-        for (let i = lastIndex; i >= 0; i--) {
-          const endpoint = xhr.response.archives[i];
-          const [month, year] = getMonthAndYear(endpoint);
 
-          const $optGroup = document.querySelector(`#match-list-date optgroup[label="${year}"`);
+        xhr.response.archives.forEach((n, i, arr) => {
+          const [month, year] = getMonthAndYear(arr[lastIndex - i]);
+          const $optGroup = document.querySelector(
+            `#match-list-date optgroup[label="${year}"`);
           if (!$optGroup) {
-            const $newOptGroup = $matchListDate.appendChild(renderOptGroup(year));
+            const $newOptGroup = $matchListDate.appendChild(
+              renderOptGroup(year)
+            );
             $newOptGroup.appendChild(renderOption(month));
           } else {
             $optGroup.appendChild(renderOption(month));
           }
-        }
-
-        xhr.response.archives.forEach((n, i, arr) => {
-          const [month, year] = getMonthAndYear(n);
-          const $optGroup = document.querySelector(
-            `#match-list-date optgroup[label="${year}"`);
         });
 
         const lastEndpoint = xhr.response.archives[lastIndex];
@@ -882,33 +858,31 @@ function getMonthlyGameEndpoint(month, year) {
 function updateWPCTElements() {
   $winPCT.textContent = `${getWPCT()}%`;
 
-  for (let i = 0; i < $wld.length; i++) {
+  $wld.forEach((n, i) => {
     switch (i) {
       case 0:
-        $wld[i].textContent = data.win;
+        n.textContent = data.win;
         break;
       case 1:
-        $wld[i].textContent = '|';
+        n.textContent = '|';
         break;
       case 2:
-        $wld[i].textContent = data.loss;
+        n.textContent = data.loss;
         break;
       case 3:
-        $wld[i].textContent = '|';
+        n.textContent = '|';
         break;
       case 4:
-        $wld[i].textContent = data.draw;
+        n.textContent = data.draw;
         break;
     }
-  }
+  });
   resetwld();
 }
 
 function clearWPCTElement() {
   $winPCT.textContent = '';
-  for (let i = 0; i < $wld.length; i++) {
-    $wld[i].textContent = '';
-  }
+  $wld.forEach((n, i) => { n.textContent = ''; });
 }
 
 function clearTableElements() {
