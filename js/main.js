@@ -36,8 +36,6 @@ const $matchListDate = document.querySelector('#match-list-date');
 const $matchErrorMsg = document.querySelector('#match-error-msg');
 const $matchList = document.querySelector('#match-list');
 const $winPCT = document.querySelector('#win-pct');
-
-// Win Percentage
 const $wld = document.querySelectorAll('#wld span');
 
 // Refresh buttons
@@ -121,34 +119,22 @@ const leagueIcons = {
 $selectContainer.addEventListener('click', function (event) {
   if (event.target.matches('.select')) {
     const type = event.target.getAttribute('id').replace('-', '_');
-    for (const select of $selects) {
-      if (select === event.target) {
-        select.className = 'select active';
-      } else {
-        select.className = 'select';
-      }
-    }
+    $selects.forEach(n => {
+      n.className = (n === event.target) ? 'select active' : 'select';
+    });
     renderTournamentTable(data.currentPlayer.tournaments[type]);
   }
 });
 
 $tabContainer.addEventListener('click', function (event) {
   if (event.target.matches('.tab')) {
-    for (const tab of $tabs) {
-      if (tab === event.target) {
-        tab.className = 'tab active';
-      } else {
-        tab.className = 'tab';
-      }
-    }
     const dataView = event.target.getAttribute('data-view');
-    for (const view of $views) {
-      if (view.getAttribute('data-view') === dataView) {
-        view.className = 'view';
-      } else {
-        view.className = 'view hidden';
-      }
-    }
+    $tabs.forEach(n => {
+      n.className = (n === event.target) ? 'tab active' : 'tab';
+    });
+    $views.forEach(n => {
+      n.className = (n.getAttribute('data-view') === dataView) ? 'view' : 'view hidden';
+    });
     if (dataView === 'tournaments' && !data.currentPlayer.tournaments) {
       insertTournaments();
     }
