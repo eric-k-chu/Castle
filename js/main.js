@@ -288,9 +288,7 @@ function getTournamentName(url) {
   const name = words[words.length - 1]
     .split('-')
     .filter(char => char !== '');
-  const nameCapitalize = name.map(
-    element => element.slice(0, 1).toUpperCase() + element.slice(1)
-  );
+  const nameCapitalize = name.map(n => n[0].toUpperCase() + n.slice(1));
   return nameCapitalize.join(' ');
 }
 
@@ -725,7 +723,7 @@ function getDateObj(timestamp) {
 
 function getMode(timeClass, rules) {
   if (rules === 'chess') {
-    return timeClass.charAt(0).toUpperCase() + timeClass.slice(1);
+    return timeClass[0].toUpperCase() + timeClass.slice(1);
   } else if (rules === 'chess960') {
     return 'Daily 960';
   } else if (rules === 'bughouse') {
