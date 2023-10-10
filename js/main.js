@@ -256,9 +256,7 @@ function renderTournamentTable(tournamentList) {
     let { url, placement, points_awarded: points } = n;
     const id = n['@id'];
     placement = placement ?? '-';
-    if (!points || points === 0) {
-      points = '-';
-    }
+    points = points || '-';
 
     const name = getTournamentName(id);
 
