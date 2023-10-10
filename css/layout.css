@@ -11,6 +11,12 @@
   padding: 0 1rem;
 }
 
+.container-3 {
+  min-width: 15rem;
+  width: 15rem;
+  max-width: 15rem;
+}
+
 .container-modal {
   width: 50%;
   margin: 0 auto;
@@ -49,13 +55,13 @@
 }
 
 #leaderboard-table {
-  flex-basis: 50%;
+  flex-basis: 100%;
 }
 
-.column-9 {
-  flex-basis: 90%;
-}
-
-.column-1 {
-  flex-basis: 10%;
+@media only screen and (min-width: 768px) {
+  .container-3 {
+    min-width: 25rem;
+    width: 25rem;
+    max-width: 25rem;
+  }
 }

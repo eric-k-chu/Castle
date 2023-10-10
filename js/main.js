@@ -67,6 +67,8 @@ const $views = document.querySelectorAll('.view');
 
 // Tournaments
 const $tournamentTable = document.querySelector('.tournament-table > tbody');
+const $selectContainer = document.querySelector('.select-container');
+const $selects = document.querySelectorAll('.select');
 
 const months = [
   'January',
@@ -115,6 +117,20 @@ const leagueIcons = {
   Legend:
     'https://www.chess.com/bundles/web/images/leagues/badges/legend.1ea014f3.svg'
 };
+
+$selectContainer.addEventListener('click', function (event) {
+  if (event.target.matches('.select')) {
+    const type = event.target.getAttribute('id').replace('-', '_');
+    for (const select of $selects) {
+      if (select === event.target) {
+        select.className = 'select active';
+      } else {
+        select.className = 'select';
+      }
+    }
+    renderTournamentTable(data.currentPlayer.tournaments[type]);
+  }
+});
 
 $tabContainer.addEventListener('click', function (event) {
   if (event.target.matches('.tab')) {
@@ -250,6 +266,7 @@ function renderTournamentTable(tournamentList) {
   clearTournamentTable();
   for (let i = 0; i < tournamentList.length; i++) {
     let { url, placement, points_awarded: points } = tournamentList[i];
+    const id = tournamentList[i]['@id'];
     if (!placement) {
       placement = '-';
     }
@@ -257,7 +274,7 @@ function renderTournamentTable(tournamentList) {
     if (!points) {
       points = '-';
     }
-    const name = getTournamentName(url);
+    const name = getTournamentName(id);
 
     const $tr = `<tr>
                   <td>${i + 1}</td>
@@ -272,12 +289,14 @@ function renderTournamentTable(tournamentList) {
 }
 
 function getTournamentName(url) {
-  const words = url.split('/', 5);
-  const name = words[4]
+  const words = url.split('/', 6);
+  const name = words[words.length - 1]
     .split('-')
-    .filter(char => char !== '')
-    .join(' ');
-  return name;
+    .filter(char => char !== '');
+  const nameCapitalize = name.map(
+    element => element.slice(0, 1).toUpperCase() + element.slice(1)
+  );
+  return nameCapitalize.join(' ');
 }
 
 function insertTournaments() {

@@ -248,7 +248,13 @@ header .search-bar {
 .tab {
   padding: 0.5rem;
   font-size: 0.75rem;
+  background-color: transparent;
+  color: #f5f5f5;
+  border: none;
   border-right: 1.5px solid #1d1c1a;
+  font-family:
+    "JetBrains Mono",
+    monospace;
 }
 
 .tab:hover {
@@ -263,7 +269,6 @@ header .search-bar {
 .tournament-table {
   flex-basis: 100%;
   border-collapse: collapse;
-  margin-top: 1rem;
   font-size: 0.65rem;
 }
 
@@ -283,10 +288,10 @@ header .search-bar {
   color: #262522;
 }
 
-.tournament-table tbody tr > td {
+.tournament-table tbody tr {
   text-align: center;
   padding: 0.5rem;
-  border-bottom: 1px solid #262522;
+  border-bottom: 1px solid #bbb;
 }
 
 .tournament-table tbody tr > td:nth-of-type(2) {
@@ -546,6 +551,10 @@ header .search-bar {
   font-size: 0.75rem;
 }
 
+#leaderboard-table > tbody tr {
+  border-bottom: 1px solid #bbb;
+}
+
 td.rank,
 td.username,
 td.country,
@@ -650,6 +659,51 @@ td.username {
   padding: 1rem;
 }
 
+.select-container {
+  border-radius: 50px;
+  box-shadow: 0 4px #1d1c1a;
+  background-color: #262522;
+  margin: 1rem 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.select {
+  font-size: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  width: 100%;
+  background-color: transparent;
+  color: #f5f5f5;
+  font-family: "JetBrains Mono", monospace;
+}
+
+.select:hover {
+  background-color: #3b3936;
+  cursor: pointer;
+}
+
+.select.active {
+  background-color: #81b64c;
+}
+
+.select-container .select:nth-of-type(1) {
+  border-top-left-radius: 50px;
+  border-bottom-left-radius: 50px;
+}
+
+.select-container .select:nth-of-type(2) {
+  border-right: 1.5px solid #1d1c1a;
+  border-left: 1.5px solid #1d1c1a;
+}
+
+.select-container .select:nth-of-type(3) {
+  border-top-right-radius: 50px;
+  border-bottom-right-radius: 50px;
+}
+
 /* duration, easing function, delay, iterations, animation function */
 .fade-out {
   animation: 1s ease-out 1s 1 fade-out;
@@ -709,6 +763,10 @@ td.username {
 }
 
 @media only screen and (min-width: 768px) {
+  .select {
+    font-size: 0.8rem;
+  }
+
   .tournament-table tbody tr > td:nth-of-type(2) {
     max-width: 30rem;
     width: 30rem;
