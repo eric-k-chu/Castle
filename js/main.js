@@ -183,18 +183,20 @@ $logo.addEventListener('click', function (event) {
 });
 
 $matchList.addEventListener('click', function (event) {
-  if (event.target.closest('div.match-entry')) {
-    const $selected = event.target.closest('div.match-entry');
-    if (!data.bookmarks.has($selected.getAttribute('data-id'))) {
-      const entryHTML = $selected.cloneNode(true).outerHTML;
-      const key = $selected.getAttribute('data-id');
-      data.bookmarks.set(key, entryHTML);
-      $bookmarksList.innerHTML = entryHTML;
-      setBookmarkModal('Game added.');
-    } else {
-      setBookmarkModal('Game already saved.');
+  if (event.target.className.includes('fa-bookmark')) {
+    if (event.target.closest('div.match-entry')) {
+      const $selected = event.target.closest('div.match-entry');
+      if (!data.bookmarks.has($selected.getAttribute('data-id'))) {
+        const entryHTML = $selected.cloneNode(true).outerHTML;
+        const key = $selected.getAttribute('data-id');
+        data.bookmarks.set(key, entryHTML);
+        $bookmarksList.innerHTML += entryHTML;
+        setBookmarkModal('Game added.');
+      } else {
+        setBookmarkModal('Game already saved.');
+      }
+      displayBookmarkModal();
     }
-    displayBookmarkModal();
   }
 });
 
@@ -358,6 +360,7 @@ function renderLeaderboard(index) {
 }
 
 function getPlayerInfo(username) {
+  data.currentPlayer = {};
   data.currentPlayer.username = username.toLowerCase();
   const xhr = new XMLHttpRequest();
   xhr.open('GET', `https://api.chess.com/pub/player/${username.toLowerCase()}`);
