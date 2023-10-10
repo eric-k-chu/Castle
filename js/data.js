@@ -12,7 +12,7 @@ let data = {
   win: 0,
   draw: 0,
   loss: 0,
-  currentUsername: null,
+  currentPlayer: {},
   leaderboard: null,
   bookmarks: new Map(),
   entryToDelete: null,
@@ -36,9 +36,15 @@ if (previousDataJSON) {
   data.win = 0;
   data.draw = 0;
   data.loss = 0;
-  data.currentUsername = null;
+  data.currentPlayer = {};
   data.leaderboard = null;
   data.dailyPuzzle = null;
+  if (data.entryToDelete) {
+    const $bkmarks = document.querySelector('#bookmarks-list');
+    data.bookmarks.delete(data.entryToDelete.getAttribute('data-id'));
+    $bkmarks.removeChild(data.entryToDelete);
+    data.entryToDelete = null;
+  }
 }
 
 function loadBookmarks() {

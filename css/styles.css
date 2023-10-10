@@ -259,7 +259,7 @@ span {
 }
 
 .tournament-table {
-  width: 100%;
+  flex-basis: 100%;
   border-collapse: collapse;
   margin-top: 1rem;
   font-size: 0.65rem;
@@ -281,12 +281,24 @@ span {
   color: #262522;
 }
 
+.tournament-table tbody tr > td {
+  text-align: center;
+  padding: 0.5rem;
+  border-bottom: 1px solid #262522;
+}
+
 .tournament-table tbody tr > td:nth-of-type(2) {
   text-align: left;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
-  max-width: fit-content;
+  max-width: 12rem;
+  width: 12rem;
+}
+
+.tournament-table tbody tr > td:nth-of-type(2) a {
+  text-decoration-line: none;
+  color: #ca9372;
 }
 
 #account-info-name,
@@ -687,9 +699,19 @@ td.username {
   #bookmarks-list div.match-entry > table > tbody > tr td.result-cell {
     display: inline-block;
   }
+
+  .tournament-table tbody tr > td:nth-of-type(2) {
+    max-width: 15rem;
+    width: 15rem;
+  }
 }
 
 @media only screen and (min-width: 768px) {
+  .tournament-table tbody tr > td:nth-of-type(2) {
+    max-width: 30rem;
+    width: 30rem;
+  }
+
   .content-box {
     padding: 0.25rem 0.5rem;
   }

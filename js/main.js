@@ -65,6 +65,9 @@ const $tabContainer = document.querySelector('.tab-container');
 const $tabs = document.querySelectorAll('.tab');
 const $views = document.querySelectorAll('.view');
 
+// Tournaments
+const $tournamentTable = document.querySelector('.tournament-table > tbody');
+
 const months = [
   'January',
   'February',
@@ -129,6 +132,9 @@ $tabContainer.addEventListener('click', function (event) {
       } else {
         view.className = 'view hidden';
       }
+    }
+    if (dataView === 'tournaments' && !data.currentPlayer.tournaments) {
+      insertTournaments();
     }
   }
 });
@@ -232,6 +238,63 @@ $matchListDate.addEventListener('change', function (event) {
   insertArchives(getMonthlyGameEndpoint(month, year));
 });
 
+function clearTournamentTable() {
+  while ($tournamentTable.firstChild) {
+    $tournamentTable.removeChild($tournamentTable.firstChild);
+  }
+}
+
+function renderTournamentTable(tournamentList) {
+  clearTournamentTable();
+  for (let i = 0; i < tournamentList.length; i++) {
+    let { url, placement, points_award: points } = tournamentList[i];
+    if (!placement) {
+      placement = '-';
+    }
+
+    if (!points) {
+      points = '-';
+    }
+    const name = getTournamentName(url);
+
+    const $tr = `<tr>
+                  <td>${i + 1}</td>
+                  <td>
+                    <a href="${url}" target="_blank">${name}</a>
+                  </td>
+                  <td>${placement}</td>
+                  <td>${points}</td>
+                </tr>`;
+    $tournamentTable.innerHTML += $tr;
+  }
+}
+
+function getTournamentName(url) {
+  let index = url.length - 1;
+  let name = '';
+  while (url[index] !== '/') {
+    name += url[index];
+    index--;
+  }
+
+  const words = name.split('-');
+  const curatedWords = words.filter(element => element !== '');
+  return curatedWords.reverse().join(' ');
+}
+
+function insertTournaments() {
+  const xhr = new XMLHttpRequest();
+  xhr.open('GET', `https://api.chess.com/pub/player/${data.currentPlayer.username}/tournaments`);
+  xhr.responseType = 'json';
+  xhr.addEventListener('load', function () {
+    if (xhr.status === 200) {
+      data.currentPlayer.tournaments = xhr.response;
+      renderTournamentTable(xhr.response.finished);
+    }
+  });
+  xhr.send();
+}
+
 function getLeaderboard() {
   const xhr = new XMLHttpRequest();
   xhr.open('GET', 'https://api.chess.com/pub/leaderboards');
@@ -299,7 +362,7 @@ function renderLeaderboard(index) {
 }
 
 function getPlayerInfo(username) {
-  data.currentUsername = username.toLowerCase();
+  data.currentPlayer.username = username.toLowerCase();
   const xhr = new XMLHttpRequest();
   xhr.open('GET', `https://api.chess.com/pub/player/${username.toLowerCase()}`);
   xhr.responseType = 'json';
@@ -432,10 +495,11 @@ function renderStat(type, stats) {
 
 function insertStats() {
   const xhr = new XMLHttpRequest();
-  xhr.open('GET', `https://api.chess.com/pub/player/${data.currentUsername}/stats`);
+  xhr.open('GET', `https://api.chess.com/pub/player/${data.currentPlayer.username}/stats`);
   xhr.responseType = 'json';
   xhr.addEventListener('load', function (event) {
     if (xhr.status === 200) {
+      data.currentPlayer.stats = xhr.response;
       const gameModes = Object.keys(xhr.response);
       gameModes.forEach((key, index) => {
         if (key !== 'fide') {
@@ -478,10 +542,11 @@ function renderClub(club) {
 
 function insertClubs() {
   const xhr = new XMLHttpRequest();
-  xhr.open('GET', `https://api.chess.com/pub/player/${data.currentUsername}/clubs`);
+  xhr.open('GET', `https://api.chess.com/pub/player/${data.currentPlayer.username}/clubs`);
   xhr.responseType = 'json';
   xhr.addEventListener('load', function (event) {
     if (xhr.status === 200) {
+      data.currentPlayer.clubs = xhr.response;
       const clubs = xhr.response.clubs;
       let maxDisplay = 0;
 
@@ -609,11 +674,12 @@ function getArchive() {
   const xhr = new XMLHttpRequest();
   xhr.open(
     'GET',
-    `https://api.chess.com/pub/player/${data.currentUsername}/games/archives`
+    `https://api.chess.com/pub/player/${data.currentPlayer.username}/games/archives`
   );
   xhr.responseType = 'json';
   xhr.addEventListener('load', function (event) {
     if (xhr.status === 200) {
+      data.currentPlayer.archives = xhr.response;
       if (xhr.response.archives.length === 0) {
         toggleMatchErrorMsg();
       } else {
@@ -705,7 +771,7 @@ function parsePGN(pgn, white, black) {
     // penultimate character is always a number 0, 1, or 2
     if (i === pgn.length - 2) {
       if (pgn[i] === '0') {
-        if (data.currentUsername === white) {
+        if (data.currentPlayer.username === white) {
           result = 'Win';
           colorStr = 'text-green';
           bgColorStr = 'bg-win';
@@ -717,7 +783,7 @@ function parsePGN(pgn, white, black) {
           data.loss++;
         }
       } else if (pgn[i] === '1') {
-        if (data.currentUsername === black) {
+        if (data.currentPlayer.username === black) {
           result = 'Win';
           colorStr = 'text-green';
           bgColorStr = 'bg-win';
@@ -785,7 +851,7 @@ function getMonthAndYear(endpointStr) {
 function getMonthlyGameEndpoint(month, year) {
   const date = [month, '1, ', year];
   const monthNum = `0${new Date(Date.parse(date)).getMonth() + 1}`;
-  return `https://api.chess.com/pub/player/${data.currentUsername}/games/${year}/${monthNum}`;
+  return `https://api.chess.com/pub/player/${data.currentPlayer.username}/games/${year}/${monthNum}`;
 }
 
 function updateWPCTElements() {
