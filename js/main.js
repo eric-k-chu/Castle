@@ -813,37 +813,11 @@ function parsePGN(pgn, white, black) {
 
 // archive endpoint last part example: ..games/2021/07"
 function getMonthAndYear(endpointStr) {
-  const year = [];
-  const month = [];
-  let monthStr = '';
-  let monthIndex = 0;
-  let condition = false;
-  let count = 0;
-  let i = endpointStr.length - 1;
+  const month = endpointStr.slice(-2);
+  const year = endpointStr.slice(-7).slice(0, -3);
+  const index = (month[0] === '0') ? (Number(month[1]) - 1) : (Number(month) - 1);
+  return [months[index], year];
 
-  while (count < 8) {
-    if (endpointStr[i] === '/') {
-      condition = true;
-    }
-    if (endpointStr[i] !== '/') {
-      if (!condition) {
-        month.unshift(endpointStr[i]);
-      } else {
-        year.unshift(endpointStr[i]);
-      }
-    }
-    count++;
-    i--;
-  }
-  monthStr = month.join('');
-
-  if (month[0] === '0') {
-    monthIndex = Number(monthStr.slice(1)) - 1;
-  } else {
-    monthIndex = Number(monthStr) - 1;
-  }
-
-  return [months[monthIndex], year.join('')];
 }
 
 // 'string' will be in the format "Month Year"
