@@ -714,6 +714,13 @@ function getArchive() {
             $optGroup.appendChild(renderOption(month));
           }
         }
+
+        xhr.response.archives.forEach((n, i, arr) => {
+          const [month, year] = getMonthAndYear(n);
+          const $optGroup = document.querySelector(
+            `#match-list-date optgroup[label="${year}"`);
+        });
+
         const lastEndpoint = xhr.response.archives[lastIndex];
         insertArchives(lastEndpoint);
       }
