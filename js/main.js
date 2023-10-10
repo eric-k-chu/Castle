@@ -247,7 +247,7 @@ function clearTournamentTable() {
 function renderTournamentTable(tournamentList) {
   clearTournamentTable();
   for (let i = 0; i < tournamentList.length; i++) {
-    let { url, placement, points_award: points } = tournamentList[i];
+    let { url, placement, points_awarded: points } = tournamentList[i];
     if (!placement) {
       placement = '-';
     }
