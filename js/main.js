@@ -270,16 +270,12 @@ function renderTournamentTable(tournamentList) {
 }
 
 function getTournamentName(url) {
-  let index = url.length - 1;
-  let name = '';
-  while (url[index] !== '/') {
-    name += url[index];
-    index--;
-  }
-
-  const words = name.split('-');
-  const curatedWords = words.filter(element => element !== '');
-  return curatedWords.reverse().join(' ');
+  const words = url.split('/', 5);
+  const name = words[4]
+    .split('-')
+    .filter(char => char !== '')
+    .join(' ');
+  return name;
 }
 
 function insertTournaments() {
