@@ -120,7 +120,7 @@ $selectContainer.addEventListener('click', function (event) {
   if (event.target.matches('.select')) {
     const type = event.target.getAttribute('id').replace('-', '_');
     $selects.forEach(n => {
-      n.className = (n === event.target) ? 'select active' : 'select';
+      n.className = n === event.target ? 'select active' : 'select';
     });
     renderTournamentTable(data.currentPlayer.tournaments[type]);
   }
@@ -130,10 +130,11 @@ $tabContainer.addEventListener('click', function (event) {
   if (event.target.matches('.tab')) {
     const dataView = event.target.getAttribute('data-view');
     $tabs.forEach(n => {
-      n.className = (n === event.target) ? 'tab active' : 'tab';
+      n.className = n === event.target ? 'tab active' : 'tab';
     });
     $views.forEach(n => {
-      n.className = (n.getAttribute('data-view') === dataView) ? 'view' : 'view hidden';
+      n.className =
+        n.getAttribute('data-view') === dataView ? 'view' : 'view hidden';
     });
     if (dataView === 'tournaments' && !data.currentPlayer.tournaments) {
       insertTournaments();
@@ -238,7 +239,8 @@ $forms[1].addEventListener('submit', function (event) {
 $matchListDate.addEventListener('change', function (event) {
   clearMatchList();
   const month = $matchListDate.value;
-  const year = $matchListDate.options[$matchListDate.selectedIndex].parentElement.label;
+  const year =
+    $matchListDate.options[$matchListDate.selectedIndex].parentElement.label;
   insertArchives(getMonthlyGameEndpoint(month, year));
 });
 
@@ -271,16 +273,17 @@ function renderTournamentTable(tournamentList) {
 
 function getTournamentName(url) {
   const words = url.split('/', 6);
-  const name = words[words.length - 1]
-    .split('-')
-    .filter(char => char !== '');
+  const name = words[words.length - 1].split('-').filter(char => char !== '');
   const nameCapitalize = name.map(n => n[0].toUpperCase() + n.slice(1));
   return nameCapitalize.join(' ');
 }
 
 function insertTournaments() {
   const xhr = new XMLHttpRequest();
-  xhr.open('GET', `https://api.chess.com/pub/player/${data.currentPlayer.username}/tournaments`);
+  xhr.open(
+    'GET',
+    `https://api.chess.com/pub/player/${data.currentPlayer.username}/tournaments`
+  );
   xhr.responseType = 'json';
   xhr.addEventListener('load', function () {
     if (xhr.status === 200) {
@@ -350,7 +353,6 @@ function renderLeaderboard(index) {
                 </tr>`;
       $leaderboardBody.innerHTML += $entry;
     });
-
   }
 }
 
@@ -387,7 +389,16 @@ function getPlayerInfo(username) {
   xhr.send();
 }
 
-function insertAccountInfo({ avatar, name, username, followers, country, location, joined, league }) {
+function insertAccountInfo({
+  avatar,
+  name,
+  username,
+  followers,
+  country,
+  location,
+  joined,
+  league
+}) {
   $accountInfoUser.textContent = username;
   $accountInfoImg.alt = `${username} avatar`;
   const countryCode = country.slice(-2).toLowerCase();
@@ -489,7 +500,10 @@ function renderStat(type, stats) {
 
 function insertStats() {
   const xhr = new XMLHttpRequest();
-  xhr.open('GET', `https://api.chess.com/pub/player/${data.currentPlayer.username}/stats`);
+  xhr.open(
+    'GET',
+    `https://api.chess.com/pub/player/${data.currentPlayer.username}/stats`
+  );
   xhr.responseType = 'json';
   xhr.addEventListener('load', function (event) {
     if (xhr.status === 200) {
@@ -536,7 +550,10 @@ function renderClub(club) {
 
 function insertClubs() {
   const xhr = new XMLHttpRequest();
-  xhr.open('GET', `https://api.chess.com/pub/player/${data.currentPlayer.username}/clubs`);
+  xhr.open(
+    'GET',
+    `https://api.chess.com/pub/player/${data.currentPlayer.username}/clubs`
+  );
   xhr.responseType = 'json';
   xhr.addEventListener('load', function (event) {
     if (xhr.status === 200) {
@@ -551,7 +568,9 @@ function insertClubs() {
         $msg.appendChild($p);
         $clubsTable.append($msg);
       } else {
-        clubs.forEach((n, i) => { $clubsTable.appendChild(renderClub(n)); });
+        clubs.forEach((n, i) => {
+          $clubsTable.appendChild(renderClub(n));
+        });
       }
     } else {
       handleError(xhr.status, 'clubs');
@@ -560,7 +579,16 @@ function insertClubs() {
   xhr.send();
 }
 
-function renderMatch({ url, pgn, end_time: endTime, uuid, time_class: timeClass, rules, white, black }) {
+function renderMatch({
+  url,
+  pgn,
+  end_time: endTime,
+  uuid,
+  time_class: timeClass,
+  rules,
+  white,
+  black
+}) {
   const mode = getMode(timeClass, rules);
   const { monthAbbr, day, year } = getDateObj(endTime);
   const date = `${monthAbbr} ${day}, ${year}`;
@@ -670,7 +698,8 @@ function getArchive() {
         xhr.response.archives.forEach((n, i, arr) => {
           const [month, year] = getMonthAndYear(arr[lastIndex - i]);
           const $optGroup = document.querySelector(
-            `#match-list-date optgroup[label="${year}"`);
+            `#match-list-date optgroup[label="${year}"`
+          );
           if (!$optGroup) {
             const $newOptGroup = $matchListDate.appendChild(
               renderOptGroup(year)
@@ -801,9 +830,8 @@ function parsePGN(pgn, white, black) {
 function getMonthAndYear(endpointStr) {
   const month = endpointStr.slice(-2);
   const year = endpointStr.slice(-7).slice(0, -3);
-  const index = (month[0] === '0') ? (Number(month[1]) - 1) : (Number(month) - 1);
+  const index = month[0] === '0' ? Number(month[1]) - 1 : Number(month) - 1;
   return [months[index], year];
-
 }
 
 // 'string' will be in the format "Month Year"
@@ -840,7 +868,9 @@ function updateWPCTElements() {
 
 function clearWPCTElement() {
   $winPCT.textContent = '';
-  $wld.forEach((n, i) => { n.textContent = ''; });
+  $wld.forEach((n, i) => {
+    n.textContent = '';
+  });
 }
 
 function clearTableElements() {
