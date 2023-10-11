@@ -227,12 +227,18 @@ $bookmarksList.addEventListener('animationend', function (event) {
 $forms[0].addEventListener('submit', function (event) {
   event.preventDefault();
   getPlayerInfo($forms[0][0].value);
+  insertStats();
+  insertClubs();
+  getArchive();
   viewSwap($playerInfo);
 });
 
 $forms[1].addEventListener('submit', function (event) {
   event.preventDefault();
   getPlayerInfo($forms[1][0].value);
+  insertStats();
+  insertClubs();
+  getArchive();
   viewSwap($playerInfo);
 });
 
@@ -368,18 +374,8 @@ function getPlayerInfo(username) {
       clearWPCTElement();
       clearTableElements();
       clearMatchErrorMsg();
+      insertAccountInfo(xhr.response);
       viewSwap($playerInfo);
-      for (let i = 0; i < 4; i++) {
-        if (i === 0) {
-          insertAccountInfo(xhr.response);
-        } else if (i === 1) {
-          insertStats();
-        } else if (i === 2) {
-          insertClubs();
-        } else if (i === 3) {
-          getArchive();
-        }
-      }
       event.target.value = '';
     } else {
       $errorMsg.textContent = `Unable to find ${event.target.value}`;
