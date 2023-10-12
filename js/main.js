@@ -762,9 +762,9 @@ function getMode(timeClass, rules) {
 }
 
 function parsePGN(pgn, white, black) {
-  let flag1 = false;
-  let flag2 = false;
-  const flag3 = pgn.includes('{');
+  let isTimeCodeEnd = false;
+  let isMoveNotation = false;
+  const hasTimeCode = pgn.includes('{');
   const moveCount = [];
   let result = '';
   let colorStr = '';
@@ -773,21 +773,21 @@ function parsePGN(pgn, white, black) {
   let i = pgn.length - 1;
 
   while (moveCount.length < 2) {
-    if (flag2 && /[0-9]/.test(pgn[i])) {
+    if (isMoveNotation && /[0-9]/.test(pgn[i])) {
       moveCount.unshift(pgn[i]);
     }
 
-    if (pgn[i] === '{') {
-      flag1 = true;
-    }
+    if (hasTimeCode) {
+      if (pgn[i] === '{') {
+        isTimeCodeEnd = true;
+      }
 
-    if (flag3) {
-      if (flag1 && pgn[i] === '.') {
-        flag2 = true;
+      if (isTimeCodeEnd && pgn[i] === '.') {
+        isMoveNotation = true;
       }
     } else {
       if (pgn[i] === '.') {
-        flag2 = true;
+        isMoveNotation = true;
       }
     }
 
