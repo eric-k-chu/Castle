@@ -772,7 +772,7 @@ function parsePGN(pgn, white, black) {
 
   let i = pgn.length - 1;
 
-  while (moveCount.length < 2) {
+  while (moveCount.length < 2 || /[0-9]/.test(pgn[i + 1])) {
     if (isMoveNotation && /[0-9]/.test(pgn[i])) {
       moveCount.unshift(pgn[i]);
     }
@@ -815,7 +815,6 @@ function parsePGN(pgn, white, black) {
     }
     i--;
   }
-
   return {
     resultStr: result,
     moves: moveCount.join(''),
