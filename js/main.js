@@ -14,8 +14,6 @@ const $leaderboard = document.querySelector('#leaderboard');
 const $bookmarks = document.querySelector('#bookmarks');
 const $dailyPuzzle = document.querySelector('#daily-puzzle');
 
-const $errorMsg = document.querySelector('#error-msg');
-
 // Account Info
 const $accountInfoImg = document.querySelector('#account-info-img');
 const $accountInfoUser = document.querySelector('#account-info-username');
@@ -231,6 +229,7 @@ $forms[0].addEventListener('submit', function (event) {
   insertClubs();
   getArchive();
   viewSwap($playerInfo);
+  $forms[0][0].value = '';
 });
 
 $forms[1].addEventListener('submit', function (event) {
@@ -240,6 +239,7 @@ $forms[1].addEventListener('submit', function (event) {
   insertClubs();
   getArchive();
   viewSwap($playerInfo);
+  $forms[1][0].value = '';
 });
 
 $matchListDate.addEventListener('change', function (event) {
@@ -364,6 +364,9 @@ function renderLeaderboard(index) {
 }
 
 function getPlayerInfo(username) {
+  clearWPCTElement();
+  clearTableElements();
+  clearMatchErrorMsg();
   data.currentPlayer = {};
   data.currentPlayer.username = username.toLowerCase();
   const xhr = new XMLHttpRequest();
@@ -371,16 +374,10 @@ function getPlayerInfo(username) {
   xhr.responseType = 'json';
   xhr.addEventListener('load', function () {
     if (xhr.status === 200) {
-      clearWPCTElement();
-      clearTableElements();
-      clearMatchErrorMsg();
       insertAccountInfo(xhr.response);
       viewSwap($playerInfo);
-      event.target.value = '';
     } else {
-      $errorMsg.textContent = `Unable to find ${event.target.value}`;
       viewSwap($failedSearch);
-      event.target.value = '';
     }
   });
   xhr.send();
@@ -496,6 +493,10 @@ function renderStat(type, stats) {
 }
 
 function insertStats() {
+  if (!data.currentPlayer.username) {
+    return;
+  }
+
   const xhr = new XMLHttpRequest();
   xhr.open(
     'GET',
@@ -546,6 +547,9 @@ function renderClub(club) {
 }
 
 function insertClubs() {
+  if (!data.currentPlayer.username) {
+    return;
+  }
   const xhr = new XMLHttpRequest();
   xhr.open(
     'GET',
@@ -678,6 +682,9 @@ function insertArchives(game) {
 }
 
 function getArchive() {
+  if (!data.currentPlayer.username) {
+    return;
+  }
   const xhr = new XMLHttpRequest();
   xhr.open(
     'GET',
@@ -820,7 +827,6 @@ function getMonthAndYear(endpointStr) {
   return [months[index], year];
 }
 
-// 'string' will be in the format "Month Year"
 function getMonthlyGameEndpoint(month, year) {
   const date = [month, '1, ', year];
   const monthNum = `0${new Date(Date.parse(date)).getMonth() + 1}`;
