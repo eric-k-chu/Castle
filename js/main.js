@@ -671,11 +671,16 @@ function getMonthlyArchive(game) {
   xhr.open('GET', game);
   xhr.responseType = 'json';
   xhr.addEventListener('load', function (event) {
-    const lastIndex = xhr.response.games.length - 1;
 
-    xhr.response.games.forEach((n, i, arr) => {
-      $matchList.innerHTML += renderMatch(arr[lastIndex - i]);
-    });
+    const games = xhr.response.games;
+    let count = 0;
+    for (let i = games.length - 1; i >= 0; i--) {
+      if (count >= 50) {
+        break;
+      }
+      $matchList.innerHTML += renderMatch(games[i]);
+      count++;
+    }
     updateWPCTElements();
   });
   xhr.send();
