@@ -145,10 +145,10 @@ $refreshBtns.addEventListener('click', function (event) {
     const target = event.target.closest('button').id;
     if (target === 'refresh-stats') {
       clearStats();
-      insertStats();
+      getStats();
     } else if (target === 'refresh-clubs') {
       clearClubs();
-      insertClubs();
+      getClubs();
     } else if (target === 'refresh-matches') {
       clearMatchList();
       getArchives();
@@ -225,8 +225,8 @@ $bookmarksList.addEventListener('animationend', function (event) {
 $forms[0].addEventListener('submit', function (event) {
   event.preventDefault();
   getPlayerInfo($forms[0][0].value);
-  insertStats();
-  insertClubs();
+  getStats();
+  getClubs();
   getArchives();
   viewSwap($playerInfo);
   $forms[0][0].value = '';
@@ -235,8 +235,8 @@ $forms[0].addEventListener('submit', function (event) {
 $forms[1].addEventListener('submit', function (event) {
   event.preventDefault();
   getPlayerInfo($forms[1][0].value);
-  insertStats();
-  insertClubs();
+  getStats();
+  getClubs();
   getArchives();
   viewSwap($playerInfo);
   $forms[1][0].value = '';
@@ -247,7 +247,7 @@ $matchListDate.addEventListener('change', function (event) {
   const month = $matchListDate.value;
   const year =
     $matchListDate.options[$matchListDate.selectedIndex].parentElement.label;
-  insertArchives(getMonthlyGameEndpoint(month, year));
+  getMonthlyArchive(getMonthlyGameEndpoint(month, year));
 });
 
 function clearTournamentTable() {
@@ -492,7 +492,7 @@ function renderStat(type, stats) {
   return $tr;
 }
 
-function insertStats() {
+function getStats() {
   if (!data.currentPlayer.username) {
     return;
   }
@@ -546,7 +546,7 @@ function renderClub(club) {
   return $row;
 }
 
-function insertClubs() {
+function getClubs() {
   if (!data.currentPlayer.username) {
     return;
   }
@@ -666,7 +666,7 @@ function renderMatch({
   return $entry;
 }
 
-function insertArchives(game) {
+function getMonthlyArchive(game) {
   const xhr = new XMLHttpRequest();
   xhr.open('GET', game);
   xhr.responseType = 'json';
@@ -715,7 +715,7 @@ function getArchives() {
         });
 
         const lastEndpoint = xhr.response.archives[lastIndex];
-        insertArchives(lastEndpoint);
+        getMonthlyArchive(lastEndpoint);
       }
     } else {
       handleError(xhr.status, 'matches');
