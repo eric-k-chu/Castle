@@ -761,7 +761,7 @@ function parsePGN(pgn, white, black) {
   let i = pgn.length - 1;
 
   while (moveCount.length < 2) {
-    if (flag2 === true && /[0-9]/.test(pgn[i])) {
+    if (flag2 && /[0-9]/.test(pgn[i])) {
       moveCount.unshift(pgn[i]);
     }
 
@@ -769,8 +769,8 @@ function parsePGN(pgn, white, black) {
       flag1 = true;
     }
 
-    if (flag3 === true) {
-      if (flag1 === true && pgn[i] === '.') {
+    if (flag3) {
+      if (flag1 && pgn[i] === '.') {
         flag2 = true;
       }
     } else {
