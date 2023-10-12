@@ -14,8 +14,6 @@ const $leaderboard = document.querySelector('#leaderboard');
 const $bookmarks = document.querySelector('#bookmarks');
 const $dailyPuzzle = document.querySelector('#daily-puzzle');
 
-const $errorMsg = document.querySelector('#error-msg');
-
 // Account Info
 const $accountInfoImg = document.querySelector('#account-info-img');
 const $accountInfoUser = document.querySelector('#account-info-username');
@@ -147,13 +145,13 @@ $refreshBtns.addEventListener('click', function (event) {
     const target = event.target.closest('button').id;
     if (target === 'refresh-stats') {
       clearStats();
-      insertStats();
+      getStats();
     } else if (target === 'refresh-clubs') {
       clearClubs();
-      insertClubs();
+      getClubs();
     } else if (target === 'refresh-matches') {
       clearMatchList();
-      getArchive();
+      getArchives();
     }
   }
 });
@@ -227,19 +225,19 @@ $bookmarksList.addEventListener('animationend', function (event) {
 $forms[0].addEventListener('submit', function (event) {
   event.preventDefault();
   getPlayerInfo($forms[0][0].value);
-  insertStats();
-  insertClubs();
-  getArchive();
-  viewSwap($playerInfo);
+  getStats();
+  getClubs();
+  getArchives();
+  $forms[0][0].value = '';
 });
 
 $forms[1].addEventListener('submit', function (event) {
   event.preventDefault();
   getPlayerInfo($forms[1][0].value);
-  insertStats();
-  insertClubs();
-  getArchive();
-  viewSwap($playerInfo);
+  getStats();
+  getClubs();
+  getArchives();
+  $forms[1][0].value = '';
 });
 
 $matchListDate.addEventListener('change', function (event) {
@@ -247,7 +245,7 @@ $matchListDate.addEventListener('change', function (event) {
   const month = $matchListDate.value;
   const year =
     $matchListDate.options[$matchListDate.selectedIndex].parentElement.label;
-  insertArchives(getMonthlyGameEndpoint(month, year));
+  getMonthlyArchive(getMonthlyGameEndpoint(month, year));
 });
 
 function clearTournamentTable() {
@@ -364,6 +362,9 @@ function renderLeaderboard(index) {
 }
 
 function getPlayerInfo(username) {
+  clearWPCTElement();
+  clearTableElements();
+  clearMatchErrorMsg();
   data.currentPlayer = {};
   data.currentPlayer.username = username.toLowerCase();
   const xhr = new XMLHttpRequest();
@@ -371,16 +372,10 @@ function getPlayerInfo(username) {
   xhr.responseType = 'json';
   xhr.addEventListener('load', function () {
     if (xhr.status === 200) {
-      clearWPCTElement();
-      clearTableElements();
-      clearMatchErrorMsg();
       insertAccountInfo(xhr.response);
       viewSwap($playerInfo);
-      event.target.value = '';
     } else {
-      $errorMsg.textContent = `Unable to find ${event.target.value}`;
       viewSwap($failedSearch);
-      event.target.value = '';
     }
   });
   xhr.send();
@@ -495,7 +490,11 @@ function renderStat(type, stats) {
   return $tr;
 }
 
-function insertStats() {
+function getStats() {
+  if (!data.currentPlayer.username) {
+    return;
+  }
+
   const xhr = new XMLHttpRequest();
   xhr.open(
     'GET',
@@ -545,7 +544,10 @@ function renderClub(club) {
   return $row;
 }
 
-function insertClubs() {
+function getClubs() {
+  if (!data.currentPlayer.username) {
+    return;
+  }
   const xhr = new XMLHttpRequest();
   xhr.open(
     'GET',
@@ -662,22 +664,30 @@ function renderMatch({
   return $entry;
 }
 
-function insertArchives(game) {
+function getMonthlyArchive(game) {
   const xhr = new XMLHttpRequest();
   xhr.open('GET', game);
   xhr.responseType = 'json';
   xhr.addEventListener('load', function (event) {
-    const lastIndex = xhr.response.games.length - 1;
 
-    xhr.response.games.forEach((n, i, arr) => {
-      $matchList.innerHTML += renderMatch(arr[lastIndex - i]);
-    });
+    const games = xhr.response.games;
+    let count = 0;
+    for (let i = games.length - 1; i >= 0; i--) {
+      if (count >= 50) {
+        break;
+      }
+      $matchList.innerHTML += renderMatch(games[i]);
+      count++;
+    }
     updateWPCTElements();
   });
   xhr.send();
 }
 
-function getArchive() {
+function getArchives() {
+  if (!data.currentPlayer.username) {
+    return;
+  }
   const xhr = new XMLHttpRequest();
   xhr.open(
     'GET',
@@ -708,7 +718,7 @@ function getArchive() {
         });
 
         const lastEndpoint = xhr.response.archives[lastIndex];
-        insertArchives(lastEndpoint);
+        getMonthlyArchive(lastEndpoint);
       }
     } else {
       handleError(xhr.status, 'matches');
@@ -750,9 +760,9 @@ function getMode(timeClass, rules) {
 }
 
 function parsePGN(pgn, white, black) {
-  let flag1 = false;
-  let flag2 = false;
-  const flag3 = pgn.includes('{');
+  let isTimeCodeEnd = false;
+  let isMoveNotation = false;
+  const hasTimeCode = pgn.includes('{');
   const moveCount = [];
   let result = '';
   let colorStr = '';
@@ -760,61 +770,49 @@ function parsePGN(pgn, white, black) {
 
   let i = pgn.length - 1;
 
-  while (moveCount.length < 2) {
-    if (flag2 === true && /[0-9]/.test(pgn[i])) {
+  while (moveCount.length < 2 || /[0-9]/.test(pgn[i + 1])) {
+    if (isMoveNotation && /[0-9]/.test(pgn[i])) {
       moveCount.unshift(pgn[i]);
     }
 
-    if (pgn[i] === '{') {
-      flag1 = true;
-    }
+    if (hasTimeCode) {
+      if (pgn[i] === '{') {
+        isTimeCodeEnd = true;
+      }
 
-    if (flag3 === true) {
-      if (flag1 === true && pgn[i] === '.') {
-        flag2 = true;
+      if (isTimeCodeEnd && pgn[i] === '.') {
+        isMoveNotation = true;
       }
     } else {
       if (pgn[i] === '.') {
-        flag2 = true;
+        isMoveNotation = true;
       }
     }
 
     // penultimate character is always a number 0, 1, or 2
     if (i === pgn.length - 2) {
-      if (pgn[i] === '0') {
-        if (data.currentPlayer.username === white) {
-          result = 'Win';
-          colorStr = 'text-green';
-          bgColorStr = 'bg-win';
-          data.win++;
-        } else {
-          result = 'Loss';
-          colorStr = 'text-red';
-          bgColorStr = 'bg-loss';
-          data.loss++;
-        }
-      } else if (pgn[i] === '1') {
-        if (data.currentPlayer.username === black) {
-          result = 'Win';
-          colorStr = 'text-green';
-          bgColorStr = 'bg-win';
-          data.win++;
-        } else {
-          result = 'Loss';
-          colorStr = 'text-red';
-          bgColorStr = 'bg-loss';
-          data.loss++;
-        }
+      if (
+        (pgn[i] === '0' && data.currentPlayer.username === white) ||
+        (pgn[i] === '1' && data.currentPlayer.username === black)
+      ) {
+        result = 'Win';
+        colorStr = 'text-green';
+        bgColorStr = 'bg-win';
+        data.win++;
       } else if (pgn[i] === '2') {
         result = 'Draw';
         colorStr = 'text-gray';
         bgColorStr = 'bg-draw';
         data.draw++;
+      } else {
+        result = 'Loss';
+        colorStr = 'text-red';
+        bgColorStr = 'bg-loss';
+        data.loss++;
       }
     }
     i--;
   }
-
   return {
     resultStr: result,
     moves: moveCount.join(''),
@@ -831,7 +829,6 @@ function getMonthAndYear(endpointStr) {
   return [months[index], year];
 }
 
-// 'string' will be in the format "Month Year"
 function getMonthlyGameEndpoint(month, year) {
   const date = [month, '1, ', year];
   const monthNum = `0${new Date(Date.parse(date)).getMonth() + 1}`;
