@@ -20,7 +20,6 @@
 <body class="bg-dark-gray">
   <header class="bg-blue-2">
     <div class="container">
-
       <div class="row align-center justify-between">
         <button class="row align-center gap-half" type="button" id="logo">
           <i class="fa-regular fa-chess-rook text-green icon-med"></i>
@@ -95,41 +94,48 @@
 
       <div id="player-info-header">
         <div class="container text-white">
-          <div class="row align-center">
-            <div class="row column-full content-box align-center padding-1">
-              <div class="mr-1">
-                <div class="avatar-wrapper">
-                  <img id="account-info-img" src="" alt="user avatar" />
-                </div>
+          <div class="row align-center column-full content-box padding-1">
+            <div class="mr-1">
+              <div class="avatar-wrapper">
+                <img id="account-info-img" src="" alt="user avatar" />
               </div>
-              <div class="col">
-                <div class="row gap-1 align-center leading-1">
-                  <h3 id="account-info-username"></h3>
-                  <span id="account-info-country"></span>
-                </div>
-                <div class="row">
-                  <p id="account-info-name" class="font-italic"></p>
-                </div>
-                <div class="row gap-1 mtb-three-fourths">
-                  <i class="fa-solid fa-user">
-                    <span class="font-jetbrains font-thin" id="account-info-followers"></span>
-                  </i>
-                  <i class="fa-solid fa-location-dot">
-                    <span class="font-jetbrains font-thin" id="account-info-location"></span>
-                  </i>
-                </div>
-                <div class="row mtb-three-fourths">
-                  <i class="fa-regular fa-calendar-days">
-                    <span class="font-jetbrains font-thin" id="account-info-joined"></span>
-                  </i>
-                </div>
+            </div>
+            <div class="col">
+              <div class="row gap-1 align-center leading-1">
+                <h3 id="account-info-username"></h3>
+                <span id="account-info-country"></span>
+              </div>
+              <div class="row">
+                <p id="account-info-name" class="font-italic"></p>
+              </div>
+              <div class="row gap-1 mtb-three-fourths">
+                <i class="fa-solid fa-user">
+                  <span class="font-jetbrains font-thin" id="account-info-followers"></span>
+                </i>
+                <i class="fa-solid fa-location-dot">
+                  <span class="font-jetbrains font-thin" id="account-info-location"></span>
+                </i>
+              </div>
+              <div class="row mtb-three-fourths">
+                <i class="fa-regular fa-calendar-days">
+                  <span class="font-jetbrains font-thin" id="account-info-joined"></span>
+                </i>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div id="player-info-body">
+      <div class="tab-views">
+        <div class="container text-white">
+          <div class="tab-container">
+            <button class="tab active" data-view="summary" type="button">Summary</button>
+            <button class="tab" data-view="tournaments" type="button">Tournaments</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="view" id="player-summary" data-view="summary">
         <div class="container text-white">
           <div class="row">
             <div class="col mr-1">
@@ -183,12 +189,12 @@
                 <h3 class="column-full text-center hidden" id="match-error-msg">No games found.</h3>
                 <div class="col align-center">
                   <h3 id="win-pct"></h3>
-                  <div id="wdl">
+                  <div id="wld">
                     <span id="win"></span>
                     <span>|</span>
-                    <span id="draw"></span>
-                    <span>|</span>
                     <span id="loss"></span>
+                    <span>|</span>
+                    <span id="draw"></span>
                   </div>
                 </div>
               </div>
@@ -197,6 +203,40 @@
           </div>
         </div>
       </div>
+
+      <div class="view hidden" id="player-tournaments" data-view="tournaments">
+
+        <div class="container text-white">
+          <div class="col column-full">
+            <div class="container-3 text-white">
+              <div class="select-container">
+                <button class="select active" type="button" id="finished">
+                  Finished
+                </button>
+                <button class="select" type="button" id="in-progress">
+                  In Progress
+                </button>
+                <button class="select" type="button" id="registered">
+                  Registered
+                </button>
+              </div>
+            </div>
+            <table class="tournament-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Name</th>
+                  <th>Placement</th>
+                  <th>Points</th>
+                </tr>
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
     </div>
 
     <div class="container mt-1 mb-1 hidden" id="leaderboard">

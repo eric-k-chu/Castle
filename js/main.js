@@ -36,12 +36,10 @@ const $matchListDate = document.querySelector('#match-list-date');
 const $matchErrorMsg = document.querySelector('#match-error-msg');
 const $matchList = document.querySelector('#match-list');
 const $winPCT = document.querySelector('#win-pct');
-
-// Win Percentage
-const $wdl = document.querySelectorAll('#wdl span');
+const $wld = document.querySelectorAll('#wld span');
 
 // Refresh buttons
-const $refreshBtns = document.querySelector('#player-info-body');
+const $refreshBtns = document.querySelector('#player-summary');
 
 // Leaderboard
 const $leaderboardSelect = document.querySelector('#leaderboard-select');
@@ -59,6 +57,16 @@ const $dailyPuzzleLink = document.querySelector('.board-wrapper');
 const $dailyPuzzleImg = document.querySelector('.board-wrapper img');
 const $dailyPuzzleTitle = document.querySelector('.daily-puzzle-title');
 const $dailyPuzzleTime = document.querySelector('.daily-puzzle-time');
+
+// Tabs
+const $tabContainer = document.querySelector('.tab-container');
+const $tabs = document.querySelectorAll('.tab');
+const $views = document.querySelectorAll('.view');
+
+// Tournaments
+const $tournamentTable = document.querySelector('.tournament-table > tbody');
+const $selectContainer = document.querySelector('.select-container');
+const $selects = document.querySelectorAll('.select');
 
 const months = [
   'January',
@@ -108,6 +116,32 @@ const leagueIcons = {
     'https://www.chess.com/bundles/web/images/leagues/badges/legend.1ea014f3.svg'
 };
 
+$selectContainer.addEventListener('click', function (event) {
+  if (event.target.matches('.select')) {
+    const type = event.target.getAttribute('id').replace('-', '_');
+    $selects.forEach(n => {
+      n.className = n === event.target ? 'select active' : 'select';
+    });
+    renderTournamentTable(data.currentPlayer.tournaments[type]);
+  }
+});
+
+$tabContainer.addEventListener('click', function (event) {
+  if (event.target.matches('.tab')) {
+    const dataView = event.target.getAttribute('data-view');
+    $tabs.forEach(n => {
+      n.className = n === event.target ? 'tab active' : 'tab';
+    });
+    $views.forEach(n => {
+      n.className =
+        n.getAttribute('data-view') === dataView ? 'view' : 'view hidden';
+    });
+    if (dataView === 'tournaments' && !data.currentPlayer.tournaments) {
+      insertTournaments();
+    }
+  }
+});
+
 $refreshBtns.addEventListener('click', function (event) {
   if (event.target.closest('button')) {
     const target = event.target.closest('button').id;
@@ -152,18 +186,20 @@ $logo.addEventListener('click', function (event) {
 });
 
 $matchList.addEventListener('click', function (event) {
-  if (event.target.closest('div.match-entry')) {
-    const $selected = event.target.closest('div.match-entry');
-    if (!data.bookmarks.has($selected.getAttribute('data-id'))) {
-      const entryHTML = $selected.cloneNode(true).outerHTML;
-      const key = $selected.getAttribute('data-id');
-      data.bookmarks.set(key, entryHTML);
-      $bookmarksList.innerHTML = entryHTML;
-      setBookmarkModal('Game added.');
-    } else {
-      setBookmarkModal('Game already saved.');
+  if (event.target.className.includes('fa-bookmark')) {
+    if (event.target.closest('div.match-entry')) {
+      const $selected = event.target.closest('div.match-entry');
+      if (!data.bookmarks.has($selected.getAttribute('data-id'))) {
+        const entryHTML = $selected.cloneNode(true).outerHTML;
+        const key = $selected.getAttribute('data-id');
+        data.bookmarks.set(key, entryHTML);
+        $bookmarksList.innerHTML += entryHTML;
+        setBookmarkModal('Game added.');
+      } else {
+        setBookmarkModal('Game already saved.');
+      }
+      displayBookmarkModal();
     }
-    displayBookmarkModal();
   }
 });
 
@@ -191,21 +227,79 @@ $bookmarksList.addEventListener('animationend', function (event) {
 $forms[0].addEventListener('submit', function (event) {
   event.preventDefault();
   getPlayerInfo($forms[0][0].value);
+  insertStats();
+  insertClubs();
+  getArchive();
   viewSwap($playerInfo);
 });
 
 $forms[1].addEventListener('submit', function (event) {
   event.preventDefault();
   getPlayerInfo($forms[1][0].value);
+  insertStats();
+  insertClubs();
+  getArchive();
   viewSwap($playerInfo);
 });
 
 $matchListDate.addEventListener('change', function (event) {
   clearMatchList();
   const month = $matchListDate.value;
-  const year = $matchListDate.options[$matchListDate.selectedIndex].parentElement.label;
+  const year =
+    $matchListDate.options[$matchListDate.selectedIndex].parentElement.label;
   insertArchives(getMonthlyGameEndpoint(month, year));
 });
+
+function clearTournamentTable() {
+  while ($tournamentTable.firstChild) {
+    $tournamentTable.removeChild($tournamentTable.firstChild);
+  }
+}
+
+function renderTournamentTable(tournamentList) {
+  clearTournamentTable();
+  tournamentList.forEach((n, i) => {
+    let { url, placement, points_awarded: points } = n;
+    const id = n['@id'];
+    placement = placement ?? '-';
+    points = points || '-';
+
+    const name = getTournamentName(id);
+
+    const $tr = `<tr>
+                  <td>${i + 1}</td>
+                  <td>
+                    <a href="${url}" target="_blank">${name}</a>
+                  </td>
+                  <td>${placement}</td>
+                  <td>${points}</td>
+                </tr>`;
+    $tournamentTable.innerHTML += $tr;
+  });
+}
+
+function getTournamentName(url) {
+  const words = url.split('/', 6);
+  const name = words[words.length - 1].split('-').filter(char => char !== '');
+  const nameCapitalize = name.map(n => n[0].toUpperCase() + n.slice(1));
+  return nameCapitalize.join(' ');
+}
+
+function insertTournaments() {
+  const xhr = new XMLHttpRequest();
+  xhr.open(
+    'GET',
+    `https://api.chess.com/pub/player/${data.currentPlayer.username}/tournaments`
+  );
+  xhr.responseType = 'json';
+  xhr.addEventListener('load', function () {
+    if (xhr.status === 200) {
+      data.currentPlayer.tournaments = xhr.response;
+      renderTournamentTable(xhr.response.finished);
+    }
+  });
+  xhr.send();
+}
 
 function getLeaderboard() {
   const xhr = new XMLHttpRequest();
@@ -235,18 +329,16 @@ function renderLeaderboard(index) {
                 <th class="rating">Score</th>
               </tr>`;
     $leaderboardHeader.innerHTML += $header;
-    for (let i = 0; i < rankingList.length; i++) {
-      const user = rankingList[i];
-      const countryCode = user.country.slice(-2).toLowerCase();
-
+    rankingList.forEach((n, i) => {
+      const countryCode = n.country.slice(-2).toLowerCase();
       const $entry = `<tr class="bg-white">
-                  <td class="rank">${user.rank}</td>
-                  <td class="username">${user.username}</td>
-                  <td class="country"><span class="fi fi-${countryCode}"></span></td>
-                  <td class="rating">${user.score}</td>
-                </tr>`;
+            <td class="rank">${n.rank}</td>
+            <td class="username">${n.username}</td>
+            <td class="country"><span class="fi fi-${countryCode}"></span></td>
+            <td class="rating">${n.score}</td>
+          </tr>`;
       $leaderboardBody.innerHTML += $entry;
-    }
+    });
   } else {
     const $header = `<tr>
                 <th class="rank">Rank</th>
@@ -256,25 +348,24 @@ function renderLeaderboard(index) {
                 <th class="win-pct">Win %</th>
               </tr>`;
     $leaderboardHeader.innerHTML += $header;
-    for (let i = 0; i < rankingList.length; i++) {
-      const user = rankingList[i];
-      const countryCode = user.country.slice(-2).toLowerCase();
-      const wpct = getWPCTStr(user.win_count, user.draw_count, user.loss_count);
-
+    rankingList.forEach((n, i) => {
+      const countryCode = n.country.slice(-2).toLowerCase();
+      const wpct = getWPCTStr(n.win_count, n.draw_count, n.loss_count);
       const $entry = `<tr class="bg-white">
-                  <td class="rank">${user.rank}</td>
-                  <td class="username">${user.username}</td>
+                  <td class="rank">${n.rank}</td>
+                  <td class="username">${n.username}</td>
                   <td class="country"><span class="fi fi-${countryCode}"></span></td>
-                  <td class="rating">${user.score}</td>
+                  <td class="rating">${n.score}</td>
                   <td class="win-pct">${wpct}</td>
                 </tr>`;
       $leaderboardBody.innerHTML += $entry;
-    }
+    });
   }
 }
 
 function getPlayerInfo(username) {
-  data.currentUsername = username.toLowerCase();
+  data.currentPlayer = {};
+  data.currentPlayer.username = username.toLowerCase();
   const xhr = new XMLHttpRequest();
   xhr.open('GET', `https://api.chess.com/pub/player/${username.toLowerCase()}`);
   xhr.responseType = 'json';
@@ -283,18 +374,8 @@ function getPlayerInfo(username) {
       clearWPCTElement();
       clearTableElements();
       clearMatchErrorMsg();
+      insertAccountInfo(xhr.response);
       viewSwap($playerInfo);
-      for (let i = 0; i < 4; i++) {
-        if (i === 0) {
-          insertAccountInfo(xhr.response);
-        } else if (i === 1) {
-          insertStats();
-        } else if (i === 2) {
-          insertClubs();
-        } else if (i === 3) {
-          getArchive();
-        }
-      }
       event.target.value = '';
     } else {
       $errorMsg.textContent = `Unable to find ${event.target.value}`;
@@ -305,80 +386,74 @@ function getPlayerInfo(username) {
   xhr.send();
 }
 
-function insertAccountInfo(response) {
-  $accountInfoUser.textContent = response.username;
-  $accountInfoImg.alt = `${response.username} avatar`;
-  const countryCode = response.country.slice(-2).toLowerCase();
+function insertAccountInfo({
+  avatar,
+  name,
+  username,
+  followers,
+  country,
+  location,
+  joined,
+  league
+}) {
+  $accountInfoUser.textContent = username;
+  $accountInfoImg.alt = `${username} avatar`;
+  const countryCode = country.slice(-2).toLowerCase();
   $accountInfoCountry.className = `fi fi-${countryCode}`;
-  $accountInfoFollowers.textContent = ` ${response.followers}`;
-  const { monthFull, day, year } = getDateObj(response.joined);
+  $accountInfoFollowers.textContent = ` ${followers}`;
+  const { monthFull, day, year } = getDateObj(joined);
   $accountInfoJoined.textContent = `Joined ${monthFull} ${day}, ${year}`;
 
-  if (response.name === undefined) {
+  if (name === undefined) {
     $accountInfoName.textContent = 'N/A';
   } else {
-    $accountInfoName.textContent = response.name;
+    $accountInfoName.textContent = name;
   }
 
-  if (response.location === undefined) {
+  if (location === undefined) {
     $accountInfoLocation.textContent = ' N/A';
   } else {
-    $accountInfoLocation.textContent = ` ${response.location}`;
+    $accountInfoLocation.textContent = ` ${location}`;
   }
 
-  if (response.avatar === undefined) {
+  if (avatar === undefined) {
     $accountInfoImg.src = '/images/placeholder-image-square.jpg';
   } else {
-    $accountInfoImg.src = response.avatar;
+    $accountInfoImg.src = avatar;
   }
 
-  if (response.league === undefined) {
+  if (league === undefined) {
     $accountInfoLeague.textContent = 'Unrated';
     $leagueIcon.src = '';
     $leagueIcon.alt = '';
   } else {
-    $accountInfoLeague.textContent = response.league;
-    $leagueIcon.src = leagueIcons[response.league];
-    $leagueIcon.alt = response.league;
+    $accountInfoLeague.textContent = league;
+    $leagueIcon.src = leagueIcons[league];
+    $leagueIcon.alt = league;
   }
 }
 
 function getGame(string) {
-  const obj = {};
   switch (string) {
     case 'chess_daily':
-      obj.name = 'Daily';
-      obj.icon = 'fa-solid fa-sun';
-      return obj;
+      return 'Daily';
     case 'chess960_daily':
-      obj.name = 'Daily 960';
-      obj.icon = 'fa-regular fa-sun';
-      return obj;
+      return 'Daily 960';
     case 'chess_rapid':
-      obj.name = 'Rapid';
-      obj.icon = 'fa-solid fa-stopwatch';
-      return obj;
+      return 'Rapid';
     case 'chess_bullet':
-      obj.name = 'Bullet';
-      obj.icon = 'fa-solid fa-rocket';
-      return obj;
+      return 'Bullet';
     case 'chess_blitz':
-      obj.name = 'Blitz';
-      obj.icon = 'fa-solid fa-bolt';
-      return obj;
+      return 'Blitz';
     case 'tactics':
-      obj.name = 'Puzzles';
-      obj.icon = 'fa-solid fa-puzzle-piece';
-      return obj;
+      return 'Puzzles';
     case 'puzzle_rush':
-      obj.name = 'Puzzle Rush';
-      obj.icon = 'fa-solid fa-bolt-lightning';
-      return obj;
+      return 'Puzzle Rush';
   }
 }
 
 function renderStat(type, stats) {
-  const game = getGame(type);
+  const name = getGame(type);
 
   const $tr = document.createElement('tr');
   const $tdMode = document.createElement('td');
@@ -389,20 +464,20 @@ function renderStat(type, stats) {
   const $p3 = document.createElement('p');
   const $p4 = document.createElement('p');
 
-  if (game.name === 'Puzzles') {
-    $p1.textContent = game.name;
+  if (name === 'Puzzles') {
+    $p1.textContent = name;
     $p2.textContent = `${stats.lowest.rating}`;
     $p3.textContent = stats.highest.rating;
     $p4.textContent = 'Highest';
-  } else if (game.name === 'Puzzle Rush') {
+  } else if (name === 'Puzzle Rush') {
     if (Object.keys(stats).length > 0) {
-      $p1.textContent = game.name;
+      $p1.textContent = name;
       $p2.textContent = `${stats.best.total_attempts}`;
       $p3.textContent = stats.best.score;
       $p4.textContent = 'Score';
     }
   } else {
-    $p1.textContent = game.name;
+    $p1.textContent = name;
     $p2.textContent = stats.last.rating;
     $p3.textContent = getWPCTStr(
       stats.record.win,
@@ -422,10 +497,14 @@ function renderStat(type, stats) {
 
 function insertStats() {
   const xhr = new XMLHttpRequest();
-  xhr.open('GET', `https://api.chess.com/pub/player/${data.currentUsername}/stats`);
+  xhr.open(
+    'GET',
+    `https://api.chess.com/pub/player/${data.currentPlayer.username}/stats`
+  );
   xhr.responseType = 'json';
   xhr.addEventListener('load', function (event) {
     if (xhr.status === 200) {
+      data.currentPlayer.stats = xhr.response;
       const gameModes = Object.keys(xhr.response);
       gameModes.forEach((key, index) => {
         if (key !== 'fide') {
@@ -468,12 +547,15 @@ function renderClub(club) {
 
 function insertClubs() {
   const xhr = new XMLHttpRequest();
-  xhr.open('GET', `https://api.chess.com/pub/player/${data.currentUsername}/clubs`);
+  xhr.open(
+    'GET',
+    `https://api.chess.com/pub/player/${data.currentPlayer.username}/clubs`
+  );
   xhr.responseType = 'json';
   xhr.addEventListener('load', function (event) {
     if (xhr.status === 200) {
+      data.currentPlayer.clubs = xhr.response;
       const clubs = xhr.response.clubs;
-      let maxDisplay = 0;
 
       if (clubs.length < 1) {
         const $msg = document.createElement('div');
@@ -483,19 +565,9 @@ function insertClubs() {
         $msg.appendChild($p);
         $clubsTable.append($msg);
       } else {
-        if (clubs.length < 5) {
-          maxDisplay = clubs.length;
-        } else {
-          maxDisplay = 5;
-        }
-
-        let count = 0;
-        let i = clubs.length - 1;
-        while (count < maxDisplay) {
-          $clubsTable.appendChild(renderClub(clubs[i]));
-          count++;
-          i--;
-        }
+        clubs.forEach((n, i) => {
+          $clubsTable.appendChild(renderClub(n));
+        });
       }
     } else {
       handleError(xhr.status, 'clubs');
@@ -504,18 +576,23 @@ function insertClubs() {
   xhr.send();
 }
 
-function renderMatch(game) {
-  const mode = getMode(game.time_class, game.rules);
-  const { monthAbbr, day, year } = getDateObj(game.end_time);
+function renderMatch({
+  url,
+  pgn,
+  end_time: endTime,
+  uuid,
+  time_class: timeClass,
+  rules,
+  white,
+  black
+}) {
+  const mode = getMode(timeClass, rules);
+  const { monthAbbr, day, year } = getDateObj(endTime);
   const date = `${monthAbbr} ${day}, ${year}`;
-  const white = game.white.username.toLowerCase();
-  const black = game.black.username.toLowerCase();
-  const whiteRating = game.white.rating;
-  const blackRating = game.black.rating;
-  const url = game.url;
-  const uuid = game.uuid;
+  const whiteUser = white.username.toLowerCase();
+  const blackUser = black.username.toLowerCase();
 
-  const result = parsePGN(game.pgn, white, black);
+  const result = parsePGN(pgn, whiteUser, blackUser);
 
   const $entry = `<div class="match-entry ${result.bgColor}" data-id="${uuid}">
                     <table class="match-info">
@@ -538,13 +615,13 @@ function renderMatch(game) {
                               <div>
                                 <div class="cell-names">
                                   <i class="fa-solid fa-chess-pawn text-white"></i>
-                                  <span>${white}</span>
-                                  <span class="text-gray">${whiteRating}</span>
+                                  <span>${whiteUser}</span>
+                                  <span class="text-gray">${white.rating}</span>
                                 </div>
                                 <div class="cell-names">
                                   <i class="fa-solid fa-chess-pawn text-gray-2"></i>
-                                  <span>${black}</span>
-                                  <span class="text-gray">${blackRating}</span>
+                                  <span>${blackUser}</span>
+                                  <span class="text-gray">${black.rating}</span>
                                 </div>
                               </div>
                             </div>
@@ -590,10 +667,11 @@ function insertArchives(game) {
   xhr.open('GET', game);
   xhr.responseType = 'json';
   xhr.addEventListener('load', function (event) {
-    for (let i = xhr.response.games.length - 1; i >= 0; i--) {
-      $matchList.innerHTML += renderMatch(xhr.response.games[i]);
-    }
+    const lastIndex = xhr.response.games.length - 1;
 
+    xhr.response.games.forEach((n, i, arr) => {
+      $matchList.innerHTML += renderMatch(arr[lastIndex - i]);
+    });
     updateWPCTElements();
   });
   xhr.send();
@@ -603,27 +681,32 @@ function getArchive() {
   const xhr = new XMLHttpRequest();
   xhr.open(
     'GET',
-    `https://api.chess.com/pub/player/${data.currentUsername}/games/archives`
+    `https://api.chess.com/pub/player/${data.currentPlayer.username}/games/archives`
   );
   xhr.responseType = 'json';
   xhr.addEventListener('load', function (event) {
     if (xhr.status === 200) {
+      data.currentPlayer.archives = xhr.response;
       if (xhr.response.archives.length === 0) {
         toggleMatchErrorMsg();
       } else {
         const lastIndex = xhr.response.archives.length - 1;
-        for (let i = lastIndex; i >= 0; i--) {
-          const endpoint = xhr.response.archives[i];
-          const [month, year] = getMonthAndYear(endpoint);
 
-          const $optGroup = document.querySelector(`#match-list-date optgroup[label="${year}"`);
+        xhr.response.archives.forEach((n, i, arr) => {
+          const [month, year] = getMonthAndYear(arr[lastIndex - i]);
+          const $optGroup = document.querySelector(
+            `#match-list-date optgroup[label="${year}"`
+          );
           if (!$optGroup) {
-            const $newOptGroup = $matchListDate.appendChild(renderOptGroup(year));
+            const $newOptGroup = $matchListDate.appendChild(
+              renderOptGroup(year)
+            );
             $newOptGroup.appendChild(renderOption(month));
           } else {
             $optGroup.appendChild(renderOption(month));
           }
-        }
+        });
+
         const lastEndpoint = xhr.response.archives[lastIndex];
         insertArchives(lastEndpoint);
       }
@@ -652,7 +735,7 @@ function getDateObj(timestamp) {
 
 function getMode(timeClass, rules) {
   if (rules === 'chess') {
-    return timeClass.charAt(0).toUpperCase() + timeClass.slice(1);
+    return timeClass[0].toUpperCase() + timeClass.slice(1);
   } else if (rules === 'chess960') {
     return 'Daily 960';
   } else if (rules === 'bughouse') {
@@ -699,7 +782,7 @@ function parsePGN(pgn, white, black) {
     // penultimate character is always a number 0, 1, or 2
     if (i === pgn.length - 2) {
       if (pgn[i] === '0') {
-        if (data.currentUsername === white) {
+        if (data.currentPlayer.username === white) {
           result = 'Win';
           colorStr = 'text-green';
           bgColorStr = 'bg-win';
@@ -711,7 +794,7 @@ function parsePGN(pgn, white, black) {
           data.loss++;
         }
       } else if (pgn[i] === '1') {
-        if (data.currentUsername === black) {
+        if (data.currentPlayer.username === black) {
           result = 'Win';
           colorStr = 'text-green';
           bgColorStr = 'bg-win';
@@ -742,76 +825,49 @@ function parsePGN(pgn, white, black) {
 
 // archive endpoint last part example: ..games/2021/07"
 function getMonthAndYear(endpointStr) {
-  const year = [];
-  const month = [];
-  let monthStr = '';
-  let monthIndex = 0;
-  let condition = false;
-  let count = 0;
-  let i = endpointStr.length - 1;
-
-  while (count < 8) {
-    if (endpointStr[i] === '/') {
-      condition = true;
-    }
-    if (endpointStr[i] !== '/') {
-      if (!condition) {
-        month.unshift(endpointStr[i]);
-      } else {
-        year.unshift(endpointStr[i]);
-      }
-    }
-    count++;
-    i--;
-  }
-  monthStr = month.join('');
-
-  if (month[0] === '0') {
-    monthIndex = Number(monthStr.slice(1)) - 1;
-  } else {
-    monthIndex = Number(monthStr) - 1;
-  }
-
-  return [months[monthIndex], year.join('')];
+  const month = endpointStr.slice(-2);
+  const year = endpointStr.slice(-7).slice(0, -3);
+  const index = month[0] === '0' ? Number(month[1]) - 1 : Number(month) - 1;
+  return [months[index], year];
 }
 
 // 'string' will be in the format "Month Year"
 function getMonthlyGameEndpoint(month, year) {
   const date = [month, '1, ', year];
   const monthNum = `0${new Date(Date.parse(date)).getMonth() + 1}`;
-  return `https://api.chess.com/pub/player/${data.currentUsername}/games/${year}/${monthNum}`;
+  return `https://api.chess.com/pub/player/${data.currentPlayer.username}/games/${year}/${monthNum}`;
 }
 
 function updateWPCTElements() {
   $winPCT.textContent = `${getWPCT()}%`;
 
-  for (let i = 0; i < $wdl.length; i++) {
+  $wld.forEach((n, i) => {
     switch (i) {
       case 0:
-        $wdl[i].textContent = data.win;
+        n.textContent = data.win;
         break;
       case 1:
-        $wdl[i].textContent = '|';
+        n.textContent = '|';
         break;
       case 2:
-        $wdl[i].textContent = data.draw;
+        n.textContent = data.loss;
         break;
       case 3:
-        $wdl[i].textContent = '|';
+        n.textContent = '|';
         break;
       case 4:
-        $wdl[i].textContent = data.loss;
+        n.textContent = data.draw;
         break;
     }
-  }
-  resetWDL();
+  });
+  resetwld();
 }
 
 function clearWPCTElement() {
   $winPCT.textContent = '';
-  for (let i = 0; i < $wdl.length; i++) {
-    $wdl[i].textContent = '';
-  }
+  $wld.forEach((n, i) => {
+    n.textContent = '';
+  });
 }
 
 function clearTableElements() {
@@ -887,7 +943,7 @@ function getWPCT() {
   return ((upper / lower) * 100).toFixed(2);
 }
 
-function resetWDL() {
+function resetwld() {
   data.win = 0;
   data.loss = 0;
   data.draw = 0;
