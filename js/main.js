@@ -781,35 +781,24 @@ function parsePGN(pgn, white, black) {
 
     // penultimate character is always a number 0, 1, or 2
     if (i === pgn.length - 2) {
-      if (pgn[i] === '0') {
-        if (data.currentPlayer.username === white) {
-          result = 'Win';
-          colorStr = 'text-green';
-          bgColorStr = 'bg-win';
-          data.win++;
-        } else {
-          result = 'Loss';
-          colorStr = 'text-red';
-          bgColorStr = 'bg-loss';
-          data.loss++;
-        }
-      } else if (pgn[i] === '1') {
-        if (data.currentPlayer.username === black) {
-          result = 'Win';
-          colorStr = 'text-green';
-          bgColorStr = 'bg-win';
-          data.win++;
-        } else {
-          result = 'Loss';
-          colorStr = 'text-red';
-          bgColorStr = 'bg-loss';
-          data.loss++;
-        }
+      if (
+        (pgn[i] === '0' && data.currentPlayer.username === white) ||
+        (pgn[i] === '1' && data.currentPlayer.username === black)
+      ) {
+        result = 'Win';
+        colorStr = 'text-green';
+        bgColorStr = 'bg-win';
+        data.win++;
       } else if (pgn[i] === '2') {
         result = 'Draw';
         colorStr = 'text-gray';
         bgColorStr = 'bg-draw';
         data.draw++;
+      } else {
+        result = 'Loss';
+        colorStr = 'text-red';
+        bgColorStr = 'bg-loss';
+        data.loss++;
       }
     }
     i--;
