@@ -151,7 +151,7 @@ $refreshBtns.addEventListener('click', function (event) {
       insertClubs();
     } else if (target === 'refresh-matches') {
       clearMatchList();
-      getArchive();
+      getArchives();
     }
   }
 });
@@ -227,7 +227,7 @@ $forms[0].addEventListener('submit', function (event) {
   getPlayerInfo($forms[0][0].value);
   insertStats();
   insertClubs();
-  getArchive();
+  getArchives();
   viewSwap($playerInfo);
   $forms[0][0].value = '';
 });
@@ -237,7 +237,7 @@ $forms[1].addEventListener('submit', function (event) {
   getPlayerInfo($forms[1][0].value);
   insertStats();
   insertClubs();
-  getArchive();
+  getArchives();
   viewSwap($playerInfo);
   $forms[1][0].value = '';
 });
@@ -681,7 +681,7 @@ function insertArchives(game) {
   xhr.send();
 }
 
-function getArchive() {
+function getArchives() {
   if (!data.currentPlayer.username) {
     return;
   }
