@@ -228,7 +228,6 @@ $forms[0].addEventListener('submit', function (event) {
   getStats();
   getClubs();
   getArchives();
-  viewSwap($playerInfo);
   $forms[0][0].value = '';
 });
 
@@ -238,7 +237,6 @@ $forms[1].addEventListener('submit', function (event) {
   getStats();
   getClubs();
   getArchives();
-  viewSwap($playerInfo);
   $forms[1][0].value = '';
 });
 
