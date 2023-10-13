@@ -831,7 +831,10 @@ function getMonthAndYear(endpointStr) {
 
 function getMonthlyGameEndpoint(month, year) {
   const date = [month, '1, ', year];
-  const monthNum = `0${new Date(Date.parse(date)).getMonth() + 1}`;
+  let monthNum = new Date(Date.parse(date)).getMonth() + 1;
+  if (monthNum < 10) {
+    monthNum = `0${monthNum}`;
+  }
   return `https://api.chess.com/pub/player/${data.currentPlayer.username}/games/${year}/${monthNum}`;
 }
 
